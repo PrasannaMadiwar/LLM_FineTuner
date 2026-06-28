@@ -1,0 +1,43 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "llm-fine-tuner-api"
+version = "0.1.0"
+description = "FastAPI backend for LLM Fine-Tuner."
+requires-python = ">=3.12"
+dependencies = [
+  "alembic>=1.14.0",
+  "asyncpg>=0.30.0",
+  "bcrypt>=4.0.1,<4.1.0",
+  "email-validator>=2.2.0",
+  "fastapi>=0.115.6",
+  "passlib[bcrypt]>=1.7.4",
+  "pydantic-settings>=2.7.1",
+  "pyjwt>=2.10.1",
+  "python-multipart>=0.0.20",
+  "redis>=5.2.1",
+  "sqlalchemy[asyncio]>=2.0.36",
+  "uvicorn[standard]>=0.34.0"
+]
+
+[project.optional-dependencies]
+dev = [
+  "httpx>=0.28.1",
+  "pytest>=8.3.4,<9.0.0",
+  "pytest-asyncio>=0.25.2",
+  "ruff>=0.8.6"
+]
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["app*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-p no:asyncio -p no:anyio -p no:cacheprovider"
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"

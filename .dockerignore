@@ -1,0 +1,10 @@
+.git
+.next
+.pytest_cache
+.ruff_cache
+__pycache__
+node_modules
+apps/api/.venv
+apps/api/*.egg-info
+apps/web/.next
+*.log
