@@ -6,6 +6,8 @@ from sqlalchemy.ext.asyncio import async_engine_from_config
 
 from app.core.config import get_settings
 from app.core.database import Base
+from app.infrastructure.models import dataset  # noqa: F401
+from app.infrastructure.models import gpu  # noqa: F401
 from app.infrastructure.models import user  # noqa: F401
 
 config = context.config
