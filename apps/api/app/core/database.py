@@ -22,7 +22,7 @@ async def get_session() -> AsyncGenerator[AsyncSession, None]:
 
 
 async def create_database_tables() -> None:
-    from app.infrastructure.models import dataset, gpu, user  # noqa: F401
+    from app.infrastructure.models import dataset, gpu, training, user  # noqa: F401
 
     async with engine.begin() as connection:
         await connection.run_sync(Base.metadata.create_all)

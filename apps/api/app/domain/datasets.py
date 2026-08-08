@@ -93,3 +93,13 @@ class ValidationReport(BaseModel):
     total_rows: int
     valid_rows: int
     issues: list[ValidationIssue] = Field(default_factory=list)
+
+
+class DatasetNormalizationArtifact(BaseModel):
+    dataset_id: str
+    dataset_name: str
+    source: DatasetSource
+    split: str | None = None
+    path: str
+    row_count: int
+    validation_report: ValidationReport

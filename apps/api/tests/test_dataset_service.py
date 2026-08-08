@@ -1,5 +1,7 @@
 import asyncio
+import json
 
+from app.core.config import get_settings
 from app.domain.datasets import DatasetMetadata, DatasetSearchResult, DatasetSource, MappingResult
 from app.services.dataset_converter_service import DatasetConverterService
 from app.services.dataset_service import DatasetService
@@ -45,6 +47,12 @@ class FakeProvider:
     async def preview_dataset(self, dataset_id, split, limit):
         return [{"instruction": "Say hi", "output": "Hi"}]
 
+    async def iter_dataset_rows(self, dataset_id, split, batch_size):
+        yield [
+            {"instruction": "Say hi", "output": "Hi"},
+            {"instruction": "Say bye", "output": "Bye"},
+        ]
+
 
 class FakeSemanticMappingService:
     async def analyze_dataset(self, metadata):
@@ -68,11 +76,32 @@ def test_dataset_service_normalizes_preview_rows_and_records_history():
     repository = FakeRepository()
     service = _service(repository)
 
-    normalized, report = asyncio.run(service.normalize_dataset("demo"))
+    normalized, report, artifact_path = asyncio.run(
+        service.normalize_dataset("demo", rows=[{"instruction": "Say hi", "output": "Hi"}])
+    )
 
     assert report.is_valid is True
+    assert artifact_path is None
     assert normalized[0].messages[0].role == "user"
     assert repository.history_saved is True
+
+
+def test_dataset_service_writes_full_jsonl_artifact(tmp_path, monkeypatch):
+    monkeypatch.setenv("STORAGE_PATH", str(tmp_path))
+    get_settings.cache_clear()
+    repository = FakeRepository()
+    service = _service(repository)
+
+    normalized, report, artifact_path = asyncio.run(service.normalize_dataset("demo"))
+
+    assert report.is_valid is True
+    assert len(normalized) == 2
+    assert artifact_path is not None
+    with open(artifact_path, encoding="utf-8") as artifact_file:
+        lines = [json.loads(line) for line in artifact_file]
+    assert len(lines) == 2
+    assert lines[0]["messages"][1]["content"] == "Hi"
+    get_settings.cache_clear()
 
 
 def _service(repository=None):

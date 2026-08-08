@@ -1,4 +1,5 @@
 from collections.abc import AsyncGenerator
+from typing import Annotated
 
 from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
@@ -8,16 +9,17 @@ from app.core.cache import create_redis_client
 from app.core.config import get_settings
 from app.core.database import get_session
 from app.core.security import decode_access_token
-from app.domain.users import UserRole
 from app.domain.gpu import GPUProviderName
+from app.domain.users import User, UserRole
+from app.infrastructure.cache.mapping_cache import MappingCache
 from app.infrastructure.datasets.github_provider import GitHubDatasetProvider
 from app.infrastructure.datasets.huggingface_provider import HuggingFaceDatasetProvider
 from app.infrastructure.datasets.kaggle_provider import KaggleDatasetProvider
 from app.infrastructure.gpu.runpod_provider import RunPodProvider
-from app.infrastructure.cache.mapping_cache import MappingCache
 from app.infrastructure.llm.openai_provider import OpenAIProvider
 from app.infrastructure.repositories.dataset_repository import DatasetRepository
 from app.infrastructure.repositories.gpu_repository import GPURepository
+from app.infrastructure.repositories.training_job_repository import TrainingJobRepository
 from app.infrastructure.repositories.user_repository import UserRepository
 from app.schemas.auth import TokenPayload
 from app.services.auth_service import AuthenticationService
@@ -25,7 +27,12 @@ from app.services.dataset_converter_service import DatasetConverterService
 from app.services.dataset_service import DatasetService
 from app.services.dataset_validation_service import DatasetValidationService
 from app.services.gpu_service import GPUService
+from app.services.model_registry import ModelRegistry
 from app.services.semantic_mapping_service import SemanticMappingService
+from app.services.template_loader import TemplateLoader
+from app.services.training_service import TrainingService
+from app.services.training_state_machine import TrainingStateMachine
+from app.services.training_task_dispatcher import TrainingTaskDispatcher
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/v1/auth/login")
 
@@ -35,32 +42,73 @@ async def get_db_session() -> AsyncGenerator[AsyncSession, None]:
         yield session
 
 
+SessionDep = Annotated[AsyncSession, Depends(get_db_session)]
+
+
 def get_user_repository(
-    session: AsyncSession = Depends(get_db_session),
+    session: SessionDep,
 ) -> UserRepository:
     return UserRepository(session)
 
 
 def get_authentication_service(
-    user_repository: UserRepository = Depends(get_user_repository),
+    user_repository: Annotated[UserRepository, Depends(get_user_repository)],
 ) -> AuthenticationService:
     return AuthenticationService(user_repository)
 
 
 def get_dataset_repository(
-    session: AsyncSession = Depends(get_db_session),
+    session: SessionDep,
 ) -> DatasetRepository:
     return DatasetRepository(session)
 
 
 def get_gpu_repository(
-    session: AsyncSession = Depends(get_db_session),
+    session: SessionDep,
 ) -> GPURepository:
     return GPURepository(session)
 
 
+def get_training_job_repository(
+    session: SessionDep,
+) -> TrainingJobRepository:
+    return TrainingJobRepository(session)
+
+
+def get_model_registry() -> ModelRegistry:
+    return ModelRegistry()
+
+
+def get_template_loader() -> TemplateLoader:
+    return TemplateLoader()
+
+
+def get_training_state_machine() -> TrainingStateMachine:
+    return TrainingStateMachine()
+
+
+def get_training_task_dispatcher() -> TrainingTaskDispatcher:
+    return TrainingTaskDispatcher()
+
+
+def get_training_service(
+    repository: Annotated[TrainingJobRepository, Depends(get_training_job_repository)],
+    model_registry: Annotated[ModelRegistry, Depends(get_model_registry)],
+    template_loader: Annotated[TemplateLoader, Depends(get_template_loader)],
+    state_machine: Annotated[TrainingStateMachine, Depends(get_training_state_machine)],
+    task_dispatcher: Annotated[TrainingTaskDispatcher, Depends(get_training_task_dispatcher)],
+) -> TrainingService:
+    return TrainingService(
+        repository=repository,
+        model_registry=model_registry,
+        template_loader=template_loader,
+        state_machine=state_machine,
+        task_dispatcher=task_dispatcher,
+    )
+
+
 def get_semantic_mapping_service(
-    dataset_repository: DatasetRepository = Depends(get_dataset_repository),
+    dataset_repository: Annotated[DatasetRepository, Depends(get_dataset_repository)],
 ) -> SemanticMappingService:
     settings = get_settings()
     return SemanticMappingService(
@@ -83,10 +131,10 @@ def get_dataset_validation_service() -> DatasetValidationService:
 
 
 def get_dataset_service(
-    dataset_repository: DatasetRepository = Depends(get_dataset_repository),
-    semantic_mapping_service: SemanticMappingService = Depends(get_semantic_mapping_service),
-    converter_service: DatasetConverterService = Depends(get_dataset_converter_service),
-    validation_service: DatasetValidationService = Depends(get_dataset_validation_service),
+    dataset_repository: Annotated[DatasetRepository, Depends(get_dataset_repository)],
+    semantic_mapping_service: Annotated[SemanticMappingService, Depends(get_semantic_mapping_service)],
+    converter_service: Annotated[DatasetConverterService, Depends(get_dataset_converter_service)],
+    validation_service: Annotated[DatasetValidationService, Depends(get_dataset_validation_service)],
 ) -> DatasetService:
     return DatasetService(
         repository=dataset_repository,
@@ -102,7 +150,7 @@ def get_dataset_service(
 
 
 def get_gpu_service(
-    gpu_repository: GPURepository = Depends(get_gpu_repository),
+    gpu_repository: Annotated[GPURepository, Depends(get_gpu_repository)],
 ) -> GPUService:
     settings = get_settings()
     provider_name = GPUProviderName(settings.gpu_provider)
@@ -119,9 +167,9 @@ def get_gpu_service(
 
 
 async def get_current_user(
-    token: str = Depends(oauth2_scheme),
-    auth_service: AuthenticationService = Depends(get_authentication_service),
-):
+    token: Annotated[str, Depends(oauth2_scheme)],
+    auth_service: Annotated[AuthenticationService, Depends(get_authentication_service)],
+) -> User:
     payload_data = decode_access_token(token)
     if payload_data is None:
         raise HTTPException(
@@ -141,7 +189,7 @@ async def get_current_user(
 
 
 def require_role(*allowed_roles: UserRole):
-    async def dependency(current_user=Depends(get_current_user)):
+    async def dependency(current_user: Annotated[User, Depends(get_current_user)]) -> User:
         if current_user.role not in allowed_roles:
             raise HTTPException(
                 status_code=status.HTTP_403_FORBIDDEN,

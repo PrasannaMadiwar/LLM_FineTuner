@@ -1,0 +1,6 @@
+template: llama
+model_family: llama
+epochs: 1
+learning_rate: 0.0002
+batch_size: 1
+lora_rank: 16

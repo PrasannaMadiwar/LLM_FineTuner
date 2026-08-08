@@ -1,3 +1,5 @@
+from uuid import UUID
+
 from pydantic import BaseModel, Field
 
 from app.domain.datasets import (
@@ -36,6 +38,7 @@ class DatasetNormalizeRequest(BaseModel):
     dataset_id: str
     source: DatasetSource = DatasetSource.HUGGING_FACE
     split: str | None = None
+    project_id: UUID | None = None
     mapping: SemanticMapping | None = None
     rows: list[dict] | None = Field(default=None, description="Optional sample rows to normalize.")
 
@@ -44,6 +47,7 @@ class DatasetNormalizeResponse(BaseModel):
     dataset_id: str
     normalized_rows: list[NormalizedConversation]
     validation_report: ValidationReport
+    artifact_path: str | None = None
 
 
 class DatasetInfoResponse(BaseModel):

@@ -87,20 +87,28 @@ class DatasetRepository:
         normalized_sample: list[dict],
         row_count: int,
         status: str,
+        artifact_path: str | None = None,
+        user_id: str | None = None,
+        project_id: str | None = None,
         error_message: str | None = None,
-    ) -> None:
+    ):
         model = DatasetNormalizationHistoryModel(
             dataset_name=dataset_name,
             source=source,
             mapping_json=mapping.model_dump(mode="json"),
             validation_report_json=validation_report,
             normalized_sample_json=normalized_sample,
+            artifact_path=artifact_path,
+            user_id=user_id,
+            project_id=project_id,
             row_count=row_count,
             status=status,
             error_message=error_message,
         )
         self._session.add(model)
         await self._session.commit()
+        await self._session.refresh(model)
+        return model
 
     @staticmethod
     def _to_mapping_record(model: DatasetMappingModel) -> MappingRecord:

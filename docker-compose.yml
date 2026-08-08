@@ -6,7 +6,7 @@ services:
       POSTGRES_USER: ${POSTGRES_USER:-llm_finetuner}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-llm_finetuner_password}
     ports:
-      - "5432:5432"
+      - "${POSTGRES_HOST_PORT:-15432}:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
@@ -18,7 +18,7 @@ services:
   redis:
     image: redis:7-alpine
     ports:
-      - "6379:6379"
+      - "${REDIS_HOST_PORT:-16379}:6379"
     healthcheck:
       test: ["CMD", "redis-cli", "ping"]
       interval: 10s
@@ -32,8 +32,27 @@ services:
       DATABASE_URL: ${DATABASE_URL:-postgresql+asyncpg://llm_finetuner:llm_finetuner_password@postgres:5432/llm_finetuner}
       REDIS_URL: ${REDIS_URL:-redis://redis:6379/0}
       API_CORS_ORIGINS: ${API_CORS_ORIGINS:-http://localhost:3000}
+      STORAGE_PATH: ${STORAGE_PATH:-/app/storage}
+      GPU_AGENT_TOKEN: ${GPU_AGENT_TOKEN:-change-me-runtime-agent-token}
     ports:
-      - "8000:8000"
+      - "${API_HOST_PORT:-18000}:8000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  worker:
+    build:
+      context: ./apps/api
+    command: celery -A app.core.celery_app.celery_app worker --loglevel=info
+    environment:
+      DATABASE_URL: ${DATABASE_URL:-postgresql+asyncpg://llm_finetuner:llm_finetuner_password@postgres:5432/llm_finetuner}
+      REDIS_URL: ${REDIS_URL:-redis://redis:6379/0}
+      CELERY_BROKER_URL: ${CELERY_BROKER_URL:-redis://redis:6379/0}
+      CELERY_RESULT_BACKEND: ${CELERY_RESULT_BACKEND:-redis://redis:6379/0}
+      STORAGE_PATH: ${STORAGE_PATH:-/app/storage}
+      GPU_AGENT_TOKEN: ${GPU_AGENT_TOKEN:-change-me-runtime-agent-token}
     depends_on:
       postgres:
         condition: service_healthy
@@ -45,9 +64,9 @@ services:
       context: .
       dockerfile: apps/web/Dockerfile
     environment:
-      NEXT_PUBLIC_API_BASE_URL: ${NEXT_PUBLIC_API_BASE_URL:-http://localhost:8000}
+      NEXT_PUBLIC_API_BASE_URL: http://localhost:${API_HOST_PORT:-18000}
     ports:
-      - "3000:3000"
+      - "${WEB_HOST_PORT:-13000}:3000"
     depends_on:
       - api
 

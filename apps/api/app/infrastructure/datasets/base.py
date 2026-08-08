@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+from collections.abc import AsyncIterator
 
 from app.domain.datasets import DatasetMetadata, DatasetSearchResult, DatasetSource
 
@@ -21,3 +22,13 @@ class DatasetProvider(ABC):
     @abstractmethod
     async def preview_dataset(self, dataset_id: str, split: str | None, limit: int) -> list[dict]:
         raise NotImplementedError
+
+    async def iter_dataset_rows(
+        self,
+        dataset_id: str,
+        split: str | None,
+        batch_size: int,
+    ) -> AsyncIterator[list[dict]]:
+        rows = await self.preview_dataset(dataset_id, split, batch_size)
+        if rows:
+            yield rows

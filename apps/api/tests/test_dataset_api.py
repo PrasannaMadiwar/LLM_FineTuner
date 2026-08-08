@@ -1,6 +1,6 @@
 from fastapi.testclient import TestClient
 
-from app.api.dependencies import get_dataset_service
+from app.api.dependencies import get_current_user, get_dataset_service
 from app.domain.datasets import (
     DatasetMetadata,
     DatasetSearchResult,
@@ -41,6 +41,8 @@ class FakeDatasetService:
         mapping=None,
         rows=None,
         split=None,
+        user_id=None,
+        project_id=None,
     ):
         from app.domain.datasets import NormalizedConversation, NormalizedMessage, ValidationReport
 
@@ -54,6 +56,7 @@ class FakeDatasetService:
                 )
             ],
             ValidationReport(is_valid=True, total_rows=1, valid_rows=1),
+            "storage/datasets/user/default/hugging_face/demo/train.jsonl",
         )
 
 
@@ -102,4 +105,5 @@ def test_dataset_normalize_api():
 
 def _client():
     app.dependency_overrides[get_dataset_service] = lambda: FakeDatasetService()
+    app.dependency_overrides[get_current_user] = lambda: type("User", (), {"id": "user-1"})()
     return TestClient(app)

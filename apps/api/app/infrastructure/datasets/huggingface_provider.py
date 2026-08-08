@@ -1,3 +1,5 @@
+from collections.abc import AsyncIterator
+
 import httpx
 
 from app.domain.datasets import DatasetMetadata, DatasetSearchResult, DatasetSource
@@ -64,6 +66,36 @@ class HuggingFaceDatasetProvider(DatasetProvider):
             response.raise_for_status()
         rows = response.json().get("rows", [])
         return [row.get("row", {}) for row in rows[:limit]]
+
+    async def iter_dataset_rows(
+        self,
+        dataset_id: str,
+        split: str | None,
+        batch_size: int,
+    ) -> AsyncIterator[list[dict]]:
+        offset = 0
+        config = "default"
+        async with httpx.AsyncClient(timeout=30) as client:
+            while True:
+                params = {
+                    "dataset": dataset_id,
+                    "config": config,
+                    "split": split or "train",
+                    "offset": offset,
+                    "length": batch_size,
+                }
+                response = await client.get(f"{self._datasets_server_url}/rows", params=params)
+                if response.status_code == 400 and config == "default":
+                    configs = await self._fetch_configs(client, dataset_id)
+                    if configs:
+                        config = configs[0]
+                        continue
+                response.raise_for_status()
+                rows = [row.get("row", {}) for row in response.json().get("rows", [])]
+                if not rows:
+                    break
+                yield rows
+                offset += len(rows)
 
     async def _fetch_splits(self, client: httpx.AsyncClient, dataset_id: str) -> list[str]:
         response = await client.get(f"{self._datasets_server_url}/splits", params={"dataset": dataset_id})

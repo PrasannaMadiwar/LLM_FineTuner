@@ -1,3 +1,7 @@
+import json
+from pathlib import Path
+from uuid import UUID
+
 from app.core.config import get_settings
 from app.domain.datasets import (
     DatasetMetadata,
@@ -88,15 +92,29 @@ class DatasetService:
         mapping: SemanticMapping | None = None,
         rows: list[dict] | None = None,
         split: str | None = None,
-    ) -> tuple[list[NormalizedConversation], ValidationReport]:
+        user_id: UUID | None = None,
+        project_id: UUID | None = None,
+    ) -> tuple[list[NormalizedConversation], ValidationReport, str | None]:
         metadata = await self.get_dataset_info(dataset_id, source)
         active_mapping = mapping
         if active_mapping is None:
             active_mapping = await self._semantic_mapping_service.analyze_dataset(metadata)
-        active_rows = rows or await self.preview_dataset(dataset_id, source, split)
+        if rows is not None:
+            active_rows = rows
+            validation_report = self._validation_service.validate_rows(active_rows, active_mapping)
+            normalized = self._converter_service.convert_rows(active_rows, active_mapping)
+            artifact_path = None
+        else:
+            normalized, validation_report, artifact_path = await self._normalize_full_dataset(
+                dataset_id=dataset_id,
+                source=source,
+                split=split,
+                mapping=active_mapping,
+                user_id=user_id,
+                project_id=project_id,
+            )
+            active_rows = [item.model_dump(mode="json") for item in normalized[:10]]
 
-        validation_report = self._validation_service.validate_rows(active_rows, active_mapping)
-        normalized = self._converter_service.convert_rows(active_rows, active_mapping)
         status = "completed" if validation_report.is_valid else "completed_with_issues"
         await self._repository.save_normalization_history(
             dataset_name=metadata.name,
@@ -104,7 +122,58 @@ class DatasetService:
             mapping=active_mapping,
             validation_report=validation_report.model_dump(mode="json"),
             normalized_sample=[item.model_dump(mode="json") for item in normalized],
-            row_count=len(active_rows),
+            row_count=validation_report.total_rows,
             status=status,
+            artifact_path=artifact_path,
+            user_id=str(user_id) if user_id else None,
+            project_id=str(project_id) if project_id else None,
         )
-        return normalized, validation_report
+        return normalized, validation_report, artifact_path
+
+    async def _normalize_full_dataset(
+        self,
+        dataset_id: str,
+        source: DatasetSource,
+        split: str | None,
+        mapping: SemanticMapping,
+        user_id: UUID | None,
+        project_id: UUID | None,
+    ) -> tuple[list[NormalizedConversation], ValidationReport, str]:
+        settings = get_settings()
+        provider = self._providers[source]
+        all_rows: list[dict] = []
+        output_path = self._artifact_path(settings.storage_path, dataset_id, source, split, user_id, project_id)
+        output_path.parent.mkdir(parents=True, exist_ok=True)
+        normalized_sample: list[NormalizedConversation] = []
+        with output_path.open("w", encoding="utf-8", newline="\n") as file:
+            async for batch in provider.iter_dataset_rows(dataset_id, split, 1000):
+                report = self._validation_service.validate_rows(batch, mapping)
+                if not report.is_valid:
+                    output_path.unlink(missing_ok=True)
+                    return [], report, str(output_path)
+                converted = self._converter_service.convert_rows(batch, mapping)
+                for item in converted:
+                    file.write(json.dumps(item.model_dump(mode="json"), ensure_ascii=False) + "\n")
+                all_rows.extend(batch)
+                if len(normalized_sample) < 10:
+                    normalized_sample.extend(converted[: 10 - len(normalized_sample)])
+        validation_report = self._validation_service.validate_rows(all_rows, mapping)
+        if validation_report.total_rows == 0 or not validation_report.is_valid:
+            output_path.unlink(missing_ok=True)
+            return normalized_sample, validation_report, str(output_path)
+        return normalized_sample, validation_report, str(output_path)
+
+    @staticmethod
+    def _artifact_path(
+        storage_path: str,
+        dataset_id: str,
+        source: DatasetSource,
+        split: str | None,
+        user_id: UUID | None,
+        project_id: UUID | None,
+    ) -> Path:
+        owner = str(user_id) if user_id else "anonymous"
+        project = str(project_id) if project_id else "default"
+        safe_dataset = "".join(char if char.isalnum() or char in {"-", "_"} else "_" for char in dataset_id)
+        safe_split = split or "train"
+        return Path(storage_path).resolve() / "datasets" / owner / project / source.value / safe_dataset / f"{safe_split}.jsonl"

@@ -165,6 +165,79 @@ Alembic migration `20260628_0003_create_gpu_orchestration_tables.py` creates:
 - `training_sessions`
 - `gpu_events`
 
+## Phase 3B Scope: GPU Runtime Agent
+
+The repository now includes a standalone GPU Runtime Agent under `gpu-agent/`. This FastAPI
+service is designed to run inside each GPU pod and expose the control surface used by the
+backend `RunPodProvider`.
+
+```text
+Backend GPUService
+  -> RunPodProvider
+    -> GPU pod endpoint
+      -> gpu-agent FastAPI app
+        -> workspace services
+        -> approved training templates
+        -> logs/artifacts
+```
+
+The agent creates and validates a managed workspace:
+
+- `/workspace/dataset`
+- `/workspace/configs`
+- `/workspace/templates`
+- `/workspace/outputs`
+- `/workspace/checkpoints`
+- `/workspace/logs`
+- `/workspace/artifacts`
+- `/workspace/cache`
+- `/workspace/temp`
+
+Runtime Agent endpoints:
+
+- `GET /health`
+- `POST /upload`
+- `PUT /files`
+- `GET /files`
+- `POST /train`
+- `POST /cancel/{training_id}`
+- `GET /status/{training_id}`
+- `GET /logs/{training_id}`
+- `GET /logs`
+- `GET /artifacts/{training_id}`
+- `POST /download/{training_id}`
+- `POST /commands`
+- `POST /cleanup`
+
+The backend compatibility endpoints are `/health`, `/files`, `/commands`, and `/logs`.
+No backend GPU orchestration business logic is changed for this phase.
+
+Agent environment variables:
+
+- `WORKSPACE_PATH` with default `/workspace`
+- `DATASET_PATH` with default `/workspace/dataset`
+- `CONFIG_PATH` with default `/workspace/configs`
+- `TEMPLATE_PATH` with default `/workspace/templates`
+- `OUTPUT_PATH` with default `/workspace/outputs`
+- `CHECKPOINT_PATH` with default `/workspace/checkpoints`
+- `LOG_PATH` with default `/workspace/logs`
+- `ARTIFACT_PATH` with default `/workspace/artifacts`
+- `CACHE_PATH` with default `/workspace/cache`
+- `TEMP_PATH` with default `/workspace/temp`
+- `PORT` with default `8001`
+- `MAX_UPLOAD_BYTES` with default `10737418240`
+
+Build the Runtime Agent image:
+
+```powershell
+docker build -t llm-fine-tuner-gpu-agent:latest gpu-agent
+```
+
+The Docker image installs CUDA-compatible PyTorch, Unsloth, Transformers, TRL, PEFT,
+Datasets, Accelerate, Flash Attention, FastAPI, and Uvicorn. Training execution is limited
+to approved templates in `gpu-agent/templates`; this phase does not add frontend, inference,
+Hugging Face publishing, billing, or full Unsloth training logic.
+
 ## Local Development
 
 Copy `.env.example` to `.env`, then install dependencies:
@@ -200,6 +273,15 @@ apps/api/.venv/Scripts/python -m ruff check . --no-cache
 apps/api/.venv/Scripts/python -m alembic upgrade head --sql
 ```
 
+GPU Runtime Agent:
+
+```powershell
+cd gpu-agent
+../apps/api/.venv/Scripts/python -m pytest -q
+../apps/api/.venv/Scripts/python -m ruff check . --no-cache
+python -m compileall app tests templates
+```
+
 Frontend:
 
 ```powershell
@@ -219,7 +301,7 @@ The Dataset Intelligence migration was applied successfully to the running Postg
 
 ## Current Non-Goals
 
-- No Unsloth integration.
-- No training jobs.
+- No production Unsloth training integration.
+- No production training jobs.
 - No inference serving.
 - No Celery workers.

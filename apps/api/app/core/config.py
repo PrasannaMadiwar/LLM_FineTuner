@@ -10,6 +10,11 @@ class Settings(BaseSettings):
     api_v1_prefix: str = "/api/v1"
     database_url: str = "postgresql+asyncpg://llm_finetuner:llm_finetuner_password@localhost:5432/llm_finetuner"
     redis_url: str = "redis://localhost:6379/0"
+    celery_broker_url: str | None = None
+    celery_result_backend: str | None = None
+    storage_path: str = "storage"
+    gpu_agent_token: str | None = None
+    celery_training_max_retries: int = 3
     jwt_secret_key: str = Field(default="change-me-in-development-use-at-least-32-bytes", min_length=32)
     jwt_algorithm: str = "HS256"
     access_token_expire_minutes: int = 60
@@ -31,6 +36,8 @@ class Settings(BaseSettings):
     runpod_agent_port: int = 8001
     gpu_create_timeout_seconds: int = 900
     gpu_operation_max_retries: int = 3
+    training_worker_poll_interval_seconds: float = 10.0
+    training_worker_poll_timeout_seconds: int = 86400
 
     model_config = SettingsConfigDict(
         env_file=".env",
@@ -42,6 +49,16 @@ class Settings(BaseSettings):
     @property
     def cors_origins(self) -> list[str]:
         return [origin.strip() for origin in self.api_cors_origins.split(",") if origin.strip()]
+
+    @computed_field
+    @property
+    def resolved_celery_broker_url(self) -> str:
+        return self.celery_broker_url or self.redis_url
+
+    @computed_field
+    @property
+    def resolved_celery_result_backend(self) -> str:
+        return self.celery_result_backend or self.redis_url
 
 
 @lru_cache
