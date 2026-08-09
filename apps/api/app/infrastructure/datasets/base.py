@@ -4,6 +4,16 @@ from collections.abc import AsyncIterator
 from app.domain.datasets import DatasetMetadata, DatasetSearchResult, DatasetSource
 
 
+class DatasetProviderError(Exception):
+    def __init__(self, message: str, status_code: int | None = None):
+        super().__init__(message)
+        self.status_code = status_code
+
+
+class DatasetNotFoundError(DatasetProviderError):
+    pass
+
+
 class DatasetProvider(ABC):
     source: DatasetSource
 

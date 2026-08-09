@@ -3,7 +3,11 @@ from collections.abc import AsyncIterator
 import httpx
 
 from app.domain.datasets import DatasetMetadata, DatasetSearchResult, DatasetSource
-from app.infrastructure.datasets.base import DatasetProvider
+from app.infrastructure.datasets.base import (
+    DatasetNotFoundError,
+    DatasetProvider,
+    DatasetProviderError,
+)
 
 
 class HuggingFaceDatasetProvider(DatasetProvider):
@@ -23,7 +27,7 @@ class HuggingFaceDatasetProvider(DatasetProvider):
     async def get_dataset_info(self, dataset_id: str) -> DatasetMetadata:
         async with httpx.AsyncClient(timeout=20) as client:
             dataset_response = await client.get(f"{self._base_url}/api/datasets/{dataset_id}")
-            dataset_response.raise_for_status()
+            self._raise_for_dataset_response(dataset_response, dataset_id)
             splits = await self._fetch_splits(client, dataset_id)
             rows = await self.preview_dataset(dataset_id, splits[0] if splits else None, 10)
 
@@ -63,7 +67,7 @@ class HuggingFaceDatasetProvider(DatasetProvider):
                         f"{self._datasets_server_url}/first-rows",
                         params=params,
                     )
-            response.raise_for_status()
+            self._raise_for_dataset_response(response, dataset_id)
         rows = response.json().get("rows", [])
         return [row.get("row", {}) for row in rows[:limit]]
 
@@ -90,7 +94,7 @@ class HuggingFaceDatasetProvider(DatasetProvider):
                     if configs:
                         config = configs[0]
                         continue
-                response.raise_for_status()
+                self._raise_for_dataset_response(response, dataset_id)
                 rows = [row.get("row", {}) for row in response.json().get("rows", [])]
                 if not rows:
                     break
@@ -152,3 +156,13 @@ class HuggingFaceDatasetProvider(DatasetProvider):
                 if isinstance(info, dict)
             }
         return {}
+
+    @staticmethod
+    def _raise_for_dataset_response(response: httpx.Response, dataset_id: str) -> None:
+        if response.status_code == 404:
+            raise DatasetNotFoundError(f"Dataset '{dataset_id}' was not found.", status_code=404)
+        if response.status_code in {400, 422}:
+            raise DatasetProviderError("Hugging Face rejected the dataset request.", status_code=response.status_code)
+        if response.status_code >= 500:
+            raise DatasetProviderError("Hugging Face dataset service is unavailable.", status_code=response.status_code)
+        response.raise_for_status()

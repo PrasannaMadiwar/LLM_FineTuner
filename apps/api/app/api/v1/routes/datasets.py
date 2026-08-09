@@ -5,6 +5,7 @@ from fastapi import APIRouter, Depends, HTTPException, Query, status
 from app.api.dependencies import get_current_user, get_dataset_service
 from app.domain.datasets import DatasetSource
 from app.domain.users import User
+from app.infrastructure.datasets.base import DatasetNotFoundError, DatasetProviderError
 from app.infrastructure.llm.base import LLMProviderException
 from app.schemas.datasets import (
     DatasetAnalyzeRequest,
@@ -38,8 +39,13 @@ async def get_dataset_info(
     dataset_service: DatasetServiceDep,
     source: DatasetSource = DatasetSource.HUGGING_FACE,
 ):
+    _validate_dataset_id(dataset_id)
     try:
         return DatasetInfoResponse(metadata=await dataset_service.get_dataset_info(dataset_id, source))
+    except DatasetNotFoundError as exc:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=str(exc)) from exc
+    except DatasetProviderError as exc:
+        raise HTTPException(status_code=status.HTTP_503_SERVICE_UNAVAILABLE, detail=str(exc)) from exc
     except NotImplementedError as exc:
         raise HTTPException(status_code=status.HTTP_501_NOT_IMPLEMENTED, detail=str(exc)) from exc
 
@@ -55,11 +61,21 @@ async def preview_dataset(
     source: DatasetSource = DatasetSource.HUGGING_FACE,
     split: str | None = None,
 ):
+    _validate_dataset_id(dataset_id)
     try:
         rows = await dataset_service.preview_dataset(dataset_id, source, split)
+    except DatasetNotFoundError as exc:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=str(exc)) from exc
+    except DatasetProviderError as exc:
+        raise HTTPException(status_code=status.HTTP_503_SERVICE_UNAVAILABLE, detail=str(exc)) from exc
     except NotImplementedError as exc:
         raise HTTPException(status_code=status.HTTP_501_NOT_IMPLEMENTED, detail=str(exc)) from exc
     return DatasetPreviewResponse(dataset_id=dataset_id, source=source, split=split, rows=rows)
+
+
+def _validate_dataset_id(dataset_id: str) -> None:
+    if not dataset_id.strip() or ".." in dataset_id or dataset_id.startswith("/") or dataset_id.endswith("/"):
+        raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, detail="Malformed dataset id.")
 
 
 @router.post("/analyze", response_model=DatasetAnalyzeResponse, summary="Analyze dataset semantics")

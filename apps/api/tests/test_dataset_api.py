@@ -7,6 +7,7 @@ from app.domain.datasets import (
     DatasetSource,
     MappingResult,
 )
+from app.infrastructure.datasets.base import DatasetNotFoundError, DatasetProviderError
 from app.main import app
 
 
@@ -15,6 +16,10 @@ class FakeDatasetService:
         return [DatasetSearchResult(dataset_id="demo", name="demo", source=DatasetSource.HUGGING_FACE)]
 
     async def get_dataset_info(self, dataset_id, source=DatasetSource.HUGGING_FACE):
+        if dataset_id == "missing":
+            raise DatasetNotFoundError("Dataset 'missing' was not found.")
+        if dataset_id == "upstream-error":
+            raise DatasetProviderError("Hugging Face dataset service is unavailable.", status_code=503)
         return DatasetMetadata(
             dataset_id=dataset_id,
             name=dataset_id,
@@ -24,6 +29,10 @@ class FakeDatasetService:
         )
 
     async def preview_dataset(self, dataset_id, source=DatasetSource.HUGGING_FACE, split=None):
+        if dataset_id == "missing":
+            raise DatasetNotFoundError("Dataset 'missing' was not found.")
+        if dataset_id == "upstream-error":
+            raise DatasetProviderError("Hugging Face dataset service is unavailable.", status_code=503)
         return [{"instruction": "Say hi", "output": "Hi"}]
 
     async def analyze_dataset(self, dataset_id, source=DatasetSource.HUGGING_FACE):
@@ -78,6 +87,40 @@ def test_dataset_info_api_supports_slash_dataset_ids():
     assert response.json()["metadata"]["dataset_id"] == "tatsu-lab/alpaca"
 
 
+def test_dataset_preview_api_returns_rows():
+    client = _client()
+
+    response = client.get("/api/v1/datasets/preview/demo")
+
+    assert response.status_code == 200
+    assert response.json()["rows"][0]["instruction"] == "Say hi"
+
+
+def test_dataset_info_returns_404_for_missing_dataset():
+    client = _client()
+
+    response = client.get("/api/v1/datasets/info/missing")
+
+    assert response.status_code == 404
+    assert "was not found" in response.json()["detail"]
+
+
+def test_dataset_preview_returns_422_for_malformed_dataset_id():
+    client = _client()
+
+    response = client.get("/api/v1/datasets/preview/bad..id")
+
+    assert response.status_code == 422
+
+
+def test_dataset_preview_returns_503_for_upstream_failure():
+    client = _client()
+
+    response = client.get("/api/v1/datasets/preview/upstream-error")
+
+    assert response.status_code == 503
+
+
 def test_dataset_analyze_api():
     client = _client()
 
@@ -104,6 +147,7 @@ def test_dataset_normalize_api():
 
 
 def _client():
+    app.dependency_overrides.clear()
     app.dependency_overrides[get_dataset_service] = lambda: FakeDatasetService()
     app.dependency_overrides[get_current_user] = lambda: type("User", (), {"id": "user-1"})()
     return TestClient(app)

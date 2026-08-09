@@ -8,6 +8,7 @@ from app.core.config import get_settings
 from app.core.database import Base
 from app.infrastructure.models import dataset  # noqa: F401
 from app.infrastructure.models import gpu  # noqa: F401
+from app.infrastructure.models import project  # noqa: F401
 from app.infrastructure.models import training  # noqa: F401
 from app.infrastructure.models import user  # noqa: F401
 

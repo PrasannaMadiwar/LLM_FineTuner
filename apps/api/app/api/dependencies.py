@@ -19,6 +19,7 @@ from app.infrastructure.gpu.runpod_provider import RunPodProvider
 from app.infrastructure.llm.openai_provider import OpenAIProvider
 from app.infrastructure.repositories.dataset_repository import DatasetRepository
 from app.infrastructure.repositories.gpu_repository import GPURepository
+from app.infrastructure.repositories.project_repository import ProjectRepository
 from app.infrastructure.repositories.training_job_repository import TrainingJobRepository
 from app.infrastructure.repositories.user_repository import UserRepository
 from app.schemas.auth import TokenPayload
@@ -28,6 +29,7 @@ from app.services.dataset_service import DatasetService
 from app.services.dataset_validation_service import DatasetValidationService
 from app.services.gpu_service import GPUService
 from app.services.model_registry import ModelRegistry
+from app.services.project_service import ProjectService
 from app.services.semantic_mapping_service import SemanticMappingService
 from app.services.template_loader import TemplateLoader
 from app.services.training_service import TrainingService
@@ -67,6 +69,12 @@ def get_gpu_repository(
     session: SessionDep,
 ) -> GPURepository:
     return GPURepository(session)
+
+
+def get_project_repository(
+    session: SessionDep,
+) -> ProjectRepository:
+    return ProjectRepository(session)
 
 
 def get_training_job_repository(
@@ -164,6 +172,12 @@ def get_gpu_service(
         provider=RunPodProvider(),
         provider_name=provider_name,
     )
+
+
+def get_project_service(
+    project_repository: Annotated[ProjectRepository, Depends(get_project_repository)],
+) -> ProjectService:
+    return ProjectService(project_repository)
 
 
 async def get_current_user(
