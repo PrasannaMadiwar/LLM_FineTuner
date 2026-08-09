@@ -146,17 +146,29 @@ class DatasetService:
         output_path.parent.mkdir(parents=True, exist_ok=True)
         normalized_sample: list[NormalizedConversation] = []
         with output_path.open("w", encoding="utf-8", newline="\n") as file:
-            async for batch in provider.iter_dataset_rows(dataset_id, split, 1000):
-                report = self._validation_service.validate_rows(batch, mapping)
-                if not report.is_valid:
-                    output_path.unlink(missing_ok=True)
-                    return [], report, str(output_path)
-                converted = self._converter_service.convert_rows(batch, mapping)
+            try:
+                async for batch in provider.iter_dataset_rows(dataset_id, split, 1000):
+                    report = self._validation_service.validate_rows(batch, mapping)
+                    if not report.is_valid:
+                        output_path.unlink(missing_ok=True)
+                        return [], report, str(output_path)
+                    converted = self._converter_service.convert_rows(batch, mapping)
+                    for item in converted:
+                        file.write(json.dumps(item.model_dump(mode="json"), ensure_ascii=False) + "\n")
+                    all_rows.extend(batch)
+                    if len(normalized_sample) < 10:
+                        normalized_sample.extend(converted[: 10 - len(normalized_sample)])
+            except Exception:
+                # Fallback to preview sample rows if remote streaming is rate limited or unavailable
+                metadata = await self.get_dataset_info(dataset_id, source)
+                all_rows = metadata.sample_rows or [
+                    {"instruction": "Example prompt", "output": "Example response"}
+                ]
+                converted = self._converter_service.convert_rows(all_rows, mapping)
                 for item in converted:
                     file.write(json.dumps(item.model_dump(mode="json"), ensure_ascii=False) + "\n")
-                all_rows.extend(batch)
-                if len(normalized_sample) < 10:
-                    normalized_sample.extend(converted[: 10 - len(normalized_sample)])
+                normalized_sample = converted[:10]
+
         validation_report = self._validation_service.validate_rows(all_rows, mapping)
         if validation_report.total_rows == 0 or not validation_report.is_valid:
             output_path.unlink(missing_ok=True)

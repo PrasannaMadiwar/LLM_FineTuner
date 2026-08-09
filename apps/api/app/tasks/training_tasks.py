@@ -1,9 +1,12 @@
 import asyncio
 from uuid import UUID
 
+from sqlalchemy.ext.asyncio import async_sessionmaker, create_async_engine
+from sqlalchemy.orm import configure_mappers
+
+import app.infrastructure.models  # noqa: F401 - Register all ORM models for SQLAlchemy
 from app.core.celery_app import celery_app
 from app.core.config import get_settings
-from app.core.database import AsyncSessionLocal
 from app.domain.gpu import GPUProviderName
 from app.infrastructure.gpu.runpod_provider import RunPodProvider
 from app.infrastructure.repositories.gpu_repository import GPURepository
@@ -14,6 +17,9 @@ from app.services.template_loader import TemplateLoader
 from app.services.training_orchestrator import TrainingOrchestrator
 from app.services.training_service import TrainingService
 from app.services.training_state_machine import TrainingStateMachine
+
+# Ensure all SQLAlchemy ORM mappers and foreign key relationships are configured
+configure_mappers()
 
 
 @celery_app.task(
@@ -30,25 +36,31 @@ def execute_training_job(self, user_id: str, job_id: str) -> dict:
 
 async def _execute_training_job(user_id: UUID, job_id: UUID, task_id: str) -> dict:
     settings = get_settings()
-    async with AsyncSessionLocal() as session:
-        training_repository = TrainingJobRepository(session)
-        gpu_repository = GPURepository(session)
-        training_service = TrainingService(
-            repository=training_repository,
-            model_registry=ModelRegistry(),
-            template_loader=TemplateLoader(),
-            state_machine=TrainingStateMachine(),
-        )
-        gpu_service = GPUService(
-            repository=gpu_repository,
-            provider=RunPodProvider(),
-            provider_name=GPUProviderName(settings.gpu_provider),
-        )
-        orchestrator = TrainingOrchestrator(
-            training_service=training_service,
-            gpu_service=gpu_service,
-            poll_interval_seconds=settings.training_worker_poll_interval_seconds,
-            poll_timeout_seconds=settings.training_worker_poll_timeout_seconds,
-        )
-        job = await orchestrator.run_job(user_id, job_id)
-        return {"job_id": str(job.id), "status": job.status.value, "celery_task_id": task_id}
+    task_engine = create_async_engine(settings.database_url, pool_pre_ping=True)
+    task_session_local = async_sessionmaker(task_engine, expire_on_commit=False)
+
+    try:
+        async with task_session_local() as session:
+            training_repository = TrainingJobRepository(session)
+            gpu_repository = GPURepository(session)
+            training_service = TrainingService(
+                repository=training_repository,
+                model_registry=ModelRegistry(),
+                template_loader=TemplateLoader(),
+                state_machine=TrainingStateMachine(),
+            )
+            gpu_service = GPUService(
+                repository=gpu_repository,
+                provider=RunPodProvider(),
+                provider_name=GPUProviderName(settings.gpu_provider),
+            )
+            orchestrator = TrainingOrchestrator(
+                training_service=training_service,
+                gpu_service=gpu_service,
+                poll_interval_seconds=settings.training_worker_poll_interval_seconds,
+                poll_timeout_seconds=settings.training_worker_poll_timeout_seconds,
+            )
+            job = await orchestrator.run_job(user_id, job_id)
+            return {"job_id": str(job.id), "status": job.status.value, "celery_task_id": task_id}
+    finally:
+        await task_engine.dispose()

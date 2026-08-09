@@ -31,11 +31,18 @@ services:
     environment:
       DATABASE_URL: ${DATABASE_URL:-postgresql+asyncpg://llm_finetuner:llm_finetuner_password@postgres:5432/llm_finetuner}
       REDIS_URL: ${REDIS_URL:-redis://redis:6379/0}
-      API_CORS_ORIGINS: ${API_CORS_ORIGINS:-http://localhost:3000}
+      API_CORS_ORIGINS: ${API_CORS_ORIGINS:-http://localhost:13000,http://localhost:3000,http://localhost:18000}
       STORAGE_PATH: ${STORAGE_PATH:-/app/storage}
       GPU_AGENT_TOKEN: ${GPU_AGENT_TOKEN:-change-me-runtime-agent-token}
+      OPENAI_API_KEY: ${OPENAI_API_KEY}
+      GPU_PROVIDER: ${GPU_PROVIDER:-runpod}
+      RUNPOD_API_KEY: ${RUNPOD_API_KEY}
+      RUNPOD_TEMPLATE_ID: ${RUNPOD_TEMPLATE_ID}
+      RUNPOD_DEFAULT_GPU: ${RUNPOD_DEFAULT_GPU:-A100}
     ports:
       - "${API_HOST_PORT:-18000}:8000"
+    volumes:
+      - ./storage:/app/storage
     depends_on:
       postgres:
         condition: service_healthy
@@ -53,6 +60,13 @@ services:
       CELERY_RESULT_BACKEND: ${CELERY_RESULT_BACKEND:-redis://redis:6379/0}
       STORAGE_PATH: ${STORAGE_PATH:-/app/storage}
       GPU_AGENT_TOKEN: ${GPU_AGENT_TOKEN:-change-me-runtime-agent-token}
+      OPENAI_API_KEY: ${OPENAI_API_KEY}
+      GPU_PROVIDER: ${GPU_PROVIDER:-runpod}
+      RUNPOD_API_KEY: ${RUNPOD_API_KEY}
+      RUNPOD_TEMPLATE_ID: ${RUNPOD_TEMPLATE_ID}
+      RUNPOD_DEFAULT_GPU: ${RUNPOD_DEFAULT_GPU:-A100}
+    volumes:
+      - ./storage:/app/storage
     depends_on:
       postgres:
         condition: service_healthy
@@ -63,8 +77,10 @@ services:
     build:
       context: .
       dockerfile: apps/web/Dockerfile
+      args:
+        NEXT_PUBLIC_API_BASE_URL: ${NEXT_PUBLIC_API_BASE_URL:-http://localhost:18000/api/v1}
     environment:
-      NEXT_PUBLIC_API_BASE_URL: http://localhost:${API_HOST_PORT:-18000}
+      NEXT_PUBLIC_API_BASE_URL: ${NEXT_PUBLIC_API_BASE_URL:-http://localhost:18000/api/v1}
     ports:
       - "${WEB_HOST_PORT:-13000}:3000"
     depends_on:
