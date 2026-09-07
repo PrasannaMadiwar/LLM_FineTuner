@@ -150,7 +150,7 @@ class FakeRuntimeAgentClient:
         self.uploaded.append((str(local_path), remote_path))
 
     async def upload_json(self, remote_path: str, payload: dict):
-        self.uploaded.append((payload["training_job_id"], remote_path))
+        self.uploaded.append((payload["job_id"], remote_path))
 
     async def start_training(self, template, dataset_path, config):
         from app.infrastructure.runtime_agent_client import RuntimeTrainingStart
@@ -178,7 +178,13 @@ class FakeRuntimeAgentClient:
         return {"deleted_paths": [], "bytes_deleted": 0}
 
 
+class FailingRuntimeAgentClient(FakeRuntimeAgentClient):
+    async def health(self):
+        raise ConnectionError("GPU runtime agent is unavailable.")
+
+
 def test_training_orchestrator_runs_agent_workflow_and_cleans_gpu(tmp_path):
+    FakeRuntimeAgentClient.cleaned = False
     dataset = tmp_path / "train.jsonl"
     dataset.write_text('{"messages":[]}\n', encoding="utf-8")
     job = _job(dataset)
@@ -216,6 +222,26 @@ def test_training_orchestrator_fails_when_dataset_is_missing(tmp_path):
         asyncio.run(orchestrator.run_job(job.user_id, job.id))
 
     assert training_service.job.status == TrainingJobStatus.FAILED
+
+
+def test_training_orchestrator_fails_when_runtime_agent_is_unavailable(tmp_path):
+    dataset = tmp_path / "train.jsonl"
+    dataset.write_text('{"messages":[]}\n', encoding="utf-8")
+    job = _job(dataset)
+    training_service = FakeTrainingService(job)
+    gpu_service = FakeGPUService()
+    orchestrator = TrainingOrchestrator(
+        training_service=training_service,
+        gpu_service=gpu_service,
+        runtime_client_factory=FailingRuntimeAgentClient,
+    )
+
+    with pytest.raises(ConnectionError, match="unavailable"):
+        asyncio.run(orchestrator.run_job(job.user_id, job.id))
+
+    assert training_service.job.status == TrainingJobStatus.FAILED
+    assert gpu_service.terminated is True
+    assert not any(event.message == "artifact" for event in training_service.events)
 
 
 def _job(dataset_path: Path) -> TrainingJob:
