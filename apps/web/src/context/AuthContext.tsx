@@ -12,6 +12,8 @@ interface AuthContextType {
   logout: () => void;
   isAuthModalOpen: boolean;
   setIsAuthModalOpen: (open: boolean) => void;
+  authMode: 'login' | 'register';
+  openAuth: (mode?: 'login' | 'register') => void;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -20,6 +22,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
+  const [authMode, setAuthMode] = useState<'login' | 'register'>('login');
+
+  const openAuth = (mode: 'login' | 'register' = 'login') => {
+    setAuthMode(mode);
+    setIsAuthModalOpen(true);
+  };
 
   useEffect(() => {
     async function loadUser() {
@@ -67,6 +75,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         logout,
         isAuthModalOpen,
         setIsAuthModalOpen,
+        authMode,
+        openAuth,
       }}
     >
       {children}

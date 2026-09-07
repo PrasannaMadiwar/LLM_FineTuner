@@ -11,6 +11,9 @@ def create_app() -> FastAPI:
         title=settings.app_name,
         version=settings.app_version,
         description="API foundation for authentication, configuration, and service orchestration.",
+        docs_url=None,
+        redoc_url=None,
+        openapi_url=None,
     )
     app.add_middleware(
         CORSMiddleware,

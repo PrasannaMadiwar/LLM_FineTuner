@@ -1,0 +1,81 @@
+services:
+  - type: web
+    name: llm-finetuner-api
+    runtime: docker
+    plan: free
+    dockerfilePath: ./apps/api/Dockerfile
+    dockerContext: ./apps/api
+    healthCheckPath: /api/v1/health
+    envVars:
+      - key: DATABASE_URL
+        sync: false
+      - key: DATABASE_SCHEMA
+        value: llm_finetuner
+      - key: REDIS_URL
+        sync: false
+      - key: API_CORS_ORIGINS
+        value: https://llm-finetuner-web.onrender.com
+      - key: STORAGE_PATH
+        value: /app/storage
+      - key: JWT_SECRET_KEY
+        generateValue: true
+      - key: JWT_ALGORITHM
+        value: HS256
+      - key: ACCESS_TOKEN_EXPIRE_MINUTES
+        value: "60"
+      - key: GPU_AGENT_TOKEN
+        sync: false
+      - key: OPENAI_API_KEY
+        sync: false
+      - key: OPENAI_MODEL
+        value: gpt-4.1
+      - key: GPU_PROVIDER
+        value: runpod
+      - key: RUNPOD_API_KEY
+        sync: false
+      - key: RUNPOD_TEMPLATE_ID
+        sync: false
+      - key: RUNPOD_DEFAULT_GPU
+        value: A100
+
+  - type: worker
+    name: llm-finetuner-worker
+    runtime: docker
+    plan: 0.5c-512mb
+    dockerfilePath: ./apps/api/Dockerfile
+    dockerContext: ./apps/api
+    dockerCommand: celery -A app.core.celery_app.celery_app worker --loglevel=info --concurrency=1
+    envVars:
+      - key: DATABASE_URL
+        sync: false
+      - key: DATABASE_SCHEMA
+        value: llm_finetuner
+      - key: REDIS_URL
+        sync: false
+      - key: STORAGE_PATH
+        value: /app/storage
+      - key: GPU_AGENT_TOKEN
+        sync: false
+      - key: OPENAI_API_KEY
+        sync: false
+      - key: OPENAI_MODEL
+        value: gpt-4.1
+      - key: GPU_PROVIDER
+        value: runpod
+      - key: RUNPOD_API_KEY
+        sync: false
+      - key: RUNPOD_TEMPLATE_ID
+        sync: false
+      - key: RUNPOD_DEFAULT_GPU
+        value: A100
+
+  - type: web
+    name: llm-finetuner-web
+    runtime: docker
+    plan: free
+    dockerfilePath: ./apps/web/Dockerfile
+    dockerContext: .
+    healthCheckPath: /
+    envVars:
+      - key: NEXT_PUBLIC_API_BASE_URL
+        value: https://llm-finetuner-api.onrender.com/api/v1

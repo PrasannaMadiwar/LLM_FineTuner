@@ -2,42 +2,30 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
 import { AuthModal } from './AuthModal';
-import { User, LogOut, Sparkles, ExternalLink, ShieldCheck } from 'lucide-react';
+import { LogOut, Sparkles, ShieldCheck } from 'lucide-react';
 
 export function Header() {
-  const { user, logout, setIsAuthModalOpen } = useAuth();
+  const { user, logout, openAuth } = useAuth();
+  const router = useRouter();
   const [dropdownOpen, setDropdownOpen] = useState(false);
-
-  const apiDocsUrl =
-    process.env.NEXT_PUBLIC_API_BASE_URL?.replace('/api/v1', '/docs') ||
-    'http://localhost:18000/docs';
 
   return (
     <>
-      <header className="h-16 border-b border-[var(--border)] bg-[var(--panel)] px-8 flex items-center justify-between sticky top-0 z-30 shadow-2xs">
+      <header className="h-14 border-b border-[var(--border)] bg-[var(--panel)] px-5 sm:px-8 flex items-center justify-between sticky top-0 z-30">
         <div className="flex items-center gap-3">
-          <span className="text-xs font-semibold px-2.5 py-1 rounded-full bg-slate-100 text-slate-600 border border-slate-200 flex items-center gap-1.5">
-            <ShieldCheck className="w-3.5 h-3.5 text-teal-600" />
+          <span className="text-xs font-semibold px-2.5 py-1 rounded-md bg-[#252526] text-white border border-[#3e3e42] flex items-center gap-1.5">
+            <ShieldCheck className="w-3.5 h-3.5 text-[#75beff]" />
             Backend Verified & Connected
           </span>
         </div>
 
         <div className="flex items-center gap-4">
-          <a
-            href={apiDocsUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-xs font-medium text-slate-500 hover:text-slate-900 flex items-center gap-1 transition-colors px-3 py-1.5 rounded-lg hover:bg-slate-100"
-          >
-            <span>API Specs</span>
-            <ExternalLink className="w-3 h-3" />
-          </a>
-
           <Link
             href="/fine-tune"
-            className="inline-flex items-center gap-2 bg-teal-600 hover:bg-teal-700 text-white text-xs font-semibold px-4 py-2 rounded-lg transition-all shadow-xs"
+            className="inline-flex items-center gap-2 bg-[#007acc] hover:bg-[#005f9e] text-white text-xs font-semibold px-4 py-2 rounded-md transition-colors"
           >
             <Sparkles className="w-3.5 h-3.5" />
             <span>Create Fine-Tune</span>
@@ -67,6 +55,7 @@ export function Header() {
                     onClick={() => {
                       logout();
                       setDropdownOpen(false);
+                      router.push('/');
                     }}
                     className="w-full text-left px-3.5 py-2 text-rose-600 hover:bg-rose-50 flex items-center gap-2 font-medium"
                   >
@@ -78,7 +67,7 @@ export function Header() {
             </div>
           ) : (
             <button
-              onClick={() => setIsAuthModalOpen(true)}
+              onClick={() => openAuth('login')}
               className="text-xs font-semibold text-slate-700 hover:text-slate-900 bg-slate-100 hover:bg-slate-200 px-3.5 py-2 rounded-lg transition-all"
             >
               Sign In

@@ -36,7 +36,11 @@ def execute_training_job(self, user_id: str, job_id: str) -> dict:
 
 async def _execute_training_job(user_id: UUID, job_id: UUID, task_id: str) -> dict:
     settings = get_settings()
-    task_engine = create_async_engine(settings.database_url, pool_pre_ping=True)
+    task_engine = create_async_engine(
+        settings.database_url,
+        pool_pre_ping=True,
+        connect_args={"server_settings": {"search_path": settings.database_schema}},
+    )
     task_session_local = async_sessionmaker(task_engine, expire_on_commit=False)
 
     try:

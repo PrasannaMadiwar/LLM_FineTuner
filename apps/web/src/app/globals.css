@@ -1,13 +1,13 @@
 @import "tailwindcss";
 
 :root {
-  --background: #f7f8fa;
-  --foreground: #17191f;
-  --panel: #ffffff;
-  --muted: #667085;
-  --border: #d9dee8;
-  --accent: #0f766e;
-  --accent-dark: #115e59;
+  --background: #1e1e1e;
+  --foreground: #cccccc;
+  --panel: #181818;
+  --muted: #9d9d9d;
+  --border: #2d2d30;
+  --accent: #007acc;
+  --accent-dark: #005f9e;
 }
 
 * {
@@ -23,5 +23,63 @@ body {
   margin: 0;
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: "Segoe UI", Arial, Helvetica, sans-serif;
 }
+
+/* VS Code-inspired application surfaces, applied across the established screens. */
+body .bg-white { background-color: #252526 !important; }
+body .bg-slate-50 { background-color: #1e1e1e !important; }
+body .bg-slate-100 { background-color: #2d2d30 !important; }
+body .bg-slate-200 { background-color: #3e3e42 !important; }
+body .bg-slate-900 { background-color: #181818 !important; }
+body .bg-teal-50 { background-color: #073b4c !important; }
+body .bg-teal-600 { background-color: #007acc !important; }
+body .bg-teal-500 { background-color: #0e639c !important; }
+body .hover\:bg-teal-700:hover { background-color: #005f9e !important; }
+body .hover\:bg-slate-50:hover,
+body .hover\:bg-slate-100:hover { background-color: #37373d !important; }
+body .text-slate-950,
+body .text-slate-900,
+body .text-slate-800,
+body .text-slate-700,
+body .text-slate-600,
+body .text-slate-500,
+body .text-slate-400,
+body .text-slate-300,
+body .text-slate-200,
+body .text-slate-100 { color: #f3f3f3 !important; }
+body .text-teal-900,
+body .text-teal-800,
+body .text-teal-700,
+body .text-teal-600,
+body .text-teal-400,
+body .text-teal-300,
+body .text-teal-200,
+body .text-emerald-800,
+body .text-emerald-700,
+body .text-emerald-600,
+body .text-emerald-500,
+body .text-emerald-400,
+body .text-sky-700,
+body .text-indigo-600,
+body .text-amber-700,
+body .text-rose-900,
+body .text-rose-700,
+body .text-rose-600 { color: #75beff !important; }
+/* Legacy slate shades map to white so body text never drifts into gray. */
+body .text-slate-700 { color: #f3f3f3 !important; }
+body .border-slate-100,
+body .border-slate-200,
+body .border-\[var\(--border\)\] { border-color: #3e3e42 !important; }
+body input,
+body select,
+body textarea { background: #1e1e1e; border-color: #3e3e42; color: #f3f3f3; }
+body input::placeholder,
+body textarea::placeholder { color: #858585; }
+body input:focus,
+body select:focus,
+body textarea:focus { border-color: #007acc !important; box-shadow: 0 0 0 1px #007acc !important; }
+body table thead { background: #2d2d30 !important; }
+body .shadow-sm,
+body .shadow-xs,
+body .shadow-2xs { box-shadow: none !important; }

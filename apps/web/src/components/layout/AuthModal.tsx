@@ -5,8 +5,8 @@ import { useAuth } from '@/context/AuthContext';
 import { X, Lock, Mail, User as UserIcon, Sparkles } from 'lucide-react';
 
 export function AuthModal() {
-  const { isAuthModalOpen, setIsAuthModalOpen, login, register } = useAuth();
-  const [isRegister, setIsRegister] = useState(false);
+  const { isAuthModalOpen, setIsAuthModalOpen, login, register, authMode, openAuth } = useAuth();
+  const isRegister = authMode === 'register';
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [fullName, setFullName] = useState('');
@@ -34,11 +34,11 @@ export function AuthModal() {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/40 backdrop-blur-xs p-4">
-      <div className="w-full max-w-md bg-white rounded-2xl border border-slate-200 shadow-xl overflow-hidden animate-in fade-in zoom-in-95 duration-200">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-xs p-4">
+      <div className="w-full max-w-md bg-[#252526] rounded-lg border border-[#3e3e42] shadow-2xl overflow-hidden animate-in fade-in zoom-in-95 duration-200">
         <div className="p-6 border-b border-slate-100 flex items-center justify-between">
           <div className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-lg bg-teal-600 flex items-center justify-center text-white font-bold text-sm">
+            <div className="w-8 h-8 rounded-md bg-[#007acc] flex items-center justify-center text-white font-bold text-sm">
               <Sparkles className="w-4 h-4" />
             </div>
             <div>
@@ -134,7 +134,7 @@ export function AuthModal() {
             <button
               type="button"
               onClick={() => {
-                setIsRegister(!isRegister);
+                openAuth(isRegister ? 'login' : 'register');
                 setError('');
               }}
               className="text-xs font-medium text-teal-600 hover:text-teal-700 underline underline-offset-2"

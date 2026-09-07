@@ -11,43 +11,41 @@ import {
   Boxes,
   PlayCircle,
   FolderDown,
-  Settings,
   Activity,
 } from 'lucide-react';
 
 const NAV_ITEMS = [
-  { name: 'Dashboard', href: '/', icon: LayoutDashboard },
+  { name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
   { name: 'Fine-Tune', href: '/fine-tune', icon: Sparkles },
   { name: 'Datasets', href: '/datasets', icon: Database },
   { name: 'Training Jobs', href: '/jobs', icon: Cpu },
   { name: 'Models', href: '/models', icon: Boxes },
   { name: 'Playground', href: '/playground', icon: PlayCircle },
   { name: 'Artifacts', href: '/artifacts', icon: FolderDown },
-  { name: 'Settings', href: '/settings', icon: Settings },
 ];
 
 export function Sidebar() {
   const pathname = usePathname();
 
   return (
-    <aside className="w-64 border-r border-[var(--border)] bg-[var(--panel)] flex flex-col h-screen sticky top-0">
+    <aside className="w-60 border-r border-[#2d2d30] bg-[#181818] flex flex-col h-screen sticky top-0">
       {/* Brand Header */}
-      <div className="p-6 border-b border-[var(--border)] flex items-center gap-3">
-        <div className="h-9 w-9 rounded-xl bg-teal-600 flex items-center justify-center text-white shadow-sm font-semibold">
+      <div className="p-5 border-b border-[#2d2d30] flex items-center gap-3">
+        <div className="h-9 w-9 rounded-md bg-[#007acc] flex items-center justify-center text-white font-semibold">
           <Sparkles className="w-5 h-5" />
         </div>
         <div>
-          <h1 className="font-bold text-base tracking-tight text-slate-900 leading-none">
+          <h1 className="font-bold text-base text-white leading-none">
             FineTuner
           </h1>
-          <span className="text-xs text-teal-600 font-medium tracking-wide">
-            Enterprise SaaS
+          <span className="text-xs text-[#75beff] font-medium tracking-wide">
+            MODEL WORKSPACE
           </span>
         </div>
       </div>
 
       {/* Navigation Links */}
-      <nav className="flex-1 p-4 space-y-1 overflow-y-auto">
+      <nav className="flex-1 p-3 space-y-1 overflow-y-auto">
         {NAV_ITEMS.map((item) => {
           const Icon = item.icon;
           const isActive =
@@ -58,15 +56,15 @@ export function Sidebar() {
             <Link
               key={item.name}
               href={item.href}
-              className={`flex items-center gap-3 px-3.5 py-2.5 rounded-lg text-sm font-medium transition-all ${
+              className={`flex items-center gap-3 px-3 py-2.5 border-l-2 text-sm font-medium transition-colors ${
                 isActive
-                  ? 'bg-teal-50 text-teal-700 font-semibold shadow-xs'
-                  : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'
+                  ? 'bg-[#37373d] text-white border-[#007acc] font-semibold'
+                  : 'text-white border-transparent hover:bg-[#2d2d30] hover:text-white'
               }`}
             >
               <Icon
                 className={`w-4 h-4 ${
-                  isActive ? 'text-teal-600' : 'text-slate-400'
+                  isActive ? 'text-[#75beff]' : 'text-white'
                 }`}
               />
               {item.name}
@@ -76,8 +74,8 @@ export function Sidebar() {
       </nav>
 
       {/* Engine Status Banner */}
-      <div className="p-4 border-t border-[var(--border)] bg-slate-50/50">
-        <div className="flex items-center gap-2.5 text-xs text-slate-600 font-medium">
+      <div className="p-4 border-t border-[#2d2d30] bg-[#181818]">
+        <div className="flex items-center gap-2.5 text-xs text-white font-medium">
           <span className="relative flex h-2 w-2">
             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
             <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
