@@ -1,13 +1,25 @@
 # LLM Fine-Tuner
 
-Commercial SaaS foundation for browser-based fine-tuning workflows.
+Browser-based fine-tuning workspace with a Next.js frontend, FastAPI API, Celery worker, Supabase PostgreSQL, hosted Redis, and RunPod GPU orchestration.
 
-## Phase 1 Scope
+## Architecture
 
-- Next.js frontend shell with TypeScript and TailwindCSS.
-- FastAPI backend with configuration management, dependency injection, JWT authentication, PostgreSQL, and Redis providers.
-- Docker Compose for local PostgreSQL, Redis, API, and web services.
-- No training, GPU orchestration, Celery workers, inference, or artifact pipelines are implemented in this phase.
+```text
+Next.js web application
+  -> FastAPI API
+    -> Supabase PostgreSQL (llm_finetuner schema)
+    -> Hosted Redis (cache, Celery broker, and result backend)
+    -> Celery worker
+      -> RunPod GPU runtime agent
+```
+
+The web application, API, and worker are Docker services. PostgreSQL and Redis are external managed services; Docker Compose does not start local database or cache containers.
+
+## Deployment
+
+Render deployment is configured in [`render.yaml`](render.yaml). It creates a public API service, a public web service, and a Celery background worker.
+
+See [`RENDER_DEPLOY.md`](RENDER_DEPLOY.md) for the required environment variables, Render Blueprint steps, worker-plan requirement, and upload-storage limitation.
 
 ## Phase 2 Scope: Dataset Intelligence
 
@@ -92,7 +104,9 @@ Alembic migration `20260628_0002_create_dataset_intelligence_tables.py` creates:
 Core environment variables:
 
 - `DATABASE_URL`
+- `DATABASE_SCHEMA` with default `llm_finetuner` for the managed application schema
 - `REDIS_URL`
+- `CELERY_BROKER_URL` and `CELERY_RESULT_BACKEND`, which default to `REDIS_URL` when omitted
 - `JWT_SECRET_KEY`
 - `API_CORS_ORIGINS`
 - `NEXT_PUBLIC_API_BASE_URL`
@@ -261,7 +275,7 @@ Or run the infrastructure with Docker:
 docker compose up --build
 ```
 
-API docs are available at `http://localhost:8000/docs`.
+The local services are available at `http://localhost:13000` (web) and `http://localhost:18000` (API). FastAPI's Swagger, ReDoc, and OpenAPI endpoints are disabled in deployed and local application instances.
 
 ## Verification
 
@@ -296,12 +310,10 @@ Docker:
 docker compose up -d --no-build
 ```
 
-The running Compose stack has been verified with PostgreSQL, Redis, API, and web services healthy.
-The Dataset Intelligence migration was applied successfully to the running PostgreSQL container.
+The API readiness endpoint is `GET /api/v1/ready`; it confirms the managed PostgreSQL and Redis connections.
 
 ## Current Non-Goals
 
 - No production Unsloth training integration.
 - No production training jobs.
 - No inference serving.
-- No Celery workers.
