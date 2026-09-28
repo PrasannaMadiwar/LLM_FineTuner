@@ -9,6 +9,10 @@ from app.services.gpu_service import GPUService
 from app.services.training_service import TrainingService
 
 
+class TrainingJobCancelled(Exception):
+    pass
+
+
 class TrainingOrchestrator:
     def __init__(
         self,
@@ -17,18 +21,24 @@ class TrainingOrchestrator:
         runtime_client_factory=RuntimeAgentClient,
         poll_interval_seconds: float = 10.0,
         poll_timeout_seconds: int = 86400,
+        max_consecutive_poll_failures: int = 5,
     ):
         self._training_service = training_service
         self._gpu_service = gpu_service
         self._runtime_client_factory = runtime_client_factory
         self._poll_interval_seconds = poll_interval_seconds
         self._poll_timeout_seconds = poll_timeout_seconds
+        self._max_consecutive_poll_failures = max_consecutive_poll_failures
 
     async def run_job(self, user_id: UUID, job_id: UUID) -> TrainingJob:
         job = await self._training_service.get_job(user_id, job_id)
+        if job.status != TrainingJobStatus.QUEUED:
+            # A redelivered or duplicate task must not touch a job another run owns.
+            return job
         gpu_instance_id: UUID | None = None
         client: RuntimeAgentClient | None = None
         try:
+            await self._raise_if_cancelled(user_id, job_id)
             job = await self._transition(
                 job,
                 TrainingJobStatus.PREPARING,
@@ -36,6 +46,7 @@ class TrainingOrchestrator:
             )
             dataset_path = self._require_local_dataset(job.normalized_dataset_path)
 
+            await self._raise_if_cancelled(user_id, job_id)
             job = await self._transition(
                 job,
                 TrainingJobStatus.WAITING_GPU,
@@ -56,6 +67,7 @@ class TrainingOrchestrator:
             if not gpu.endpoint_url:
                 raise RuntimeAgentError("GPU agent endpoint is not available.")
 
+            await self._raise_if_cancelled(user_id, job_id)
             job = await self._transition(
                 job,
                 TrainingJobStatus.GPU_READY,
@@ -66,6 +78,7 @@ class TrainingOrchestrator:
             client = self._runtime_client_factory(gpu.endpoint_url)
             await client.health()
 
+            await self._raise_if_cancelled(user_id, job_id)
             job = await self._transition(
                 job,
                 TrainingJobStatus.UPLOADING,
@@ -76,6 +89,7 @@ class TrainingOrchestrator:
             await client.upload_file(dataset_path, remote_dataset_path)
             await client.upload_json(remote_config_path, self._runtime_config(job, remote_dataset_path))
 
+            await self._raise_if_cancelled(user_id, job_id)
             job = await self._transition(
                 job,
                 TrainingJobStatus.STARTING,
@@ -83,6 +97,7 @@ class TrainingOrchestrator:
             )
             started = await client.start_training(
                 template=job.template_name,
+                model=job.model_id,
                 dataset_path=remote_dataset_path,
                 config={"config_path": remote_config_path, **job.training_config.model_dump(mode="json")},
             )
@@ -95,6 +110,8 @@ class TrainingOrchestrator:
             )
             status = await self._wait_for_runtime_completion(user_id, job_id, client, started.training_id)
             if status.state != "succeeded":
+                if status.state == "cancelled":
+                    raise TrainingJobCancelled()
                 raise RuntimeAgentError(status.error or f"Training finished with state '{status.state}'.")
 
             if status.checkpoints:
@@ -134,13 +151,22 @@ class TrainingOrchestrator:
                 "Training job completed.",
             )
 
-        except Exception as exc:
-            await self._transition(
-                job,
-                TrainingJobStatus.FAILED,
-                "Training job failed.",
-                error_message=str(exc),
+        except TrainingJobCancelled:
+            await self._training_service.record_event(
+                user_id=user_id,
+                job_id=job_id,
+                message="Training worker stopped after cancellation.",
             )
+            return await self._training_service.get_job(user_id, job_id)
+        except Exception as exc:
+            current_job = await self._training_service.get_job(user_id, job_id)
+            if current_job.status != TrainingJobStatus.CANCELLED:
+                await self._transition(
+                    current_job,
+                    TrainingJobStatus.FAILED,
+                    "Training job failed.",
+                    error_message=str(exc),
+                )
             raise
         finally:
             if client is not None:
@@ -156,25 +182,43 @@ class TrainingOrchestrator:
         training_id: str,
     ):
         deadline = asyncio.get_running_loop().time() + self._poll_timeout_seconds
+        consecutive_failures = 0
         while asyncio.get_running_loop().time() < deadline:
-            status = await client.status(training_id)
+            if await self._is_cancelled(user_id, job_id):
+                await client.cancel(training_id)
+                raise TrainingJobCancelled()
+
+            try:
+                status = await client.status(training_id)
+            except RuntimeAgentError:
+                # One dropped request must not fail a run that is still training.
+                consecutive_failures += 1
+                if consecutive_failures >= self._max_consecutive_poll_failures:
+                    raise
+                await asyncio.sleep(self._poll_interval_seconds)
+                continue
+            consecutive_failures = 0
             if status.state in {"succeeded", "failed", "cancelled"}:
                 return status
 
-            try:
-                metrics = await client.metrics(training_id)
-                for metric in metrics.metrics:
-                    await self._training_service.record_runtime_metrics(
-                        user_id=user_id,
-                        job_id=job_id,
-                        payload=metric.model_dump(mode="json"),
-                    )
-            except RuntimeAgentError:
-                pass
+            if status.metrics:
+                await self._training_service.record_runtime_metrics(
+                    user_id=user_id,
+                    job_id=job_id,
+                    payload=status.model_dump(mode="json"),
+                )
 
             await asyncio.sleep(self._poll_interval_seconds)
 
         raise RuntimeAgentError(f"Training timed out after {self._poll_timeout_seconds} seconds.")
+
+    async def _raise_if_cancelled(self, user_id: UUID, job_id: UUID) -> None:
+        if await self._is_cancelled(user_id, job_id):
+            raise TrainingJobCancelled()
+
+    async def _is_cancelled(self, user_id: UUID, job_id: UUID) -> bool:
+        job = await self._training_service.get_job(user_id, job_id)
+        return job.status == TrainingJobStatus.CANCELLED
 
     def _require_local_dataset(self, normalized_dataset_path: str) -> Path:
         path = Path(normalized_dataset_path).resolve()
@@ -216,14 +260,25 @@ class TrainingOrchestrator:
 
     @staticmethod
     def _artifact_type(path: str) -> str:
-        filename = Path(path).name.lower()
-        if "config" in filename:
-            return "adapter_config"
-        if filename.endswith((".safetensors", ".bin", ".pt")):
-            return "adapter_model"
-        if filename.endswith((".json", ".jsonl", ".txt", ".log")):
+        # The runner lays artifacts out as adapter/, tokenizer/ and checkpoints/, so the
+        # folder says what a file is more reliably than its extension.
+        parts = Path(path).parts
+        filename = parts[-1].lower() if parts else ""
+        if "checkpoints" in parts:
+            return "checkpoint"
+        if "adapter" in parts:
+            if filename == "adapter_config.json":
+                return "adapter_config"
+            if filename.endswith(".safetensors"):
+                return "adapter_model"
+            return "adapter"
+        if "tokenizer" in parts:
+            return "tokenizer"
+        if filename == "training_config.json":
+            return "training_config"
+        if filename.endswith((".log", ".txt")):
             return "log"
-        return "checkpoint"
+        return "other"
 
     async def _transition(
         self,

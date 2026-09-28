@@ -17,6 +17,17 @@ class ModelRegistry:
     @staticmethod
     def _default_models() -> list[ModelDefinition]:
         return [
+            # Small enough to fine-tune with 4-bit LoRA on an 8 GB consumer GPU.
+            # Unsloth's mirror is used because it is not gated on Hugging Face.
+            ModelDefinition(
+                model_key="qwen2.5-1.5b",
+                model_id="unsloth/Qwen2.5-1.5B-Instruct",
+                display_name="Qwen2.5 1.5B Instruct",
+                huggingface_repo="unsloth/Qwen2.5-1.5B-Instruct",
+                template="qwen",
+                sequence_length=2048,
+                gpu_requirements={"recommended": "8 GB GPU (e.g. RTX 4060 / 5050)", "minimum_vram_gb": 6},
+            ),
             ModelDefinition(
                 model_key="llama-3.1-8b",
                 model_id="meta-llama/Llama-3.1-8B-Instruct",

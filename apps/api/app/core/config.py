@@ -26,8 +26,17 @@ class Settings(BaseSettings):
     openai_model: str = "gpt-4.1"
     dataset_search_limit: int = 10
     dataset_preview_rows: int = 10
+    dataset_max_rows: int | None = Field(default=None, ge=1)
     mapping_cache_ttl_seconds: int = 86400
     gpu_provider: str = "runpod"
+    # Local provider: runs the GPU agent image as a container on this machine's GPU
+    # through the Docker Engine API, so the same pipeline can be demoed without a cloud GPU.
+    docker_socket_path: str = "/var/run/docker.sock"
+    local_gpu_image: str = "llm-finetuner-gpu-agent:local"
+    local_gpu_network: str = "llm-finetuner-net"
+    local_gpu_workspace_volume: str = "llm-finetuner-gpu-workspace"
+    local_gpu_hf_cache_volume: str = "llm-finetuner-hf-cache"
+    local_gpu_agent_port: int = 8001
     runpod_api_key: str | None = None
     runpod_template_id: str | None = None
     runpod_default_gpu: str = "A100"

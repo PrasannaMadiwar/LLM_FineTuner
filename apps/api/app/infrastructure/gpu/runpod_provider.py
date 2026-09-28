@@ -319,7 +319,7 @@ class RunPodProvider(GPUProvider):
             "volumeInGb": config.volume_size_gb or self._volume_size_gb,
             "containerDiskInGb": config.container_disk_gb or self._container_disk_gb,
             "env": config.env,
-            "ports": config.ports or [self._agent_port],
+            "ports": self._format_ports(config.ports),
         }
         image = config.image
         if template_id:
@@ -380,12 +380,26 @@ class RunPodProvider(GPUProvider):
         except json.JSONDecodeError:
             return "GPU provider request failed."
         if isinstance(payload, dict):
-            error = payload.get("error") or payload.get("message")
+            error = payload.get("error") or payload.get("message") or payload.get("detail")
             if isinstance(error, dict) and error.get("message"):
                 return str(error["message"])
             if error:
                 return str(error)
+            errors = payload.get("errors")
+            if errors:
+                return str(errors)
         return "GPU provider request failed."
+
+    def _format_ports(self, ports: list[int] | list[str] | None) -> list[str]:
+        values = ports or [self._agent_port]
+        formatted: list[str] = []
+        for port in values:
+            if isinstance(port, int):
+                formatted.append(f"{port}/http")
+                continue
+            value = str(port)
+            formatted.append(value if "/" in value else f"{value}/http")
+        return formatted
 
     def _extract_agent_url(self, payload: dict) -> str | None:
         metadata_url = payload.get("endpointUrl") or payload.get("agentUrl")

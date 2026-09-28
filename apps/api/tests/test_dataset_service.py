@@ -1,6 +1,8 @@
 import asyncio
 import json
 
+import pytest
+
 from app.core.config import get_settings
 from app.domain.datasets import DatasetMetadata, DatasetSearchResult, DatasetSource, MappingResult
 from app.services.dataset_converter_service import DatasetConverterService
@@ -104,10 +106,42 @@ def test_dataset_service_writes_full_jsonl_artifact(tmp_path, monkeypatch):
     get_settings.cache_clear()
 
 
-def _service(repository=None):
+def test_dataset_service_caps_rows_at_configured_limit(tmp_path, monkeypatch):
+    monkeypatch.setenv("STORAGE_PATH", str(tmp_path))
+    monkeypatch.setenv("DATASET_MAX_ROWS", "1")
+    get_settings.cache_clear()
+    service = _service()
+
+    _, report, artifact_path = asyncio.run(service.normalize_dataset("demo"))
+
+    assert report.total_rows == 1
+    with open(artifact_path, encoding="utf-8") as artifact_file:
+        assert len(artifact_file.readlines()) == 1
+    get_settings.cache_clear()
+
+
+def test_dataset_service_fails_instead_of_writing_placeholder_rows(tmp_path, monkeypatch):
+    monkeypatch.setenv("STORAGE_PATH", str(tmp_path))
+    get_settings.cache_clear()
+    service = _service(provider=FailingStreamProvider())
+
+    with pytest.raises(ConnectionError):
+        asyncio.run(service.normalize_dataset("demo"))
+
+    assert list(tmp_path.rglob("*.jsonl")) == []
+    get_settings.cache_clear()
+
+
+class FailingStreamProvider(FakeProvider):
+    async def iter_dataset_rows(self, dataset_id, split, batch_size):
+        yield [{"instruction": "Say hi", "output": "Hi"}]
+        raise ConnectionError("Rate limited by the datasets server.")
+
+
+def _service(repository=None, provider=None):
     return DatasetService(
         repository=repository or FakeRepository(),
-        providers=[FakeProvider()],
+        providers=[provider or FakeProvider()],
         semantic_mapping_service=FakeSemanticMappingService(),
         converter_service=DatasetConverterService(),
         validation_service=DatasetValidationService(),

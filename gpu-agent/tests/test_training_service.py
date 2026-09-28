@@ -41,6 +41,28 @@ def test_training_service_runs_approved_template_dry_run(tmp_path, template):
     assert any("checkpoints/checkpoint-1/adapter_model.safetensors" in path for path in artifact_paths)
 
 
+def test_training_service_reports_mid_epoch_progress(tmp_path):
+    service, workspace = _service(tmp_path)
+    workspace.validate_path("dataset/train.jsonl").write_text("{}", encoding="utf-8")
+    record = asyncio.run(
+        service.start_training(
+            TrainingRequest(template="qwen", dataset_path="dataset/train.jsonl", config={"dry_run": True})
+        )
+    )
+    _wait_for_finish(service, record.training_id)
+    # Live metrics written by the runner mid-run carry a fractional epoch.
+    (record.output_dir / "metrics.json").write_text(
+        '{"current_epoch": 0.04, "loss": 1.9, "global_step": 10, "max_steps": 250, "eta_seconds": 480.0}',
+        encoding="utf-8",
+    )
+
+    status = service.status(record.training_id)
+
+    assert status.current_epoch == 0.04
+    assert status.global_step == 10
+    assert status.metrics["max_steps"] == 250
+
+
 def test_training_service_rejects_unapproved_template(tmp_path):
     service, workspace = _service(tmp_path)
     workspace.validate_path("dataset/train.jsonl").write_text("{}", encoding="utf-8")

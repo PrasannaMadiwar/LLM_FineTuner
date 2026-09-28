@@ -9,6 +9,7 @@ from pydantic import BaseModel, Field
 
 class GPUProviderName(StrEnum):
     RUNPOD = "runpod"
+    LOCAL = "local"
 
 
 class GPUInstanceStatus(StrEnum):

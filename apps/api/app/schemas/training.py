@@ -15,6 +15,7 @@ from app.domain.training import (
 
 class ModelListResponse(BaseModel):
     models: list[ModelDefinition]
+    gpu_provider: str | None = None
 
 
 class TemplateListResponse(BaseModel):

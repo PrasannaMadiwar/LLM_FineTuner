@@ -42,6 +42,7 @@ function FineTuneWizardContent() {
   const initialModelKey = searchParams.get('model') || '';
 
   const [currentStep, setCurrentStep] = useState(1);
+  const [gpuProvider, setGpuProvider] = useState<string | null>(null);
 
   // --- Step 1: Dataset State ---
   const [searchQuery, setSearchQuery] = useState('alpaca');
@@ -106,6 +107,7 @@ function FineTuneWizardContent() {
     api.getModels().then((res) => {
       if (ignore) return;
       setModels(res.models || []);
+      setGpuProvider(res.gpu_provider ?? null);
       if (!initialModelKey && res.models?.length > 0) {
         setSelectedModelKey(res.models[0].model_key);
       }
@@ -201,7 +203,13 @@ function FineTuneWizardContent() {
   const selectedModel = models.find((m) => m.model_key === selectedModelKey);
 
   // Compute Cost Calculations
-  const hourlyGpuRate = selectedModelKey.includes('8b') || selectedModelKey.includes('7b') ? 1.89 : 2.49;
+  // The local provider trains on this machine's GPU, so there is no cloud bill.
+  const isLocalGpu = gpuProvider === 'local';
+  const hourlyGpuRate = isLocalGpu
+    ? 0
+    : selectedModelKey.includes('8b') || selectedModelKey.includes('7b')
+      ? 1.89
+      : 2.49;
   const estimatedRuntimeMinutes = Math.max(15, epochs * 15);
   const estimatedRuntimeHours = estimatedRuntimeMinutes / 60;
   const estimatedCost = (estimatedRuntimeHours * hourlyGpuRate).toFixed(2);
@@ -687,7 +695,9 @@ function FineTuneWizardContent() {
                   <span className="text-[10px] text-slate-400 block uppercase font-semibold">
                     GPU Rate
                   </span>
-                  <span className="font-semibold">${hourlyGpuRate}/hr (A100 80GB)</span>
+                  <span className="font-semibold">
+                    {isLocalGpu ? 'Local GPU (this machine)' : `$${hourlyGpuRate}/hr (A100 80GB)`}
+                  </span>
                 </div>
               </div>
 
@@ -707,7 +717,9 @@ function FineTuneWizardContent() {
                   <span className="text-[10px] text-slate-400 block uppercase font-semibold">
                     Billing Guarantee
                   </span>
-                  <span className="font-semibold">Pay-per-minute only</span>
+                  <span className="font-semibold">
+                    {isLocalGpu ? 'No cloud cost' : 'Pay-per-minute only'}
+                  </span>
                 </div>
               </div>
             </div>

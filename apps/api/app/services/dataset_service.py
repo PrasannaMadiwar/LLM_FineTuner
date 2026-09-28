@@ -1,4 +1,5 @@
 import json
+from contextlib import aclosing
 from pathlib import Path
 from uuid import UUID
 
@@ -141,38 +142,45 @@ class DatasetService:
     ) -> tuple[list[NormalizedConversation], ValidationReport, str]:
         settings = get_settings()
         provider = self._providers[source]
+        max_rows = settings.dataset_max_rows
         all_rows: list[dict] = []
         output_path = self._artifact_path(settings.storage_path, dataset_id, source, split, user_id, project_id)
         output_path.parent.mkdir(parents=True, exist_ok=True)
         normalized_sample: list[NormalizedConversation] = []
-        with output_path.open("w", encoding="utf-8", newline="\n") as file:
-            try:
-                async for batch in provider.iter_dataset_rows(dataset_id, split, 1000):
-                    report = self._validation_service.validate_rows(batch, mapping)
-                    if not report.is_valid:
-                        output_path.unlink(missing_ok=True)
-                        return [], report, str(output_path)
-                    converted = self._converter_service.convert_rows(batch, mapping)
-                    for item in converted:
-                        file.write(json.dumps(item.model_dump(mode="json"), ensure_ascii=False) + "\n")
-                    all_rows.extend(batch)
-                    if len(normalized_sample) < 10:
-                        normalized_sample.extend(converted[: 10 - len(normalized_sample)])
-            except Exception:
-                # Fallback to preview sample rows if remote streaming is rate limited or unavailable
-                metadata = await self.get_dataset_info(dataset_id, source)
-                all_rows = metadata.sample_rows or [
-                    {"instruction": "Example prompt", "output": "Example response"}
-                ]
-                converted = self._converter_service.convert_rows(all_rows, mapping)
-                for item in converted:
-                    file.write(json.dumps(item.model_dump(mode="json"), ensure_ascii=False) + "\n")
-                normalized_sample = converted[:10]
+        invalid_batch_report: ValidationReport | None = None
+        # A failed download must fail the request: a partially written file would
+        # otherwise be used as training data without anyone noticing.
+        try:
+            with output_path.open("w", encoding="utf-8", newline="\n") as file:
+                row_batches = provider.iter_dataset_rows(dataset_id, split, min(1000, max_rows or 1000))
+                async with aclosing(row_batches):
+                    async for batch in row_batches:
+                        if max_rows is not None:
+                            batch = batch[: max_rows - len(all_rows)]
+                        report = self._validation_service.validate_rows(batch, mapping)
+                        if not report.is_valid:
+                            invalid_batch_report = report
+                            break
+                        converted = self._converter_service.convert_rows(batch, mapping)
+                        for item in converted:
+                            file.write(json.dumps(item.model_dump(mode="json"), ensure_ascii=False) + "\n")
+                        all_rows.extend(batch)
+                        if len(normalized_sample) < 10:
+                            normalized_sample.extend(converted[: 10 - len(normalized_sample)])
+                        if max_rows is not None and len(all_rows) >= max_rows:
+                            break
+        except Exception:
+            output_path.unlink(missing_ok=True)
+            raise
+
+        if invalid_batch_report is not None:
+            output_path.unlink(missing_ok=True)
+            return [], invalid_batch_report, None
 
         validation_report = self._validation_service.validate_rows(all_rows, mapping)
         if validation_report.total_rows == 0 or not validation_report.is_valid:
             output_path.unlink(missing_ok=True)
-            return normalized_sample, validation_report, str(output_path)
+            return normalized_sample, validation_report, None
         return normalized_sample, validation_report, str(output_path)
 
     @staticmethod

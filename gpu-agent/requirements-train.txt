@@ -1,0 +1,11 @@
+# Installed on top of the CUDA 12.8 PyTorch build (see Dockerfile); torch itself is
+# constrained to that build so these packages cannot swap it for an older CUDA wheel.
+# Pinned to the set verified end to end on an RTX 50-series (Blackwell) GPU with torch 2.11.0+cu128.
+unsloth==2026.9.11
+unsloth_zoo==2026.9.7
+bitsandbytes==0.50.2
+transformers==5.5.0
+trl==0.24.0
+peft==0.21.0
+datasets==4.3.0
+accelerate==1.15.0

@@ -111,6 +111,10 @@ async def normalize_dataset(
             user_id=current_user.id,
             project_id=payload.project_id,
         )
+    except DatasetNotFoundError as exc:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=str(exc)) from exc
+    except DatasetProviderError as exc:
+        raise HTTPException(status_code=status.HTTP_503_SERVICE_UNAVAILABLE, detail=str(exc)) from exc
     except LLMProviderException as exc:
         raise HTTPException(
             status_code=status.HTTP_503_SERVICE_UNAVAILABLE,

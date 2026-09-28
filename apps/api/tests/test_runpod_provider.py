@@ -40,6 +40,7 @@ def test_runpod_provider_creates_pod_and_maps_status():
     assert requests[0].url == "https://runpod.test/v1/pods"
     payload = json.loads(requests[0].content)
     assert payload["templateId"] == "template-1"
+    assert payload["ports"] == ["8001/http"]
     assert requests[0].headers["authorization"] == "Bearer runpod-key"
 
 

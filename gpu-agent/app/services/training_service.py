@@ -112,8 +112,7 @@ class TrainingService:
         return updated
 
     def status(self, training_id: str) -> TrainingStatusResponse:
-        record = self._require_record(training_id)
-        self._refresh_metrics(record)
+        record = self._refresh_metrics(self._require_record(training_id))
         return TrainingStatusResponse(**record.model_dump())
 
     def artifacts(self, training_id: str) -> list[dict]:
@@ -213,10 +212,11 @@ class TrainingService:
                 "error": None if exit_code == 0 else "Training process failed.",
             }
         )
-        self._records[record.training_id] = finished
-        self._refresh_metrics(finished)
+        self._records[record.training_id] = self._refresh_metrics(finished)
 
-    def _refresh_metrics(self, record: TrainingRecord) -> None:
+    def _refresh_metrics(self, record: TrainingRecord) -> TrainingRecord:
+        # Pure read: status requests run on another thread than the training loop, so
+        # storing here could overwrite a state change (e.g. RUNNING -> SUCCEEDED).
         metrics_path = record.output_dir / "metrics.json"
         metrics_payload = {}
         if not metrics_path.exists():
@@ -238,7 +238,7 @@ class TrainingService:
                 "checkpoints": self._list_checkpoints(record),
             }
         )
-        self._records[record.training_id] = updated
+        return updated
 
     def _list_checkpoints(self, record: TrainingRecord) -> list[str]:
         checkpoint_root = record.artifact_dir / "checkpoints"

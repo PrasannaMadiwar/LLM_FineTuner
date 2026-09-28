@@ -53,7 +53,7 @@ class TrainingStartResponse(BaseModel):
 class TrainingStatusResponse(BaseModel):
     training_id: str
     state: TrainingState
-    current_epoch: int | None = None
+    current_epoch: float | None = None
     loss: float | None = None
     learning_rate: float | None = None
     eta_seconds: float | None = None
@@ -115,7 +115,7 @@ class TrainingRecord(BaseModel):
     log_stdout_path: Path
     log_stderr_path: Path
     process_id: int | None = None
-    current_epoch: int | None = None
+    current_epoch: float | None = None
     loss: float | None = None
     learning_rate: float | None = None
     eta_seconds: float | None = None

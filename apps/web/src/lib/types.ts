@@ -86,6 +86,7 @@ export interface ModelDefinition {
 
 export interface ModelListResponse {
   models: ModelDefinition[];
+  gpu_provider?: string | null;
 }
 
 export interface TemplateListResponse {

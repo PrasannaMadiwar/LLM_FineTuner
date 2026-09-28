@@ -139,6 +139,7 @@ class FakeGPUService:
 class FakeRuntimeAgentClient:
     uploaded: ClassVar[list] = []
     cleaned = False
+    started_model: str | None = None
 
     def __init__(self, base_url):
         self.base_url = base_url
@@ -152,9 +153,10 @@ class FakeRuntimeAgentClient:
     async def upload_json(self, remote_path: str, payload: dict):
         self.uploaded.append((payload["job_id"], remote_path))
 
-    async def start_training(self, template, dataset_path, config):
+    async def start_training(self, template, dataset_path, config, model=None):
         from app.infrastructure.runtime_agent_client import RuntimeTrainingStart
 
+        type(self).started_model = model
         return RuntimeTrainingStart(training_id="run-1", state="queued")
 
     async def status(self, training_id):
@@ -173,14 +175,49 @@ class FakeRuntimeAgentClient:
 
         return RuntimeArtifactList(training_id=training_id, artifacts=[])
 
+    async def cancel(self, training_id):
+        from app.infrastructure.runtime_agent_client import RuntimeTrainingStatus
+
+        return RuntimeTrainingStatus(training_id=training_id, state="cancelled")
+
     async def cleanup(self):
         type(self).cleaned = True
         return {"deleted_paths": [], "bytes_deleted": 0}
 
 
+class FlakyStatusRuntimeAgentClient(FakeRuntimeAgentClient):
+    status_calls = 0
+
+    async def status(self, training_id):
+        from app.infrastructure.runtime_agent_client import RuntimeAgentError
+
+        type(self).status_calls += 1
+        if type(self).status_calls == 1:
+            raise RuntimeAgentError("GPU agent request failed.")
+        return await super().status(training_id)
+
+
 class FailingRuntimeAgentClient(FakeRuntimeAgentClient):
     async def health(self):
         raise ConnectionError("GPU runtime agent is unavailable.")
+
+
+class CancellingRuntimeAgentClient(FakeRuntimeAgentClient):
+    cancelled = False
+    training_service: FakeTrainingService | None = None
+
+    async def status(self, training_id):
+        from app.infrastructure.runtime_agent_client import RuntimeTrainingStatus
+
+        if self.training_service is not None:
+            payload = self.training_service.job.model_dump()
+            payload.update({"status": TrainingJobStatus.CANCELLED, "updated_at": datetime.now(UTC)})
+            self.training_service.job = TrainingJob(**payload)
+        return RuntimeTrainingStatus(training_id=training_id, state="running")
+
+    async def cancel(self, training_id):
+        type(self).cancelled = True
+        return await super().cancel(training_id)
 
 
 def test_training_orchestrator_runs_agent_workflow_and_cleans_gpu(tmp_path):
@@ -205,6 +242,46 @@ def test_training_orchestrator_runs_agent_workflow_and_cleans_gpu(tmp_path):
     assert FakeRuntimeAgentClient.cleaned is True
     assert TrainingJobStatus.TRAINING in {event.to_status for event in training_service.events}
     assert TrainingJobStatus.CHECKPOINTING in {event.to_status for event in training_service.events}
+    assert FakeRuntimeAgentClient.started_model == job.model_id
+
+
+def test_training_orchestrator_tolerates_a_transient_status_failure(tmp_path):
+    FlakyStatusRuntimeAgentClient.status_calls = 0
+    dataset = tmp_path / "train.jsonl"
+    dataset.write_text('{"messages":[]}\n', encoding="utf-8")
+    job = _job(dataset)
+    training_service = FakeTrainingService(job)
+    orchestrator = TrainingOrchestrator(
+        training_service=training_service,
+        gpu_service=FakeGPUService(),
+        runtime_client_factory=FlakyStatusRuntimeAgentClient,
+        poll_interval_seconds=0,
+        poll_timeout_seconds=1,
+    )
+
+    completed = asyncio.run(orchestrator.run_job(job.user_id, job.id))
+
+    assert completed.status == TrainingJobStatus.COMPLETED
+    assert FlakyStatusRuntimeAgentClient.status_calls == 2
+
+
+def test_training_orchestrator_ignores_jobs_that_are_not_queued(tmp_path):
+    dataset = tmp_path / "train.jsonl"
+    dataset.write_text('{"messages":[]}\n', encoding="utf-8")
+    job = _job(dataset).model_copy(update={"status": TrainingJobStatus.TRAINING})
+    training_service = FakeTrainingService(job)
+    gpu_service = FakeGPUService()
+    orchestrator = TrainingOrchestrator(
+        training_service=training_service,
+        gpu_service=gpu_service,
+        runtime_client_factory=FakeRuntimeAgentClient,
+    )
+
+    result = asyncio.run(orchestrator.run_job(job.user_id, job.id))
+
+    assert result.status == TrainingJobStatus.TRAINING
+    assert training_service.events == []
+    assert gpu_service.terminated is False
 
 
 def test_training_orchestrator_fails_when_dataset_is_missing(tmp_path):
@@ -242,6 +319,44 @@ def test_training_orchestrator_fails_when_runtime_agent_is_unavailable(tmp_path)
     assert training_service.job.status == TrainingJobStatus.FAILED
     assert gpu_service.terminated is True
     assert not any(event.message == "artifact" for event in training_service.events)
+
+
+def test_training_orchestrator_stops_runtime_when_job_is_cancelled(tmp_path):
+    CancellingRuntimeAgentClient.cancelled = False
+    dataset = tmp_path / "train.jsonl"
+    dataset.write_text('{"messages":[]}\n', encoding="utf-8")
+    job = _job(dataset)
+    training_service = FakeTrainingService(job)
+    CancellingRuntimeAgentClient.training_service = training_service
+    gpu_service = FakeGPUService()
+    orchestrator = TrainingOrchestrator(
+        training_service=training_service,
+        gpu_service=gpu_service,
+        runtime_client_factory=CancellingRuntimeAgentClient,
+        poll_interval_seconds=0,
+        poll_timeout_seconds=1,
+    )
+
+    cancelled = asyncio.run(orchestrator.run_job(job.user_id, job.id))
+
+    assert cancelled.status == TrainingJobStatus.CANCELLED
+    assert CancellingRuntimeAgentClient.cancelled is True
+    assert gpu_service.terminated is True
+    assert any(event.message == "Training worker stopped after cancellation." for event in training_service.events)
+
+
+@pytest.mark.parametrize(
+    ("path", "expected"),
+    [
+        ("artifacts/run-1/adapter/adapter_model.safetensors", "adapter_model"),
+        ("artifacts/run-1/adapter/adapter_config.json", "adapter_config"),
+        ("artifacts/run-1/tokenizer/tokenizer.json", "tokenizer"),
+        ("artifacts/run-1/checkpoints/checkpoint-250/optimizer.pt", "checkpoint"),
+        ("artifacts/run-1/training_config.json", "training_config"),
+    ],
+)
+def test_training_orchestrator_classifies_artifacts_by_folder(path, expected):
+    assert TrainingOrchestrator._artifact_type(path) == expected
 
 
 def _job(dataset_path: Path) -> TrainingJob:

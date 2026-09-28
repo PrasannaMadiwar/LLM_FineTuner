@@ -51,6 +51,7 @@ class TrainingConfig(BaseModel):
     batch_size: int = Field(default=2, ge=1)
     gradient_accumulation_steps: int = Field(default=4, ge=1)
     lora_rank: int = Field(default=16, ge=1)
+    lora_alpha: int | None = Field(default=None, ge=1)
     max_sequence_length: int | None = Field(default=None, ge=1)
     load_in_4bit: bool = True
     extra: dict = Field(default_factory=dict)

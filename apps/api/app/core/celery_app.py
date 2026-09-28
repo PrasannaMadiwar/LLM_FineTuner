@@ -18,4 +18,13 @@ celery_app.conf.update(
     accept_content=["json"],
     result_serializer="json",
     timezone="UTC",
+    # Training tasks hold their message for the whole run. With late acks, Redis
+    # redelivers any message not acked within the visibility timeout, so it must
+    # outlast the longest job, and workers must not prefetch jobs they can't start.
+    worker_prefetch_multiplier=1,
+    broker_transport_options={
+        "visibility_timeout": settings.training_worker_poll_timeout_seconds
+        + settings.gpu_create_timeout_seconds
+        + 3600,
+    },
 )

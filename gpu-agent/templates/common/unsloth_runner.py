@@ -1,4 +1,5 @@
 import argparse
+import inspect
 import json
 import shutil
 import time
@@ -48,10 +49,11 @@ def _run_unsloth_training(
     output_dir: Path,
     artifact_dir: Path,
 ) -> None:
+    # Unsloth must be imported before transformers and trl so its patches apply.
+    from unsloth import FastLanguageModel  # isort: skip
     from datasets import load_dataset
-    from transformers import TrainingArguments
-    from trl import SFTTrainer
-    from unsloth import FastLanguageModel
+    from transformers import TrainerCallback
+    from trl import SFTConfig, SFTTrainer
 
     model_id = payload.get("model") or config.get("model_id") or DEFAULT_MODEL_IDS[model_family]
     max_sequence_length = int(config.get("max_sequence_length") or config.get("sequence_length") or 2048)
@@ -87,33 +89,36 @@ def _run_unsloth_training(
         remove_columns=dataset.column_names,
     )
 
-    training_args = TrainingArguments(
-        output_dir=str(output_dir),
-        per_device_train_batch_size=int(config.get("batch_size", 2)),
-        gradient_accumulation_steps=int(config.get("gradient_accumulation_steps", 4)),
-        warmup_steps=int(config.get("warmup_steps", 5)),
-        num_train_epochs=float(config.get("epochs", 3)),
-        learning_rate=float(config.get("learning_rate", 2e-4)),
-        logging_steps=int(config.get("logging_steps", 1)),
-        save_strategy=str(config.get("save_strategy", "epoch")),
-        save_steps=int(config.get("save_steps", 100)),
-        save_total_limit=int(config.get("save_total_limit", 3)),
-        optim=str(config.get("optim", "adamw_8bit")),
-        weight_decay=float(config.get("weight_decay", 0.01)),
-        lr_scheduler_type=str(config.get("lr_scheduler_type", "linear")),
-        seed=int(config.get("seed", 3407)),
-        report_to=config.get("report_to", "none"),
-    )
-    trainer = SFTTrainer(
-        model=model,
-        tokenizer=tokenizer,
-        train_dataset=dataset,
-        dataset_text_field="text",
-        max_seq_length=max_sequence_length,
-        dataset_num_proc=int(config.get("dataset_num_proc", 2)),
-        packing=bool(config.get("packing", False)),
-        args=training_args,
-    )
+    sft_config_kwargs = {
+        "output_dir": str(output_dir),
+        "per_device_train_batch_size": int(config.get("batch_size", 2)),
+        "gradient_accumulation_steps": int(config.get("gradient_accumulation_steps", 4)),
+        "warmup_steps": int(config.get("warmup_steps", 5)),
+        "num_train_epochs": float(config.get("epochs", 3)),
+        "learning_rate": float(config.get("learning_rate", 2e-4)),
+        "logging_steps": int(config.get("logging_steps", 1)),
+        "save_strategy": str(config.get("save_strategy", "epoch")),
+        "save_steps": int(config.get("save_steps", 100)),
+        "save_total_limit": int(config.get("save_total_limit", 3)),
+        "optim": str(config.get("optim", "adamw_8bit")),
+        "weight_decay": float(config.get("weight_decay", 0.01)),
+        "lr_scheduler_type": str(config.get("lr_scheduler_type", "linear")),
+        "seed": int(config.get("seed", 3407)),
+        "report_to": config.get("report_to", "none"),
+        "dataset_text_field": "text",
+        "dataset_num_proc": int(config.get("dataset_num_proc", 2)),
+        "packing": bool(config.get("packing", False)),
+    }
+    # TRL renamed these across releases; pass whichever name the installed version accepts.
+    sft_config_kwargs[_supported_name(SFTConfig, "max_length", "max_seq_length")] = max_sequence_length
+    trainer_kwargs = {
+        "model": model,
+        "train_dataset": dataset,
+        "args": SFTConfig(**sft_config_kwargs),
+        "callbacks": [_live_metrics_callback(TrainerCallback, output_dir, started_at)],
+    }
+    trainer_kwargs[_supported_name(SFTTrainer, "processing_class", "tokenizer")] = tokenizer
+    trainer = SFTTrainer(**trainer_kwargs)
     result = trainer.train(resume_from_checkpoint=config.get("resume_from_checkpoint"))
 
     adapter_dir = artifact_dir / "adapter"
@@ -170,9 +175,11 @@ def _training_config(payload: dict) -> dict:
 
 def _copy_checkpoints(output_dir: Path, destination: Path) -> None:
     destination.mkdir(parents=True, exist_ok=True)
-    checkpoint_root = output_dir / "checkpoints"
-    search_root = checkpoint_root if checkpoint_root.exists() else output_dir
-    for checkpoint in search_root.glob("checkpoint-*"):
+    # The Trainer writes checkpoint-N straight into output_dir; the dry run uses output_dir/checkpoints.
+    checkpoints = sorted((output_dir / "checkpoints").glob("checkpoint-*")) or sorted(
+        output_dir.glob("checkpoint-*")
+    )
+    for checkpoint in checkpoints:
         if checkpoint.is_dir():
             target = destination / checkpoint.name
             if target.exists():
@@ -180,9 +187,49 @@ def _copy_checkpoints(output_dir: Path, destination: Path) -> None:
             shutil.copytree(checkpoint, target)
 
 
+def _supported_name(target: Any, *candidates: str) -> str:
+    parameters = inspect.signature(target.__init__).parameters
+    for name in candidates:
+        if name in parameters:
+            return name
+    return candidates[-1]
+
+
+def _live_metrics_callback(callback_base: type, output_dir: Path, started_at: float) -> Any:
+    """Write metrics.json on every log step so the agent can report progress mid-run."""
+
+    class LiveMetricsCallback(callback_base):
+        def __init__(self):
+            self._last_loss: float | None = None
+
+        def on_log(self, args, state, control, logs=None, **kwargs):
+            logs = logs or {}
+            if "loss" in logs:
+                self._last_loss = float(logs["loss"])
+            step = int(state.global_step or 0)
+            max_steps = int(state.max_steps or 0)
+            elapsed = time.monotonic() - started_at
+            _write_metrics(
+                output_dir,
+                {
+                    "current_epoch": float(state.epoch or 0),
+                    "loss": self._last_loss,
+                    "learning_rate": logs.get("learning_rate"),
+                    "global_step": step,
+                    "max_steps": max_steps,
+                    "eta_seconds": elapsed / step * (max_steps - step) if step and max_steps else None,
+                },
+            )
+
+    return LiveMetricsCallback()
+
+
 def _write_metrics(output_dir: Path, metrics: dict) -> None:
     sanitized = {key: value for key, value in metrics.items() if value is not None}
-    (output_dir / "metrics.json").write_text(json.dumps(sanitized, indent=2), encoding="utf-8")
+    # Write then rename so the agent never reads a half-written file while training runs.
+    temporary = output_dir / "metrics.json.tmp"
+    temporary.write_text(json.dumps(sanitized, indent=2), encoding="utf-8")
+    temporary.replace(output_dir / "metrics.json")
 
 
 def _write_dry_run_outputs(

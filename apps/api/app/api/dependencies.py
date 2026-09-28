@@ -15,7 +15,7 @@ from app.infrastructure.cache.mapping_cache import MappingCache
 from app.infrastructure.datasets.github_provider import GitHubDatasetProvider
 from app.infrastructure.datasets.huggingface_provider import HuggingFaceDatasetProvider
 from app.infrastructure.datasets.kaggle_provider import KaggleDatasetProvider
-from app.infrastructure.gpu.runpod_provider import RunPodProvider
+from app.infrastructure.gpu.factory import create_gpu_provider
 from app.infrastructure.llm.openai_provider import OpenAIProvider
 from app.infrastructure.repositories.dataset_repository import DatasetRepository
 from app.infrastructure.repositories.gpu_repository import GPURepository
@@ -161,15 +161,17 @@ def get_gpu_service(
     gpu_repository: Annotated[GPURepository, Depends(get_gpu_repository)],
 ) -> GPUService:
     settings = get_settings()
-    provider_name = GPUProviderName(settings.gpu_provider)
-    if provider_name != GPUProviderName.RUNPOD:
+    try:
+        provider_name = GPUProviderName(settings.gpu_provider)
+        provider = create_gpu_provider(provider_name)
+    except ValueError as exc:
         raise HTTPException(
             status_code=status.HTTP_501_NOT_IMPLEMENTED,
             detail=f"GPU provider '{settings.gpu_provider}' is not implemented.",
-        )
+        ) from exc
     return GPUService(
         repository=gpu_repository,
-        provider=RunPodProvider(),
+        provider=provider,
         provider_name=provider_name,
     )
 

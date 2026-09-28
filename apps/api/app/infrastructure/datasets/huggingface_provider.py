@@ -1,3 +1,4 @@
+import asyncio
 from collections.abc import AsyncIterator
 
 import httpx
@@ -8,6 +9,9 @@ from app.infrastructure.datasets.base import (
     DatasetProvider,
     DatasetProviderError,
 )
+
+_MAX_ROWS_PER_PAGE = 100
+_RETRYABLE_STATUS_CODES = {429, 500, 502, 503, 504}
 
 
 class HuggingFaceDatasetProvider(DatasetProvider):
@@ -79,6 +83,8 @@ class HuggingFaceDatasetProvider(DatasetProvider):
     ) -> AsyncIterator[list[dict]]:
         offset = 0
         config = "default"
+        # The datasets server rejects pages larger than 100 rows.
+        page_size = min(batch_size, _MAX_ROWS_PER_PAGE)
         async with httpx.AsyncClient(timeout=30) as client:
             while True:
                 params = {
@@ -86,9 +92,9 @@ class HuggingFaceDatasetProvider(DatasetProvider):
                     "config": config,
                     "split": split or "train",
                     "offset": offset,
-                    "length": batch_size,
+                    "length": page_size,
                 }
-                response = await client.get(f"{self._datasets_server_url}/rows", params=params)
+                response = await self._get_with_retry(client, f"{self._datasets_server_url}/rows", params)
                 if response.status_code == 400 and config == "default":
                     configs = await self._fetch_configs(client, dataset_id)
                     if configs:
@@ -100,6 +106,20 @@ class HuggingFaceDatasetProvider(DatasetProvider):
                     break
                 yield rows
                 offset += len(rows)
+
+    @staticmethod
+    async def _get_with_retry(
+        client: httpx.AsyncClient,
+        url: str,
+        params: dict,
+        attempts: int = 4,
+    ) -> httpx.Response:
+        for attempt in range(attempts):
+            response = await client.get(url, params=params)
+            if response.status_code not in _RETRYABLE_STATUS_CODES or attempt == attempts - 1:
+                return response
+            await asyncio.sleep(2**attempt)
+        return response
 
     async def _fetch_splits(self, client: httpx.AsyncClient, dataset_id: str) -> list[str]:
         response = await client.get(f"{self._datasets_server_url}/splits", params={"dataset": dataset_id})

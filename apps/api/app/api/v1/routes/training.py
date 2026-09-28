@@ -4,6 +4,7 @@ from uuid import UUID
 from fastapi import APIRouter, Depends, HTTPException, status
 
 from app.api.dependencies import get_current_user, get_training_service
+from app.core.config import get_settings
 from app.domain.users import User
 from app.schemas.training import (
     ModelListResponse,
@@ -30,7 +31,10 @@ async def list_models(
     training_service: TrainingServiceDep,
     current_user: CurrentUserDep,
 ):
-    return ModelListResponse(models=training_service.list_supported_models())
+    return ModelListResponse(
+        models=training_service.list_supported_models(),
+        gpu_provider=get_settings().gpu_provider,
+    )
 
 
 @router.get("/templates", response_model=TemplateListResponse, summary="List installed templates")

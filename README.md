@@ -21,6 +21,47 @@ Render deployment is configured in [`render.yaml`](render.yaml). It creates a pu
 
 See [`RENDER_DEPLOY.md`](RENDER_DEPLOY.md) for the required environment variables, Render Blueprint steps, worker-plan requirement, and upload-storage limitation.
 
+## Local GPU Demo
+
+The GPU layer is provider-agnostic: the training pipeline only talks to the `GPUProvider`
+interface. `GPU_PROVIDER=runpod` rents cloud GPUs; `GPU_PROVIDER=local` runs the same GPU agent
+image as a container on this machine's NVIDIA GPU. Both use the same job lifecycle
+(create instance → upload dataset → train → collect artifacts → terminate).
+
+Requirements: an NVIDIA GPU with 8 GB+ VRAM, a recent NVIDIA driver, and Docker Desktop with the
+WSL 2 backend (GPU support is built in).
+
+```powershell
+docker build -t llm-finetuner-gpu-agent:local gpu-agent   # one-time, several GB
+docker compose up --build
+```
+
+Open http://localhost:13000, register, pick a Hugging Face dataset, and fine-tune
+**Qwen2.5 1.5B Instruct**. `DATASET_MAX_ROWS` (default 2000 in Docker Compose) keeps the demo run
+to minutes. The first run downloads the model into the `llm-finetuner-hf-cache` volume; later runs
+reuse it. Trained adapters stay in the `llm-finetuner-gpu-workspace` volume under
+`artifacts/<training-id>/`.
+
+Verified on an RTX 5050 Laptop GPU (8 GB): 2,000 alpaca rows, 1 epoch (250 steps) of 4-bit LoRA
+on Qwen2.5 1.5B takes about 6 minutes end to end (first training step after ~1 minute, then about
+one step per second), shows live loss/ETA on the job page, and produces a 74 MB adapter. Run one job
+before presenting: the very first job also downloads the model (~3 GB), which is then cached.
+
+The local provider runs one GPU container at a time and needs the Docker socket mounted into the
+API and worker containers. That is only for a local demo: never mount the Docker socket on a
+publicly reachable server.
+
+Troubleshooting:
+
+- *"The local GPU is already in use by …"* — a previous job's container is still running. Wait for
+  it, or remove it with `docker rm -f <name>`.
+- *"GPU agent image … was not found"* — build it with the `docker build` command above.
+- *"Docker could not attach the NVIDIA GPU"* — enable the WSL 2 backend in Docker Desktop and update
+  the NVIDIA driver; `docker run --rm --gpus all nvidia/cuda:12.8.1-base-ubuntu24.04 nvidia-smi`
+  should list the GPU.
+- RTX 50-series (Blackwell) GPUs need the CUDA 12.8 image this repository builds; older CUDA 12.1
+  images fail with "no kernel image is available".
+
 ## Phase 2 Scope: Dataset Intelligence
 
 The backend includes a Dataset Intelligence slice for instruction-tuning dataset discovery,
@@ -275,7 +316,10 @@ Or run the infrastructure with Docker:
 docker compose up --build
 ```
 
-The local services are available at `http://localhost:13000` (web) and `http://localhost:18000` (API). FastAPI's Swagger, ReDoc, and OpenAPI endpoints are disabled in deployed and local application instances.
+The Docker stack starts local PostgreSQL and Redis for MVP development by default. The local
+services are available at `http://localhost:13000` (web), `http://localhost:18000` (API),
+`localhost:15432` (PostgreSQL), and `localhost:16379` (Redis). FastAPI's Swagger, ReDoc,
+and OpenAPI endpoints are disabled in deployed and local application instances.
 
 ## Verification
 

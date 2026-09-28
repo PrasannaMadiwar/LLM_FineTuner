@@ -22,7 +22,7 @@ class RuntimeTrainingStart(BaseModel):
 class RuntimeTrainingStatus(BaseModel):
     training_id: str
     state: str
-    current_epoch: int | None = None
+    current_epoch: float | None = None
     loss: float | None = None
     learning_rate: float | None = None
     eta_seconds: float | None = None
@@ -76,8 +76,14 @@ class RuntimeAgentClient:
             headers={"Content-Type": "application/octet-stream"},
         )
 
-    async def start_training(self, template: str, dataset_path: str, config: dict) -> RuntimeTrainingStart:
-        payload = {"template": template, "dataset_path": dataset_path, "config": config}
+    async def start_training(
+        self,
+        template: str,
+        dataset_path: str,
+        config: dict,
+        model: str | None = None,
+    ) -> RuntimeTrainingStart:
+        payload = {"template": template, "model": model, "dataset_path": dataset_path, "config": config}
         response = await self._request("POST", "/train", json_payload=payload)
         return RuntimeTrainingStart(**response)
 

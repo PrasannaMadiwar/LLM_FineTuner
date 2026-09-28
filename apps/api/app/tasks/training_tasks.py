@@ -8,7 +8,7 @@ import app.infrastructure.models  # noqa: F401 - Register all ORM models for SQL
 from app.core.celery_app import celery_app
 from app.core.config import get_settings
 from app.domain.gpu import GPUProviderName
-from app.infrastructure.gpu.runpod_provider import RunPodProvider
+from app.infrastructure.gpu.factory import create_gpu_provider
 from app.infrastructure.repositories.gpu_repository import GPURepository
 from app.infrastructure.repositories.training_job_repository import TrainingJobRepository
 from app.services.gpu_service import GPUService
@@ -53,10 +53,11 @@ async def _execute_training_job(user_id: UUID, job_id: UUID, task_id: str) -> di
                 template_loader=TemplateLoader(),
                 state_machine=TrainingStateMachine(),
             )
+            provider_name = GPUProviderName(settings.gpu_provider)
             gpu_service = GPUService(
                 repository=gpu_repository,
-                provider=RunPodProvider(),
-                provider_name=GPUProviderName(settings.gpu_provider),
+                provider=create_gpu_provider(provider_name),
+                provider_name=provider_name,
             )
             orchestrator = TrainingOrchestrator(
                 training_service=training_service,
