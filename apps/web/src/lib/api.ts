@@ -142,6 +142,7 @@ class ApiClient {
       description: item.description,
       downloads: item.downloads,
       likes: item.likes,
+      source: item.source || 'hugging_face',
       tags: item.tags || [item.source || 'Hugging Face'],
     }));
   }
@@ -155,11 +156,13 @@ class ApiClient {
   async previewDataset(
     datasetId: string,
     split = 'train',
-    limit = 5
+    limit = 5,
+    source = 'hugging_face'
   ): Promise<DatasetRowPreview[]> {
-    return this.request<DatasetRowPreview[]>(
-      `/datasets/preview/${encodeURIComponent(datasetId)}?split=${split}&limit=${limit}`
+    const res = await this.request<{ rows?: DatasetRowPreview[] }>(
+      `/datasets/preview/${encodeURIComponent(datasetId)}?split=${split}&source=${source}`
     );
+    return (res.rows || []).slice(0, limit);
   }
 
   async analyzeDataset(

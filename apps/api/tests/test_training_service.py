@@ -4,6 +4,7 @@ from uuid import uuid4
 
 import pytest
 
+from app.core.config import get_settings
 from app.domain.training import (
     ModelDefinition,
     TrainingConfig,
@@ -14,6 +15,18 @@ from app.domain.training import (
 from app.services.model_registry import ModelRegistry
 from app.services.training_service import TrainingService
 from app.services.training_state_machine import TrainingStateMachine
+
+
+@pytest.fixture(autouse=True)
+def storage_with_dataset(tmp_path, monkeypatch):
+    # Jobs may only point at normalized datasets inside platform storage.
+    monkeypatch.chdir(tmp_path)
+    monkeypatch.setenv("STORAGE_PATH", str(tmp_path))
+    get_settings.cache_clear()
+    (tmp_path / "datasets").mkdir()
+    (tmp_path / "datasets" / "demo.jsonl").write_text('{"messages": []}\n', encoding="utf-8")
+    yield
+    get_settings.cache_clear()
 
 
 class FakeTrainingJobRepository:
@@ -158,6 +171,23 @@ def test_training_service_rejects_unsupported_model():
                 _config().model_copy(update={"model_key": "unknown"}),
             )
         )
+
+
+def test_training_service_rejects_missing_dataset_file():
+    service = _service(FakeTrainingJobRepository())
+    config = _config().model_copy(update={"normalized_dataset_path": "datasets/never-normalized.jsonl"})
+
+    with pytest.raises(ValueError, match="does not exist"):
+        asyncio.run(service.create_job(uuid4(), config))
+
+
+def test_training_service_rejects_dataset_outside_storage(tmp_path):
+    service = _service(FakeTrainingJobRepository())
+    outside = tmp_path.parent / "outside-storage.jsonl"
+    config = _config().model_copy(update={"normalized_dataset_path": str(outside)})
+
+    with pytest.raises(ValueError, match="normalized by this platform"):
+        asyncio.run(service.create_job(uuid4(), config))
 
 
 def _service(repository, task_dispatcher=None):

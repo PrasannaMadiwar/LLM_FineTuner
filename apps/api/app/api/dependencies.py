@@ -12,6 +12,7 @@ from app.core.security import decode_access_token
 from app.domain.gpu import GPUProviderName
 from app.domain.users import User, UserRole
 from app.infrastructure.cache.mapping_cache import MappingCache
+from app.infrastructure.datasets.demo_provider import DemoDatasetProvider
 from app.infrastructure.datasets.github_provider import GitHubDatasetProvider
 from app.infrastructure.datasets.huggingface_provider import HuggingFaceDatasetProvider
 from app.infrastructure.datasets.kaggle_provider import KaggleDatasetProvider
@@ -147,6 +148,7 @@ def get_dataset_service(
     return DatasetService(
         repository=dataset_repository,
         providers=[
+            DemoDatasetProvider(),
             HuggingFaceDatasetProvider(),
             KaggleDatasetProvider(),
             GitHubDatasetProvider(),

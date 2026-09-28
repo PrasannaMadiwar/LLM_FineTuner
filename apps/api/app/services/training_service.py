@@ -1,6 +1,8 @@
 from datetime import UTC, datetime
+from pathlib import Path
 from uuid import UUID
 
+from app.core.config import get_settings
 from app.domain.training import TrainingConfig, TrainingJob, TrainingJobEvent, TrainingJobStatus
 from app.infrastructure.repositories.training_job_repository import TrainingJobRepository
 from app.services.model_registry import ModelRegistry
@@ -38,6 +40,7 @@ class TrainingService:
     ) -> TrainingJob:
         model = self._model_registry.get_model(training_config.model_key)
         template_name = self._template_loader.resolve_template(model.template)
+        self._require_normalized_dataset(training_config.normalized_dataset_path)
         resolved_config = self._apply_model_defaults(training_config, model.sequence_length)
         return await self._repository.create_job(
             user_id=user_id,
@@ -231,6 +234,17 @@ class TrainingService:
         if job.user_id != user_id:
             raise PermissionError("You do not have access to this training job.")
         return job
+
+    @staticmethod
+    def _require_normalized_dataset(normalized_dataset_path: str) -> None:
+        # Reject bad paths when the job is created, not minutes later in the worker,
+        # and only accept files the platform wrote into its own storage.
+        storage_root = Path(get_settings().storage_path).resolve()
+        dataset_path = Path(normalized_dataset_path).resolve()
+        if storage_root not in dataset_path.parents:
+            raise ValueError("The training dataset must be a dataset normalized by this platform.")
+        if not dataset_path.is_file():
+            raise ValueError("The normalized dataset file does not exist. Normalize the dataset before training.")
 
     @staticmethod
     def _apply_model_defaults(config: TrainingConfig, sequence_length: int) -> TrainingConfig:

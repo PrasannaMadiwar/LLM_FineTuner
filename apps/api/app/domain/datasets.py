@@ -9,6 +9,7 @@ class DatasetSource(StrEnum):
     HUGGING_FACE = "hugging_face"
     KAGGLE = "kaggle"
     GITHUB = "github"
+    DEMO = "demo"
 
 
 class DatasetSearchResult(BaseModel):

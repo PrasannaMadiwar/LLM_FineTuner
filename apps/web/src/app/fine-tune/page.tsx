@@ -29,6 +29,9 @@ import {
   Shield,
 } from 'lucide-react';
 
+// Served by the API's built-in demo dataset provider; needs no network access.
+const DEMO_DATASET_ID = 'builtin/edi-demo';
+
 const STEPS = [
   { id: 1, name: 'Dataset', icon: Database },
   { id: 2, name: 'Model', icon: Boxes },
@@ -49,6 +52,7 @@ function FineTuneWizardContent() {
   const [searchResults, setSearchResults] = useState<DatasetSearchResult[]>([]);
   const [searching, setSearching] = useState(false);
   const [selectedDatasetId, setSelectedDatasetId] = useState('');
+  const [selectedSource, setSelectedSource] = useState('hugging_face');
   const [previews, setPreviews] = useState<DatasetRowPreview[]>([]);
   const [loadingPreview, setLoadingPreview] = useState(false);
   const [promptField, setPromptField] = useState('instruction');
@@ -118,13 +122,15 @@ function FineTuneWizardContent() {
   }, [initialModelKey]);
 
   // Select dataset & fetch preview
-  const handleSelectDataset = async (datasetId: string) => {
+  const handleSelectDataset = async (datasetId: string, source = 'hugging_face') => {
     setSelectedDatasetId(datasetId);
+    setSelectedSource(source);
     setNormalizedResult(null);
+    setPreviews([]);
     setDatasetError('');
     try {
       setLoadingPreview(true);
-      const rows = await api.previewDataset(datasetId, 'train', 3);
+      const rows = await api.previewDataset(datasetId, 'train', 3, source);
       setPreviews(rows || []);
       if (rows && rows.length > 0) {
         const keys = Object.keys(rows[0]);
@@ -151,12 +157,24 @@ function FineTuneWizardContent() {
       setDatasetError('');
       const res = await api.normalizeDataset({
         dataset_id: selectedDatasetId,
+        source: selectedSource,
         field_mapping: {
           prompt_field: promptField,
           response_field: responseField,
         },
       });
       setNormalizedResult(res);
+      if (!res.artifact_path) {
+        const issues = (res.validation_report?.issues || [])
+          .map((issue: any) => issue.message || issue.code)
+          .filter(Boolean)
+          .slice(0, 3)
+          .join('; ');
+        setDatasetError(
+          `This dataset could not be prepared for training${issues ? `: ${issues}` : ''}. ` +
+            'Check the prompt/response fields, or use the built-in demo dataset.'
+        );
+      }
     } catch (err: any) {
       setDatasetError(err.message || 'Normalization failed');
     } finally {
@@ -169,14 +187,16 @@ function FineTuneWizardContent() {
     try {
       setSubmitting(true);
       setSubmitError('');
+      if (!normalizedResult?.artifact_path) {
+        setSubmitError('Normalize a dataset in Step 1 before starting training.');
+        setSubmitting(false);
+        return;
+      }
 
       const config: TrainingConfig = {
         model_key: selectedModelKey,
-        dataset_id: selectedDatasetId || 'yahma/alpaca-cleaned',
-        normalized_dataset_path:
-          normalizedResult?.artifact_path ||
-          normalizedResult?.normalized_artifact_path ||
-          `storage/normalized/${(selectedDatasetId || 'yahma/alpaca-cleaned').replace('/', '_')}.jsonl`,
+        dataset_id: selectedDatasetId,
+        normalized_dataset_path: normalizedResult.artifact_path,
         epochs,
         learning_rate: learningRate,
         batch_size: batchSize,
@@ -324,13 +344,37 @@ function FineTuneWizardContent() {
               </button>
             </div>
 
+            <button
+              type="button"
+              onClick={() => handleSelectDataset(DEMO_DATASET_ID, 'demo')}
+              className={`w-full p-3 rounded-xl border text-left transition-all flex items-center gap-3 ${
+                selectedDatasetId === DEMO_DATASET_ID
+                  ? 'border-teal-600 bg-teal-50/50 shadow-xs'
+                  : 'border-dashed border-slate-300 hover:border-teal-600 bg-white'
+              }`}
+            >
+              <Zap className="w-4 h-4 text-teal-600 shrink-0" />
+              <span className="flex-1">
+                <span className="block text-xs font-semibold text-slate-900">
+                  Use built-in demo dataset
+                </span>
+                <span className="block text-[11px] text-slate-500">
+                  527 engineering &amp; maths Q&amp;A rows bundled with the app. Works offline and
+                  trains in a few minutes.
+                </span>
+              </span>
+              {selectedDatasetId === DEMO_DATASET_ID && (
+                <CheckCircle2 className="w-4 h-4 text-teal-600 shrink-0" />
+              )}
+            </button>
+
             {/* Search Results List */}
             {searchResults.length > 0 && (
               <div className="grid grid-cols-1 md:grid-cols-2 gap-3 pt-2">
                 {searchResults.slice(0, 4).map((ds) => (
                   <div
                     key={ds.id}
-                    onClick={() => handleSelectDataset(ds.id)}
+                    onClick={() => handleSelectDataset(ds.id, ds.source)}
                     className={`p-3.5 rounded-xl border transition-all cursor-pointer ${
                       selectedDatasetId === ds.id
                         ? 'border-teal-600 bg-teal-50/50 shadow-xs'
@@ -448,10 +492,12 @@ function FineTuneWizardContent() {
                   <span>Normalize Dataset</span>
                 </button>
 
-                {normalizedResult && (
+                {normalizedResult?.artifact_path && (
                   <span className="text-xs font-semibold text-emerald-700 bg-emerald-50 border border-emerald-200 px-3 py-1.5 rounded-lg flex items-center gap-1.5">
                     <CheckCircle2 className="w-4 h-4 text-emerald-600" />
-                    <span>Dataset ready for training!</span>
+                    <span>
+                      {normalizedResult.validation_report?.total_rows ?? ''} rows ready for training
+                    </span>
                   </span>
                 )}
               </div>
@@ -459,10 +505,15 @@ function FineTuneWizardContent() {
           )}
 
           {/* Step 1 Navigation */}
-          <div className="flex justify-end pt-4 border-t border-slate-100">
+          <div className="flex items-center justify-end gap-3 pt-4 border-t border-slate-100">
+            {selectedDatasetId && !normalizedResult?.artifact_path && (
+              <span className="text-[11px] text-slate-500">
+                Normalize the dataset to continue.
+              </span>
+            )}
             <button
               onClick={() => setCurrentStep(2)}
-              disabled={!selectedDatasetId}
+              disabled={!normalizedResult?.artifact_path}
               className="px-5 py-2.5 bg-teal-600 hover:bg-teal-700 text-white font-semibold text-xs rounded-xl transition-all flex items-center gap-2 shadow-xs disabled:opacity-50"
             >
               <span>Next: Select Model</span>

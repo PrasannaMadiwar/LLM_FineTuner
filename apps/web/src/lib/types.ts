@@ -17,6 +17,7 @@ export interface DatasetSearchResult {
   description?: string;
   downloads?: number;
   likes?: number;
+  source?: string;
   tags?: string[];
 }
 

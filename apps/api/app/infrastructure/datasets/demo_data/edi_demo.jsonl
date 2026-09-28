@@ -1,0 +1,527 @@
+{"instruction": "What is the area of a circle with a radius of 132 cm?", "output": "The area is about 54739.11 cm².\n\nWorking: A = π × r² = π × 132² ≈ 54739.11 cm²."}
+{"instruction": "What is 40% of 1260?", "output": "40% of 1260 is 504.\n\nWorking: 40% × 1260 = 40/100 × 1260 = 504."}
+{"instruction": "What is the area of a circle with a radius of 138 cm?", "output": "The area is about 59828.49 cm².\n\nWorking: A = π × r² = π × 138² ≈ 59828.49 cm²."}
+{"instruction": "A device runs at 5 V and draws 3 A. How much power does it use?", "output": "The device uses 15 W.\n\nWorking: P = V × I = 5 V × 3 A = 15 W."}
+{"instruction": "Convert the decimal number 3619 to hexadecimal.", "output": "3619 in hexadecimal is E23.\n\nWorking: repeatedly dividing 3619 by 16 and reading the remainders from last to first gives E23."}
+{"instruction": "Convert the decimal number 912 to binary.", "output": "912 in binary is 1110010000.\n\nWorking: repeatedly dividing 912 by 2 and reading the remainders from last to first gives 1110010000."}
+{"instruction": "Convert the decimal number 1170 to hexadecimal.", "output": "1170 in hexadecimal is 492.\n\nWorking: repeatedly dividing 1170 by 16 and reading the remainders from last to first gives 492."}
+{"instruction": "Convert the decimal number 4050 to hexadecimal.", "output": "4050 in hexadecimal is FD2.\n\nWorking: repeatedly dividing 4050 by 16 and reading the remainders from last to first gives FD2."}
+{"instruction": "A 47 V supply is connected across a 760 ohm resistor. What current flows through it?", "output": "The current is 0.0618 A.\n\nWorking: Ohm's law gives I = V ÷ R = 47 V ÷ 760 Ω ≈ 0.0618 A."}
+{"instruction": "Convert 6 °C to Fahrenheit.", "output": "6 °C is 42.8 °F.\n\nWorking: °F = °C × 9/5 + 32 = 6 × 9/5 + 32 = 42.8."}
+{"instruction": "Convert the decimal number 2256 to hexadecimal.", "output": "2256 in hexadecimal is 8D0.\n\nWorking: repeatedly dividing 2256 by 16 and reading the remainders from last to first gives 8D0."}
+{"instruction": "Convert -23 °C to Fahrenheit.", "output": "-23 °C is -9.4 °F.\n\nWorking: °F = °C × 9/5 + 32 = -23 × 9/5 + 32 = -9.4."}
+{"instruction": "Convert the decimal number 39 to binary.", "output": "39 in binary is 100111.\n\nWorking: repeatedly dividing 39 by 2 and reading the remainders from last to first gives 100111."}
+{"instruction": "A resistor of 660 ohms carries a current of 2.7 A. What is the voltage across it?", "output": "The voltage across the resistor is 1782 V.\n\nWorking: Ohm's law gives V = I × R = 2.7 A × 660 Ω = 1782 V."}
+{"instruction": "A resistor of 720 ohms carries a current of 3.7 A. What is the voltage across it?", "output": "The voltage across the resistor is 2664 V.\n\nWorking: Ohm's law gives V = I × R = 3.7 A × 720 Ω = 2664 V."}
+{"instruction": "A device runs at 12 V and draws 7.7 A. How much power does it use?", "output": "The device uses 92.4 W.\n\nWorking: P = V × I = 12 V × 7.7 A = 92.4 W."}
+{"instruction": "Convert the decimal number 298 to binary.", "output": "298 in binary is 100101010.\n\nWorking: repeatedly dividing 298 by 2 and reading the remainders from last to first gives 100101010."}
+{"instruction": "Convert the decimal number 1062 to hexadecimal.", "output": "1062 in hexadecimal is 426.\n\nWorking: repeatedly dividing 1062 by 16 and reading the remainders from last to first gives 426."}
+{"instruction": "Convert 18 kilograms to grams.", "output": "18 kilograms is 18000 grams.\n\nWorking: there are 1000 grams in one kilogram, so 18 × 1000 = 18000."}
+{"instruction": "Convert the decimal number 684 to hexadecimal.", "output": "684 in hexadecimal is 2AC.\n\nWorking: repeatedly dividing 684 by 16 and reading the remainders from last to first gives 2AC."}
+{"instruction": "Convert the decimal number 528 to binary.", "output": "528 in binary is 1000010000.\n\nWorking: repeatedly dividing 528 by 2 and reading the remainders from last to first gives 1000010000."}
+{"instruction": "Convert 9.75 minutes to seconds.", "output": "9.75 minutes is 585 seconds.\n\nWorking: there are 60 seconds in one minute, so 9.75 × 60 = 585."}
+{"instruction": "Convert 198 kilometres to metres.", "output": "198 kilometres is 198000 metres.\n\nWorking: there are 1000 metres in one kilometre, so 198 × 1000 = 198000."}
+{"instruction": "Convert the decimal number 145 to binary.", "output": "145 in binary is 10010001.\n\nWorking: repeatedly dividing 145 by 2 and reading the remainders from last to first gives 10010001."}
+{"instruction": "Convert 112 metres to centimetres.", "output": "112 metres is 11200 centimetres.\n\nWorking: there are 100 centimetres in one metre, so 112 × 100 = 11200."}
+{"instruction": "What is 25% of 1100?", "output": "25% of 1100 is 275.\n\nWorking: 25% × 1100 = 25/100 × 1100 = 275."}
+{"instruction": "A 4 V supply is connected across a 300 ohm resistor. What current flows through it?", "output": "The current is 0.0133 A.\n\nWorking: Ohm's law gives I = V ÷ R = 4 V ÷ 300 Ω ≈ 0.0133 A."}
+{"instruction": "A 179 V supply is connected across a 610 ohm resistor. What current flows through it?", "output": "The current is 0.2934 A.\n\nWorking: Ohm's law gives I = V ÷ R = 179 V ÷ 610 Ω ≈ 0.2934 A."}
+{"instruction": "What is the capital of Germany?", "output": "The capital of Germany is Berlin.\n\nWorking: this is a geography fact; Berlin is the seat of Germany's national government."}
+{"instruction": "Convert the decimal number 2088 to hexadecimal.", "output": "2088 in hexadecimal is 828.\n\nWorking: repeatedly dividing 2088 by 16 and reading the remainders from last to first gives 828."}
+{"instruction": "Convert the decimal number 458 to binary.", "output": "458 in binary is 111001010.\n\nWorking: repeatedly dividing 458 by 2 and reading the remainders from last to first gives 111001010."}
+{"instruction": "A device runs at 110 V and draws 3 A. How much power does it use?", "output": "The device uses 330 W.\n\nWorking: P = V × I = 110 V × 3 A = 330 W."}
+{"instruction": "A device runs at 230 V and draws 6.5 A. How much power does it use?", "output": "The device uses 1495 W.\n\nWorking: P = V × I = 230 V × 6.5 A = 1495 W."}
+{"instruction": "A device runs at 12 V and draws 6.2 A. How much power does it use?", "output": "The device uses 74.4 W.\n\nWorking: P = V × I = 12 V × 6.2 A = 74.4 W."}
+{"instruction": "A resistor of 770 ohms carries a current of 3.2 A. What is the voltage across it?", "output": "The voltage across the resistor is 2464 V.\n\nWorking: Ohm's law gives V = I × R = 3.2 A × 770 Ω = 2464 V."}
+{"instruction": "What is the capital of Sweden?", "output": "The capital of Sweden is Stockholm.\n\nWorking: this is a geography fact; Stockholm is the seat of Sweden's national government."}
+{"instruction": "Convert the decimal number 2740 to hexadecimal.", "output": "2740 in hexadecimal is AB4.\n\nWorking: repeatedly dividing 2740 by 16 and reading the remainders from last to first gives AB4."}
+{"instruction": "Convert the decimal number 30 to hexadecimal.", "output": "30 in hexadecimal is 1E.\n\nWorking: repeatedly dividing 30 by 16 and reading the remainders from last to first gives 1E."}
+{"instruction": "Convert the decimal number 1363 to hexadecimal.", "output": "1363 in hexadecimal is 553.\n\nWorking: repeatedly dividing 1363 by 16 and reading the remainders from last to first gives 553."}
+{"instruction": "Convert the decimal number 222 to binary.", "output": "222 in binary is 11011110.\n\nWorking: repeatedly dividing 222 by 2 and reading the remainders from last to first gives 11011110."}
+{"instruction": "What is the area of a circle with a radius of 136 cm?", "output": "The area is about 58106.9 cm².\n\nWorking: A = π × r² = π × 136² ≈ 58106.9 cm²."}
+{"instruction": "What is the capital of the United Kingdom?", "output": "The capital of the United Kingdom is London.\n\nWorking: this is a geography fact; London is the seat of the United Kingdom's national government."}
+{"instruction": "What is 10% of 1420?", "output": "10% of 1420 is 142.\n\nWorking: 10% × 1420 = 10/100 × 1420 = 142."}
+{"instruction": "A 227 V supply is connected across a 360 ohm resistor. What current flows through it?", "output": "The current is 0.6306 A.\n\nWorking: Ohm's law gives I = V ÷ R = 227 V ÷ 360 Ω ≈ 0.6306 A."}
+{"instruction": "A device runs at 5 V and draws 4.7 A. How much power does it use?", "output": "The device uses 23.5 W.\n\nWorking: P = V × I = 5 V × 4.7 A = 23.5 W."}
+{"instruction": "What is the area of a circle with a radius of 93 cm?", "output": "The area is about 27171.63 cm².\n\nWorking: A = π × r² = π × 93² ≈ 27171.63 cm²."}
+{"instruction": "Convert the decimal number 748 to binary.", "output": "748 in binary is 1011101100.\n\nWorking: repeatedly dividing 748 by 2 and reading the remainders from last to first gives 1011101100."}
+{"instruction": "A 18 V supply is connected across a 590 ohm resistor. What current flows through it?", "output": "The current is 0.0305 A.\n\nWorking: Ohm's law gives I = V ÷ R = 18 V ÷ 590 Ω ≈ 0.0305 A."}
+{"instruction": "What is 10% of 1220?", "output": "10% of 1220 is 122.\n\nWorking: 10% × 1220 = 10/100 × 1220 = 122."}
+{"instruction": "Convert 123 metres to centimetres.", "output": "123 metres is 12300 centimetres.\n\nWorking: there are 100 centimetres in one metre, so 123 × 100 = 12300."}
+{"instruction": "A 73 V supply is connected across a 340 ohm resistor. What current flows through it?", "output": "The current is 0.2147 A.\n\nWorking: Ohm's law gives I = V ÷ R = 73 V ÷ 340 Ω ≈ 0.2147 A."}
+{"instruction": "Convert the decimal number 706 to binary.", "output": "706 in binary is 1011000010.\n\nWorking: repeatedly dividing 706 by 2 and reading the remainders from last to first gives 1011000010."}
+{"instruction": "Convert 9.5 litres to millilitres.", "output": "9.5 litres is 9500 millilitres.\n\nWorking: there are 1000 millilitres in one litre, so 9.5 × 1000 = 9500."}
+{"instruction": "A device runs at 230 V and draws 3.1 A. How much power does it use?", "output": "The device uses 713 W.\n\nWorking: P = V × I = 230 V × 3.1 A = 713 W."}
+{"instruction": "What is the capital of China?", "output": "The capital of China is Beijing.\n\nWorking: this is a geography fact; Beijing is the seat of China's national government."}
+{"instruction": "A resistor of 940 ohms carries a current of 2.9 A. What is the voltage across it?", "output": "The voltage across the resistor is 2726 V.\n\nWorking: Ohm's law gives V = I × R = 2.9 A × 940 Ω = 2726 V."}
+{"instruction": "What is the capital of Spain?", "output": "The capital of Spain is Madrid.\n\nWorking: this is a geography fact; Madrid is the seat of Spain's national government."}
+{"instruction": "A device runs at 24 V and draws 4 A. How much power does it use?", "output": "The device uses 96 W.\n\nWorking: P = V × I = 24 V × 4 A = 96 W."}
+{"instruction": "Convert the decimal number 1008 to binary.", "output": "1008 in binary is 1111110000.\n\nWorking: repeatedly dividing 1008 by 2 and reading the remainders from last to first gives 1111110000."}
+{"instruction": "Convert the decimal number 212 to binary.", "output": "212 in binary is 11010100.\n\nWorking: repeatedly dividing 212 by 2 and reading the remainders from last to first gives 11010100."}
+{"instruction": "What is 75% of 380?", "output": "75% of 380 is 285.\n\nWorking: 75% × 380 = 75/100 × 380 = 285."}
+{"instruction": "What is the capital of Saudi Arabia?", "output": "The capital of Saudi Arabia is Riyadh.\n\nWorking: this is a geography fact; Riyadh is the seat of Saudi Arabia's national government."}
+{"instruction": "A resistor of 590 ohms carries a current of 2.4 A. What is the voltage across it?", "output": "The voltage across the resistor is 1416 V.\n\nWorking: Ohm's law gives V = I × R = 2.4 A × 590 Ω = 1416 V."}
+{"instruction": "A device runs at 12 V and draws 8.3 A. How much power does it use?", "output": "The device uses 99.6 W.\n\nWorking: P = V × I = 12 V × 8.3 A = 99.6 W."}
+{"instruction": "What is the capital of Egypt?", "output": "The capital of Egypt is Cairo.\n\nWorking: this is a geography fact; Cairo is the seat of Egypt's national government."}
+{"instruction": "A 64 V supply is connected across a 950 ohm resistor. What current flows through it?", "output": "The current is 0.0674 A.\n\nWorking: Ohm's law gives I = V ÷ R = 64 V ÷ 950 Ω ≈ 0.0674 A."}
+{"instruction": "What is 75% of 360?", "output": "75% of 360 is 270.\n\nWorking: 75% × 360 = 75/100 × 360 = 270."}
+{"instruction": "What is 10% of 520?", "output": "10% of 520 is 52.\n\nWorking: 10% × 520 = 10/100 × 520 = 52."}
+{"instruction": "A resistor of 880 ohms carries a current of 1.2 A. What is the voltage across it?", "output": "The voltage across the resistor is 1056 V.\n\nWorking: Ohm's law gives V = I × R = 1.2 A × 880 Ω = 1056 V."}
+{"instruction": "A 222 V supply is connected across a 560 ohm resistor. What current flows through it?", "output": "The current is 0.3964 A.\n\nWorking: Ohm's law gives I = V ÷ R = 222 V ÷ 560 Ω ≈ 0.3964 A."}
+{"instruction": "What is the capital of South Korea?", "output": "The capital of South Korea is Seoul.\n\nWorking: this is a geography fact; Seoul is the seat of South Korea's national government."}
+{"instruction": "Convert the decimal number 237 to binary.", "output": "237 in binary is 11101101.\n\nWorking: repeatedly dividing 237 by 2 and reading the remainders from last to first gives 11101101."}
+{"instruction": "Convert -29 °C to Fahrenheit.", "output": "-29 °C is -20.2 °F.\n\nWorking: °F = °C × 9/5 + 32 = -29 × 9/5 + 32 = -20.2."}
+{"instruction": "What is 5% of 1260?", "output": "5% of 1260 is 63.\n\nWorking: 5% × 1260 = 5/100 × 1260 = 63."}
+{"instruction": "Convert 43.5 hours to minutes.", "output": "43.5 hours is 2610 minutes.\n\nWorking: there are 60 minutes in one hour, so 43.5 × 60 = 2610."}
+{"instruction": "Convert the decimal number 3461 to hexadecimal.", "output": "3461 in hexadecimal is D85.\n\nWorking: repeatedly dividing 3461 by 16 and reading the remainders from last to first gives D85."}
+{"instruction": "What is the capital of Austria?", "output": "The capital of Austria is Vienna.\n\nWorking: this is a geography fact; Vienna is the seat of Austria's national government."}
+{"instruction": "Convert -12 °C to Fahrenheit.", "output": "-12 °C is 10.4 °F.\n\nWorking: °F = °C × 9/5 + 32 = -12 × 9/5 + 32 = 10.4."}
+{"instruction": "Convert 120 °C to Fahrenheit.", "output": "120 °C is 248 °F.\n\nWorking: °F = °C × 9/5 + 32 = 120 × 9/5 + 32 = 248."}
+{"instruction": "What is the area of a circle with a radius of 65 cm?", "output": "The area is about 13273.23 cm².\n\nWorking: A = π × r² = π × 65² ≈ 13273.23 cm²."}
+{"instruction": "A device runs at 230 V and draws 9.2 A. How much power does it use?", "output": "The device uses 2116 W.\n\nWorking: P = V × I = 230 V × 9.2 A = 2116 W."}
+{"instruction": "Convert the decimal number 352 to binary.", "output": "352 in binary is 101100000.\n\nWorking: repeatedly dividing 352 by 2 and reading the remainders from last to first gives 101100000."}
+{"instruction": "Convert the decimal number 1897 to hexadecimal.", "output": "1897 in hexadecimal is 769.\n\nWorking: repeatedly dividing 1897 by 16 and reading the remainders from last to first gives 769."}
+{"instruction": "Convert the decimal number 840 to binary.", "output": "840 in binary is 1101001000.\n\nWorking: repeatedly dividing 840 by 2 and reading the remainders from last to first gives 1101001000."}
+{"instruction": "What is the area of a circle with a radius of 68 cm?", "output": "The area is about 14526.72 cm².\n\nWorking: A = π × r² = π × 68² ≈ 14526.72 cm²."}
+{"instruction": "Convert the decimal number 561 to binary.", "output": "561 in binary is 1000110001.\n\nWorking: repeatedly dividing 561 by 2 and reading the remainders from last to first gives 1000110001."}
+{"instruction": "What is the capital of Mexico?", "output": "The capital of Mexico is Mexico City.\n\nWorking: this is a geography fact; Mexico City is the seat of Mexico's national government."}
+{"instruction": "Convert the decimal number 444 to binary.", "output": "444 in binary is 110111100.\n\nWorking: repeatedly dividing 444 by 2 and reading the remainders from last to first gives 110111100."}
+{"instruction": "Convert the decimal number 667 to binary.", "output": "667 in binary is 1010011011.\n\nWorking: repeatedly dividing 667 by 2 and reading the remainders from last to first gives 1010011011."}
+{"instruction": "Convert 125 hours to minutes.", "output": "125 hours is 7500 minutes.\n\nWorking: there are 60 minutes in one hour, so 125 × 60 = 7500."}
+{"instruction": "Convert 45 metres to centimetres.", "output": "45 metres is 4500 centimetres.\n\nWorking: there are 100 centimetres in one metre, so 45 × 100 = 4500."}
+{"instruction": "Convert 129 hours to minutes.", "output": "129 hours is 7740 minutes.\n\nWorking: there are 60 minutes in one hour, so 129 × 60 = 7740."}
+{"instruction": "A 18 V supply is connected across a 250 ohm resistor. What current flows through it?", "output": "The current is 0.072 A.\n\nWorking: Ohm's law gives I = V ÷ R = 18 V ÷ 250 Ω ≈ 0.072 A."}
+{"instruction": "What is 50% of 1160?", "output": "50% of 1160 is 580.\n\nWorking: 50% × 1160 = 50/100 × 1160 = 580."}
+{"instruction": "Convert the decimal number 2075 to hexadecimal.", "output": "2075 in hexadecimal is 81B.\n\nWorking: repeatedly dividing 2075 by 16 and reading the remainders from last to first gives 81B."}
+{"instruction": "A device runs at 24 V and draws 4.6 A. How much power does it use?", "output": "The device uses 110.4 W.\n\nWorking: P = V × I = 24 V × 4.6 A = 110.4 W."}
+{"instruction": "A resistor of 310 ohms carries a current of 0.6 A. What is the voltage across it?", "output": "The voltage across the resistor is 186 V.\n\nWorking: Ohm's law gives V = I × R = 0.6 A × 310 Ω = 186 V."}
+{"instruction": "Convert the decimal number 854 to binary.", "output": "854 in binary is 1101010110.\n\nWorking: repeatedly dividing 854 by 2 and reading the remainders from last to first gives 1101010110."}
+{"instruction": "Convert the decimal number 196 to binary.", "output": "196 in binary is 11000100.\n\nWorking: repeatedly dividing 196 by 2 and reading the remainders from last to first gives 11000100."}
+{"instruction": "What is 12% of 20?", "output": "12% of 20 is 2.4.\n\nWorking: 12% × 20 = 12/100 × 20 = 2.4."}
+{"instruction": "Convert 119 °C to Fahrenheit.", "output": "119 °C is 246.2 °F.\n\nWorking: °F = °C × 9/5 + 32 = 119 × 9/5 + 32 = 246.2."}
+{"instruction": "What is the area of a circle with a radius of 77 cm?", "output": "The area is about 18626.5 cm².\n\nWorking: A = π × r² = π × 77² ≈ 18626.5 cm²."}
+{"instruction": "Convert -36 °C to Fahrenheit.", "output": "-36 °C is -32.8 °F.\n\nWorking: °F = °C × 9/5 + 32 = -36 × 9/5 + 32 = -32.8."}
+{"instruction": "Convert the decimal number 674 to binary.", "output": "674 in binary is 1010100010.\n\nWorking: repeatedly dividing 674 by 2 and reading the remainders from last to first gives 1010100010."}
+{"instruction": "What is the area of a circle with a radius of 78 cm?", "output": "The area is about 19113.45 cm².\n\nWorking: A = π × r² = π × 78² ≈ 19113.45 cm²."}
+{"instruction": "What is the area of a circle with a radius of 116 cm?", "output": "The area is about 42273.27 cm².\n\nWorking: A = π × r² = π × 116² ≈ 42273.27 cm²."}
+{"instruction": "Convert the decimal number 201 to hexadecimal.", "output": "201 in hexadecimal is C9.\n\nWorking: repeatedly dividing 201 by 16 and reading the remainders from last to first gives C9."}
+{"instruction": "Convert the decimal number 1579 to hexadecimal.", "output": "1579 in hexadecimal is 62B.\n\nWorking: repeatedly dividing 1579 by 16 and reading the remainders from last to first gives 62B."}
+{"instruction": "What is the area of a circle with a radius of 130 cm?", "output": "The area is about 53092.92 cm².\n\nWorking: A = π × r² = π × 130² ≈ 53092.92 cm²."}
+{"instruction": "Convert the decimal number 242 to hexadecimal.", "output": "242 in hexadecimal is F2.\n\nWorking: repeatedly dividing 242 by 16 and reading the remainders from last to first gives F2."}
+{"instruction": "What is 15% of 800?", "output": "15% of 800 is 120.\n\nWorking: 15% × 800 = 15/100 × 800 = 120."}
+{"instruction": "What is 5% of 1240?", "output": "5% of 1240 is 62.\n\nWorking: 5% × 1240 = 5/100 × 1240 = 62."}
+{"instruction": "Convert 26 minutes to seconds.", "output": "26 minutes is 1560 seconds.\n\nWorking: there are 60 seconds in one minute, so 26 × 60 = 1560."}
+{"instruction": "A resistor of 810 ohms carries a current of 4.1 A. What is the voltage across it?", "output": "The voltage across the resistor is 3321 V.\n\nWorking: Ohm's law gives V = I × R = 4.1 A × 810 Ω = 3321 V."}
+{"instruction": "A resistor of 470 ohms carries a current of 3.8 A. What is the voltage across it?", "output": "The voltage across the resistor is 1786 V.\n\nWorking: Ohm's law gives V = I × R = 3.8 A × 470 Ω = 1786 V."}
+{"instruction": "A device runs at 5 V and draws 3.6 A. How much power does it use?", "output": "The device uses 18 W.\n\nWorking: P = V × I = 5 V × 3.6 A = 18 W."}
+{"instruction": "Convert 144 kilometres to metres.", "output": "144 kilometres is 144000 metres.\n\nWorking: there are 1000 metres in one kilometre, so 144 × 1000 = 144000."}
+{"instruction": "Convert the decimal number 110 to binary.", "output": "110 in binary is 1101110.\n\nWorking: repeatedly dividing 110 by 2 and reading the remainders from last to first gives 1101110."}
+{"instruction": "Convert 92 °C to Fahrenheit.", "output": "92 °C is 197.6 °F.\n\nWorking: °F = °C × 9/5 + 32 = 92 × 9/5 + 32 = 197.6."}
+{"instruction": "Convert the decimal number 1842 to hexadecimal.", "output": "1842 in hexadecimal is 732.\n\nWorking: repeatedly dividing 1842 by 16 and reading the remainders from last to first gives 732."}
+{"instruction": "What is the capital of Denmark?", "output": "The capital of Denmark is Copenhagen.\n\nWorking: this is a geography fact; Copenhagen is the seat of Denmark's national government."}
+{"instruction": "What is 10% of 1500?", "output": "10% of 1500 is 150.\n\nWorking: 10% × 1500 = 10/100 × 1500 = 150."}
+{"instruction": "What is the area of a circle with a radius of 36 cm?", "output": "The area is about 4071.5 cm².\n\nWorking: A = π × r² = π × 36² ≈ 4071.5 cm²."}
+{"instruction": "What is 20% of 660?", "output": "20% of 660 is 132.\n\nWorking: 20% × 660 = 20/100 × 660 = 132."}
+{"instruction": "A resistor of 690 ohms carries a current of 2.8 A. What is the voltage across it?", "output": "The voltage across the resistor is 1932 V.\n\nWorking: Ohm's law gives V = I × R = 2.8 A × 690 Ω = 1932 V."}
+{"instruction": "A device runs at 110 V and draws 3.4 A. How much power does it use?", "output": "The device uses 374 W.\n\nWorking: P = V × I = 110 V × 3.4 A = 374 W."}
+{"instruction": "Convert 92.5 kilometres to metres.", "output": "92.5 kilometres is 92500 metres.\n\nWorking: there are 1000 metres in one kilometre, so 92.5 × 1000 = 92500."}
+{"instruction": "What is 25% of 660?", "output": "25% of 660 is 165.\n\nWorking: 25% × 660 = 25/100 × 660 = 165."}
+{"instruction": "A resistor of 630 ohms carries a current of 2.7 A. What is the voltage across it?", "output": "The voltage across the resistor is 1701 V.\n\nWorking: Ohm's law gives V = I × R = 2.7 A × 630 Ω = 1701 V."}
+{"instruction": "Convert the decimal number 17 to binary.", "output": "17 in binary is 10001.\n\nWorking: repeatedly dividing 17 by 2 and reading the remainders from last to first gives 10001."}
+{"instruction": "A resistor of 110 ohms carries a current of 3.7 A. What is the voltage across it?", "output": "The voltage across the resistor is 407 V.\n\nWorking: Ohm's law gives V = I × R = 3.7 A × 110 Ω = 407 V."}
+{"instruction": "What is the capital of India?", "output": "The capital of India is New Delhi.\n\nWorking: this is a geography fact; New Delhi is the seat of India's national government."}
+{"instruction": "A 148 V supply is connected across a 830 ohm resistor. What current flows through it?", "output": "The current is 0.1783 A.\n\nWorking: Ohm's law gives I = V ÷ R = 148 V ÷ 830 Ω ≈ 0.1783 A."}
+{"instruction": "What is the area of a circle with a radius of 59 cm?", "output": "The area is about 10935.88 cm².\n\nWorking: A = π × r² = π × 59² ≈ 10935.88 cm²."}
+{"instruction": "Convert 76 metres to centimetres.", "output": "76 metres is 7600 centimetres.\n\nWorking: there are 100 centimetres in one metre, so 76 × 100 = 7600."}
+{"instruction": "What is 15% of 540?", "output": "15% of 540 is 81.\n\nWorking: 15% × 540 = 15/100 × 540 = 81."}
+{"instruction": "Convert 10 kilograms to grams.", "output": "10 kilograms is 10000 grams.\n\nWorking: there are 1000 grams in one kilogram, so 10 × 1000 = 10000."}
+{"instruction": "A 89 V supply is connected across a 860 ohm resistor. What current flows through it?", "output": "The current is 0.1035 A.\n\nWorking: Ohm's law gives I = V ÷ R = 89 V ÷ 860 Ω ≈ 0.1035 A."}
+{"instruction": "Convert 53 °C to Fahrenheit.", "output": "53 °C is 127.4 °F.\n\nWorking: °F = °C × 9/5 + 32 = 53 × 9/5 + 32 = 127.4."}
+{"instruction": "Convert -2 °C to Fahrenheit.", "output": "-2 °C is 28.4 °F.\n\nWorking: °F = °C × 9/5 + 32 = -2 × 9/5 + 32 = 28.4."}
+{"instruction": "A 44 V supply is connected across a 460 ohm resistor. What current flows through it?", "output": "The current is 0.0957 A.\n\nWorking: Ohm's law gives I = V ÷ R = 44 V ÷ 460 Ω ≈ 0.0957 A."}
+{"instruction": "What is 50% of 740?", "output": "50% of 740 is 370.\n\nWorking: 50% × 740 = 50/100 × 740 = 370."}
+{"instruction": "Convert -38 °C to Fahrenheit.", "output": "-38 °C is -36.4 °F.\n\nWorking: °F = °C × 9/5 + 32 = -38 × 9/5 + 32 = -36.4."}
+{"instruction": "A 21 V supply is connected across a 640 ohm resistor. What current flows through it?", "output": "The current is 0.0328 A.\n\nWorking: Ohm's law gives I = V ÷ R = 21 V ÷ 640 Ω ≈ 0.0328 A."}
+{"instruction": "What is the area of a circle with a radius of 1 cm?", "output": "The area is about 3.14 cm².\n\nWorking: A = π × r² = π × 1² ≈ 3.14 cm²."}
+{"instruction": "A device runs at 9 V and draws 4.6 A. How much power does it use?", "output": "The device uses 41.4 W.\n\nWorking: P = V × I = 9 V × 4.6 A = 41.4 W."}
+{"instruction": "What is the area of a circle with a radius of 97 cm?", "output": "The area is about 29559.25 cm².\n\nWorking: A = π × r² = π × 97² ≈ 29559.25 cm²."}
+{"instruction": "Convert -9 °C to Fahrenheit.", "output": "-9 °C is 15.8 °F.\n\nWorking: °F = °C × 9/5 + 32 = -9 × 9/5 + 32 = 15.8."}
+{"instruction": "Convert 115 °C to Fahrenheit.", "output": "115 °C is 239 °F.\n\nWorking: °F = °C × 9/5 + 32 = 115 × 9/5 + 32 = 239."}
+{"instruction": "Convert the decimal number 520 to binary.", "output": "520 in binary is 1000001000.\n\nWorking: repeatedly dividing 520 by 2 and reading the remainders from last to first gives 1000001000."}
+{"instruction": "Convert 195 kilometres to metres.", "output": "195 kilometres is 195000 metres.\n\nWorking: there are 1000 metres in one kilometre, so 195 × 1000 = 195000."}
+{"instruction": "A resistor of 100 ohms carries a current of 0.8 A. What is the voltage across it?", "output": "The voltage across the resistor is 80 V.\n\nWorking: Ohm's law gives V = I × R = 0.8 A × 100 Ω = 80 V."}
+{"instruction": "Convert 68 °C to Fahrenheit.", "output": "68 °C is 154.4 °F.\n\nWorking: °F = °C × 9/5 + 32 = 68 × 9/5 + 32 = 154.4."}
+{"instruction": "Convert the decimal number 3971 to hexadecimal.", "output": "3971 in hexadecimal is F83.\n\nWorking: repeatedly dividing 3971 by 16 and reading the remainders from last to first gives F83."}
+{"instruction": "What is the area of a circle with a radius of 17 cm?", "output": "The area is about 907.92 cm².\n\nWorking: A = π × r² = π × 17² ≈ 907.92 cm²."}
+{"instruction": "A resistor of 140 ohms carries a current of 3.8 A. What is the voltage across it?", "output": "The voltage across the resistor is 532 V.\n\nWorking: Ohm's law gives V = I × R = 3.8 A × 140 Ω = 532 V."}
+{"instruction": "A resistor of 890 ohms carries a current of 2.3 A. What is the voltage across it?", "output": "The voltage across the resistor is 2047 V.\n\nWorking: Ohm's law gives V = I × R = 2.3 A × 890 Ω = 2047 V."}
+{"instruction": "A resistor of 160 ohms carries a current of 3.7 A. What is the voltage across it?", "output": "The voltage across the resistor is 592 V.\n\nWorking: Ohm's law gives V = I × R = 3.7 A × 160 Ω = 592 V."}
+{"instruction": "Convert the decimal number 488 to binary.", "output": "488 in binary is 111101000.\n\nWorking: repeatedly dividing 488 by 2 and reading the remainders from last to first gives 111101000."}
+{"instruction": "A resistor of 720 ohms carries a current of 0.9 A. What is the voltage across it?", "output": "The voltage across the resistor is 648 V.\n\nWorking: Ohm's law gives V = I × R = 0.9 A × 720 Ω = 648 V."}
+{"instruction": "Convert the decimal number 258 to binary.", "output": "258 in binary is 100000010.\n\nWorking: repeatedly dividing 258 by 2 and reading the remainders from last to first gives 100000010."}
+{"instruction": "What is the capital of Vietnam?", "output": "The capital of Vietnam is Hanoi.\n\nWorking: this is a geography fact; Hanoi is the seat of Vietnam's national government."}
+{"instruction": "Convert 76 °C to Fahrenheit.", "output": "76 °C is 168.8 °F.\n\nWorking: °F = °C × 9/5 + 32 = 76 × 9/5 + 32 = 168.8."}
+{"instruction": "Convert 49 metres to centimetres.", "output": "49 metres is 4900 centimetres.\n\nWorking: there are 100 centimetres in one metre, so 49 × 100 = 4900."}
+{"instruction": "A device runs at 48 V and draws 7 A. How much power does it use?", "output": "The device uses 336 W.\n\nWorking: P = V × I = 48 V × 7 A = 336 W."}
+{"instruction": "A device runs at 12 V and draws 8.2 A. How much power does it use?", "output": "The device uses 98.4 W.\n\nWorking: P = V × I = 12 V × 8.2 A = 98.4 W."}
+{"instruction": "A device runs at 5 V and draws 6.3 A. How much power does it use?", "output": "The device uses 31.5 W.\n\nWorking: P = V × I = 5 V × 6.3 A = 31.5 W."}
+{"instruction": "What is 75% of 200?", "output": "75% of 200 is 150.\n\nWorking: 75% × 200 = 75/100 × 200 = 150."}
+{"instruction": "Convert 81.5 hours to minutes.", "output": "81.5 hours is 4890 minutes.\n\nWorking: there are 60 minutes in one hour, so 81.5 × 60 = 4890."}
+{"instruction": "What is the capital of Portugal?", "output": "The capital of Portugal is Lisbon.\n\nWorking: this is a geography fact; Lisbon is the seat of Portugal's national government."}
+{"instruction": "What is the capital of Turkey?", "output": "The capital of Turkey is Ankara.\n\nWorking: this is a geography fact; Ankara is the seat of Turkey's national government."}
+{"instruction": "Convert -24 °C to Fahrenheit.", "output": "-24 °C is -11.2 °F.\n\nWorking: °F = °C × 9/5 + 32 = -24 × 9/5 + 32 = -11.2."}
+{"instruction": "Convert 66 °C to Fahrenheit.", "output": "66 °C is 150.8 °F.\n\nWorking: °F = °C × 9/5 + 32 = 66 × 9/5 + 32 = 150.8."}
+{"instruction": "A 231 V supply is connected across a 590 ohm resistor. What current flows through it?", "output": "The current is 0.3915 A.\n\nWorking: Ohm's law gives I = V ÷ R = 231 V ÷ 590 Ω ≈ 0.3915 A."}
+{"instruction": "What is the area of a circle with a radius of 22 cm?", "output": "The area is about 1520.53 cm².\n\nWorking: A = π × r² = π × 22² ≈ 1520.53 cm²."}
+{"instruction": "Convert the decimal number 1015 to binary.", "output": "1015 in binary is 1111110111.\n\nWorking: repeatedly dividing 1015 by 2 and reading the remainders from last to first gives 1111110111."}
+{"instruction": "Convert the decimal number 1389 to hexadecimal.", "output": "1389 in hexadecimal is 56D.\n\nWorking: repeatedly dividing 1389 by 16 and reading the remainders from last to first gives 56D."}
+{"instruction": "Convert 32.75 hours to minutes.", "output": "32.75 hours is 1965 minutes.\n\nWorking: there are 60 minutes in one hour, so 32.75 × 60 = 1965."}
+{"instruction": "What is 40% of 1200?", "output": "40% of 1200 is 480.\n\nWorking: 40% × 1200 = 40/100 × 1200 = 480."}
+{"instruction": "A device runs at 5 V and draws 2.7 A. How much power does it use?", "output": "The device uses 13.5 W.\n\nWorking: P = V × I = 5 V × 2.7 A = 13.5 W."}
+{"instruction": "Convert 172 kilometres to metres.", "output": "172 kilometres is 172000 metres.\n\nWorking: there are 1000 metres in one kilometre, so 172 × 1000 = 172000."}
+{"instruction": "A 175 V supply is connected across a 460 ohm resistor. What current flows through it?", "output": "The current is 0.3804 A.\n\nWorking: Ohm's law gives I = V ÷ R = 175 V ÷ 460 Ω ≈ 0.3804 A."}
+{"instruction": "A 188 V supply is connected across a 80 ohm resistor. What current flows through it?", "output": "The current is 2.35 A.\n\nWorking: Ohm's law gives I = V ÷ R = 188 V ÷ 80 Ω ≈ 2.35 A."}
+{"instruction": "Convert 10 °C to Fahrenheit.", "output": "10 °C is 50 °F.\n\nWorking: °F = °C × 9/5 + 32 = 10 × 9/5 + 32 = 50."}
+{"instruction": "What is 50% of 680?", "output": "50% of 680 is 340.\n\nWorking: 50% × 680 = 50/100 × 680 = 340."}
+{"instruction": "Convert 33.75 kilometres to metres.", "output": "33.75 kilometres is 33750 metres.\n\nWorking: there are 1000 metres in one kilometre, so 33.75 × 1000 = 33750."}
+{"instruction": "What is the area of a circle with a radius of 24 cm?", "output": "The area is about 1809.56 cm².\n\nWorking: A = π × r² = π × 24² ≈ 1809.56 cm²."}
+{"instruction": "A resistor of 70 ohms carries a current of 0.5 A. What is the voltage across it?", "output": "The voltage across the resistor is 35 V.\n\nWorking: Ohm's law gives V = I × R = 0.5 A × 70 Ω = 35 V."}
+{"instruction": "What is 20% of 1600?", "output": "20% of 1600 is 320.\n\nWorking: 20% × 1600 = 20/100 × 1600 = 320."}
+{"instruction": "What is the area of a circle with a radius of 103 cm?", "output": "The area is about 33329.16 cm².\n\nWorking: A = π × r² = π × 103² ≈ 33329.16 cm²."}
+{"instruction": "A resistor of 1000 ohms carries a current of 2.1 A. What is the voltage across it?", "output": "The voltage across the resistor is 2100 V.\n\nWorking: Ohm's law gives V = I × R = 2.1 A × 1000 Ω = 2100 V."}
+{"instruction": "Convert the decimal number 1780 to hexadecimal.", "output": "1780 in hexadecimal is 6F4.\n\nWorking: repeatedly dividing 1780 by 16 and reading the remainders from last to first gives 6F4."}
+{"instruction": "What is the area of a circle with a radius of 8 cm?", "output": "The area is about 201.06 cm².\n\nWorking: A = π × r² = π × 8² ≈ 201.06 cm²."}
+{"instruction": "Convert the decimal number 765 to hexadecimal.", "output": "765 in hexadecimal is 2FD.\n\nWorking: repeatedly dividing 765 by 16 and reading the remainders from last to first gives 2FD."}
+{"instruction": "Convert the decimal number 3955 to hexadecimal.", "output": "3955 in hexadecimal is F73.\n\nWorking: repeatedly dividing 3955 by 16 and reading the remainders from last to first gives F73."}
+{"instruction": "Convert the decimal number 1476 to hexadecimal.", "output": "1476 in hexadecimal is 5C4.\n\nWorking: repeatedly dividing 1476 by 16 and reading the remainders from last to first gives 5C4."}
+{"instruction": "What is the area of a circle with a radius of 20 cm?", "output": "The area is about 1256.64 cm².\n\nWorking: A = π × r² = π × 20² ≈ 1256.64 cm²."}
+{"instruction": "Convert -19 °C to Fahrenheit.", "output": "-19 °C is -2.2 °F.\n\nWorking: °F = °C × 9/5 + 32 = -19 × 9/5 + 32 = -2.2."}
+{"instruction": "Convert the decimal number 566 to binary.", "output": "566 in binary is 1000110110.\n\nWorking: repeatedly dividing 566 by 2 and reading the remainders from last to first gives 1000110110."}
+{"instruction": "A 17 V supply is connected across a 860 ohm resistor. What current flows through it?", "output": "The current is 0.0198 A.\n\nWorking: Ohm's law gives I = V ÷ R = 17 V ÷ 860 Ω ≈ 0.0198 A."}
+{"instruction": "A resistor of 280 ohms carries a current of 0.3 A. What is the voltage across it?", "output": "The voltage across the resistor is 84 V.\n\nWorking: Ohm's law gives V = I × R = 0.3 A × 280 Ω = 84 V."}
+{"instruction": "What is 15% of 1900?", "output": "15% of 1900 is 285.\n\nWorking: 15% × 1900 = 15/100 × 1900 = 285."}
+{"instruction": "A device runs at 5 V and draws 8.5 A. How much power does it use?", "output": "The device uses 42.5 W.\n\nWorking: P = V × I = 5 V × 8.5 A = 42.5 W."}
+{"instruction": "What is 5% of 1900?", "output": "5% of 1900 is 95.\n\nWorking: 5% × 1900 = 5/100 × 1900 = 95."}
+{"instruction": "What is the capital of Nepal?", "output": "The capital of Nepal is Kathmandu.\n\nWorking: this is a geography fact; Kathmandu is the seat of Nepal's national government."}
+{"instruction": "What is the area of a circle with a radius of 13 cm?", "output": "The area is about 530.93 cm².\n\nWorking: A = π × r² = π × 13² ≈ 530.93 cm²."}
+{"instruction": "Convert the decimal number 1008 to hexadecimal.", "output": "1008 in hexadecimal is 3F0.\n\nWorking: repeatedly dividing 1008 by 16 and reading the remainders from last to first gives 3F0."}
+{"instruction": "A 115 V supply is connected across a 220 ohm resistor. What current flows through it?", "output": "The current is 0.5227 A.\n\nWorking: Ohm's law gives I = V ÷ R = 115 V ÷ 220 Ω ≈ 0.5227 A."}
+{"instruction": "What is the capital of Australia?", "output": "The capital of Australia is Canberra.\n\nWorking: this is a geography fact; Canberra is the seat of Australia's national government."}
+{"instruction": "A 72 V supply is connected across a 710 ohm resistor. What current flows through it?", "output": "The current is 0.1014 A.\n\nWorking: Ohm's law gives I = V ÷ R = 72 V ÷ 710 Ω ≈ 0.1014 A."}
+{"instruction": "Convert 46.5 kilometres to metres.", "output": "46.5 kilometres is 46500 metres.\n\nWorking: there are 1000 metres in one kilometre, so 46.5 × 1000 = 46500."}
+{"instruction": "Convert 34 hours to minutes.", "output": "34 hours is 2040 minutes.\n\nWorking: there are 60 minutes in one hour, so 34 × 60 = 2040."}
+{"instruction": "Convert 41 °C to Fahrenheit.", "output": "41 °C is 105.8 °F.\n\nWorking: °F = °C × 9/5 + 32 = 41 × 9/5 + 32 = 105.8."}
+{"instruction": "A 119 V supply is connected across a 30 ohm resistor. What current flows through it?", "output": "The current is 3.9667 A.\n\nWorking: Ohm's law gives I = V ÷ R = 119 V ÷ 30 Ω ≈ 3.9667 A."}
+{"instruction": "Convert the decimal number 74 to hexadecimal.", "output": "74 in hexadecimal is 4A.\n\nWorking: repeatedly dividing 74 by 16 and reading the remainders from last to first gives 4A."}
+{"instruction": "What is 12% of 1080?", "output": "12% of 1080 is 129.6.\n\nWorking: 12% × 1080 = 12/100 × 1080 = 129.6."}
+{"instruction": "What is 50% of 720?", "output": "50% of 720 is 360.\n\nWorking: 50% × 720 = 50/100 × 720 = 360."}
+{"instruction": "A 30 V supply is connected across a 790 ohm resistor. What current flows through it?", "output": "The current is 0.038 A.\n\nWorking: Ohm's law gives I = V ÷ R = 30 V ÷ 790 Ω ≈ 0.038 A."}
+{"instruction": "A 38 V supply is connected across a 10 ohm resistor. What current flows through it?", "output": "The current is 3.8 A.\n\nWorking: Ohm's law gives I = V ÷ R = 38 V ÷ 10 Ω ≈ 3.8 A."}
+{"instruction": "Convert the decimal number 779 to binary.", "output": "779 in binary is 1100001011.\n\nWorking: repeatedly dividing 779 by 2 and reading the remainders from last to first gives 1100001011."}
+{"instruction": "Convert the decimal number 157 to hexadecimal.", "output": "157 in hexadecimal is 9D.\n\nWorking: repeatedly dividing 157 by 16 and reading the remainders from last to first gives 9D."}
+{"instruction": "Convert 101 °C to Fahrenheit.", "output": "101 °C is 213.8 °F.\n\nWorking: °F = °C × 9/5 + 32 = 101 × 9/5 + 32 = 213.8."}
+{"instruction": "Convert 11 °C to Fahrenheit.", "output": "11 °C is 51.8 °F.\n\nWorking: °F = °C × 9/5 + 32 = 11 × 9/5 + 32 = 51.8."}
+{"instruction": "Convert -7 °C to Fahrenheit.", "output": "-7 °C is 19.4 °F.\n\nWorking: °F = °C × 9/5 + 32 = -7 × 9/5 + 32 = 19.4."}
+{"instruction": "Convert the decimal number 1017 to hexadecimal.", "output": "1017 in hexadecimal is 3F9.\n\nWorking: repeatedly dividing 1017 by 16 and reading the remainders from last to first gives 3F9."}
+{"instruction": "A resistor of 740 ohms carries a current of 3.8 A. What is the voltage across it?", "output": "The voltage across the resistor is 2812 V.\n\nWorking: Ohm's law gives V = I × R = 3.8 A × 740 Ω = 2812 V."}
+{"instruction": "Convert 67 litres to millilitres.", "output": "67 litres is 67000 millilitres.\n\nWorking: there are 1000 millilitres in one litre, so 67 × 1000 = 67000."}
+{"instruction": "Convert 38 °C to Fahrenheit.", "output": "38 °C is 100.4 °F.\n\nWorking: °F = °C × 9/5 + 32 = 38 × 9/5 + 32 = 100.4."}
+{"instruction": "Convert the decimal number 2853 to hexadecimal.", "output": "2853 in hexadecimal is B25.\n\nWorking: repeatedly dividing 2853 by 16 and reading the remainders from last to first gives B25."}
+{"instruction": "A resistor of 540 ohms carries a current of 0.5 A. What is the voltage across it?", "output": "The voltage across the resistor is 270 V.\n\nWorking: Ohm's law gives V = I × R = 0.5 A × 540 Ω = 270 V."}
+{"instruction": "A 177 V supply is connected across a 170 ohm resistor. What current flows through it?", "output": "The current is 1.0412 A.\n\nWorking: Ohm's law gives I = V ÷ R = 177 V ÷ 170 Ω ≈ 1.0412 A."}
+{"instruction": "What is 40% of 1280?", "output": "40% of 1280 is 512.\n\nWorking: 40% × 1280 = 40/100 × 1280 = 512."}
+{"instruction": "What is 30% of 200?", "output": "30% of 200 is 60.\n\nWorking: 30% × 200 = 30/100 × 200 = 60."}
+{"instruction": "What is 20% of 1980?", "output": "20% of 1980 is 396.\n\nWorking: 20% × 1980 = 20/100 × 1980 = 396."}
+{"instruction": "Convert the decimal number 279 to binary.", "output": "279 in binary is 100010111.\n\nWorking: repeatedly dividing 279 by 2 and reading the remainders from last to first gives 100010111."}
+{"instruction": "What is 25% of 980?", "output": "25% of 980 is 245.\n\nWorking: 25% × 980 = 25/100 × 980 = 245."}
+{"instruction": "Convert 16 °C to Fahrenheit.", "output": "16 °C is 60.8 °F.\n\nWorking: °F = °C × 9/5 + 32 = 16 × 9/5 + 32 = 60.8."}
+{"instruction": "Convert the decimal number 995 to binary.", "output": "995 in binary is 1111100011.\n\nWorking: repeatedly dividing 995 by 2 and reading the remainders from last to first gives 1111100011."}
+{"instruction": "Convert the decimal number 3581 to hexadecimal.", "output": "3581 in hexadecimal is DFD.\n\nWorking: repeatedly dividing 3581 by 16 and reading the remainders from last to first gives DFD."}
+{"instruction": "A resistor of 120 ohms carries a current of 2.8 A. What is the voltage across it?", "output": "The voltage across the resistor is 336 V.\n\nWorking: Ohm's law gives V = I × R = 2.8 A × 120 Ω = 336 V."}
+{"instruction": "Convert 106 °C to Fahrenheit.", "output": "106 °C is 222.8 °F.\n\nWorking: °F = °C × 9/5 + 32 = 106 × 9/5 + 32 = 222.8."}
+{"instruction": "What is the area of a circle with a radius of 11 cm?", "output": "The area is about 380.13 cm².\n\nWorking: A = π × r² = π × 11² ≈ 380.13 cm²."}
+{"instruction": "What is the capital of Argentina?", "output": "The capital of Argentina is Buenos Aires.\n\nWorking: this is a geography fact; Buenos Aires is the seat of Argentina's national government."}
+{"instruction": "A 137 V supply is connected across a 540 ohm resistor. What current flows through it?", "output": "The current is 0.2537 A.\n\nWorking: Ohm's law gives I = V ÷ R = 137 V ÷ 540 Ω ≈ 0.2537 A."}
+{"instruction": "What is 25% of 340?", "output": "25% of 340 is 85.\n\nWorking: 25% × 340 = 25/100 × 340 = 85."}
+{"instruction": "A resistor of 60 ohms carries a current of 4.3 A. What is the voltage across it?", "output": "The voltage across the resistor is 258 V.\n\nWorking: Ohm's law gives V = I × R = 4.3 A × 60 Ω = 258 V."}
+{"instruction": "Convert the decimal number 959 to binary.", "output": "959 in binary is 1110111111.\n\nWorking: repeatedly dividing 959 by 2 and reading the remainders from last to first gives 1110111111."}
+{"instruction": "Convert the decimal number 2762 to hexadecimal.", "output": "2762 in hexadecimal is ACA.\n\nWorking: repeatedly dividing 2762 by 16 and reading the remainders from last to first gives ACA."}
+{"instruction": "What is the area of a circle with a radius of 5 cm?", "output": "The area is about 78.54 cm².\n\nWorking: A = π × r² = π × 5² ≈ 78.54 cm²."}
+{"instruction": "What is the area of a circle with a radius of 150 cm?", "output": "The area is about 70685.83 cm².\n\nWorking: A = π × r² = π × 150² ≈ 70685.83 cm²."}
+{"instruction": "Convert the decimal number 1094 to hexadecimal.", "output": "1094 in hexadecimal is 446.\n\nWorking: repeatedly dividing 1094 by 16 and reading the remainders from last to first gives 446."}
+{"instruction": "A device runs at 48 V and draws 4.7 A. How much power does it use?", "output": "The device uses 225.6 W.\n\nWorking: P = V × I = 48 V × 4.7 A = 225.6 W."}
+{"instruction": "Convert 18.75 metres to centimetres.", "output": "18.75 metres is 1875 centimetres.\n\nWorking: there are 100 centimetres in one metre, so 18.75 × 100 = 1875."}
+{"instruction": "Convert the decimal number 908 to hexadecimal.", "output": "908 in hexadecimal is 38C.\n\nWorking: repeatedly dividing 908 by 16 and reading the remainders from last to first gives 38C."}
+{"instruction": "A resistor of 400 ohms carries a current of 3.6 A. What is the voltage across it?", "output": "The voltage across the resistor is 1440 V.\n\nWorking: Ohm's law gives V = I × R = 3.6 A × 400 Ω = 1440 V."}
+{"instruction": "What is the area of a circle with a radius of 12 cm?", "output": "The area is about 452.39 cm².\n\nWorking: A = π × r² = π × 12² ≈ 452.39 cm²."}
+{"instruction": "A device runs at 12 V and draws 2.7 A. How much power does it use?", "output": "The device uses 32.4 W.\n\nWorking: P = V × I = 12 V × 2.7 A = 32.4 W."}
+{"instruction": "Convert 16.75 kilograms to grams.", "output": "16.75 kilograms is 16750 grams.\n\nWorking: there are 1000 grams in one kilogram, so 16.75 × 1000 = 16750."}
+{"instruction": "What is the capital of Ireland?", "output": "The capital of Ireland is Dublin.\n\nWorking: this is a geography fact; Dublin is the seat of Ireland's national government."}
+{"instruction": "What is 10% of 380?", "output": "10% of 380 is 38.\n\nWorking: 10% × 380 = 10/100 × 380 = 38."}
+{"instruction": "A 211 V supply is connected across a 880 ohm resistor. What current flows through it?", "output": "The current is 0.2398 A.\n\nWorking: Ohm's law gives I = V ÷ R = 211 V ÷ 880 Ω ≈ 0.2398 A."}
+{"instruction": "What is the area of a circle with a radius of 117 cm?", "output": "The area is about 43005.26 cm².\n\nWorking: A = π × r² = π × 117² ≈ 43005.26 cm²."}
+{"instruction": "Convert 4 metres to centimetres.", "output": "4 metres is 400 centimetres.\n\nWorking: there are 100 centimetres in one metre, so 4 × 100 = 400."}
+{"instruction": "What is 75% of 1620?", "output": "75% of 1620 is 1215.\n\nWorking: 75% × 1620 = 75/100 × 1620 = 1215."}
+{"instruction": "A device runs at 230 V and draws 9.8 A. How much power does it use?", "output": "The device uses 2254 W.\n\nWorking: P = V × I = 230 V × 9.8 A = 2254 W."}
+{"instruction": "What is 40% of 200?", "output": "40% of 200 is 80.\n\nWorking: 40% × 200 = 40/100 × 200 = 80."}
+{"instruction": "A resistor of 510 ohms carries a current of 4.2 A. What is the voltage across it?", "output": "The voltage across the resistor is 2142 V.\n\nWorking: Ohm's law gives V = I × R = 4.2 A × 510 Ω = 2142 V."}
+{"instruction": "Convert the decimal number 676 to binary.", "output": "676 in binary is 1010100100.\n\nWorking: repeatedly dividing 676 by 2 and reading the remainders from last to first gives 1010100100."}
+{"instruction": "A 39 V supply is connected across a 230 ohm resistor. What current flows through it?", "output": "The current is 0.1696 A.\n\nWorking: Ohm's law gives I = V ÷ R = 39 V ÷ 230 Ω ≈ 0.1696 A."}
+{"instruction": "Convert 46 °C to Fahrenheit.", "output": "46 °C is 114.8 °F.\n\nWorking: °F = °C × 9/5 + 32 = 46 × 9/5 + 32 = 114.8."}
+{"instruction": "Convert 186 kilometres to metres.", "output": "186 kilometres is 186000 metres.\n\nWorking: there are 1000 metres in one kilometre, so 186 × 1000 = 186000."}
+{"instruction": "Convert 39.75 hours to minutes.", "output": "39.75 hours is 2385 minutes.\n\nWorking: there are 60 minutes in one hour, so 39.75 × 60 = 2385."}
+{"instruction": "Convert 43.75 kilograms to grams.", "output": "43.75 kilograms is 43750 grams.\n\nWorking: there are 1000 grams in one kilogram, so 43.75 × 1000 = 43750."}
+{"instruction": "Convert the decimal number 856 to binary.", "output": "856 in binary is 1101011000.\n\nWorking: repeatedly dividing 856 by 2 and reading the remainders from last to first gives 1101011000."}
+{"instruction": "What is the area of a circle with a radius of 127 cm?", "output": "The area is about 50670.75 cm².\n\nWorking: A = π × r² = π × 127² ≈ 50670.75 cm²."}
+{"instruction": "What is the area of a circle with a radius of 101 cm?", "output": "The area is about 32047.39 cm².\n\nWorking: A = π × r² = π × 101² ≈ 32047.39 cm²."}
+{"instruction": "Convert the decimal number 1117 to hexadecimal.", "output": "1117 in hexadecimal is 45D.\n\nWorking: repeatedly dividing 1117 by 16 and reading the remainders from last to first gives 45D."}
+{"instruction": "Convert the decimal number 20 to binary.", "output": "20 in binary is 10100.\n\nWorking: repeatedly dividing 20 by 2 and reading the remainders from last to first gives 10100."}
+{"instruction": "A 159 V supply is connected across a 660 ohm resistor. What current flows through it?", "output": "The current is 0.2409 A.\n\nWorking: Ohm's law gives I = V ÷ R = 159 V ÷ 660 Ω ≈ 0.2409 A."}
+{"instruction": "Convert 25.75 hours to minutes.", "output": "25.75 hours is 1545 minutes.\n\nWorking: there are 60 minutes in one hour, so 25.75 × 60 = 1545."}
+{"instruction": "A 60 V supply is connected across a 490 ohm resistor. What current flows through it?", "output": "The current is 0.1224 A.\n\nWorking: Ohm's law gives I = V ÷ R = 60 V ÷ 490 Ω ≈ 0.1224 A."}
+{"instruction": "A resistor of 390 ohms carries a current of 3.4 A. What is the voltage across it?", "output": "The voltage across the resistor is 1326 V.\n\nWorking: Ohm's law gives V = I × R = 3.4 A × 390 Ω = 1326 V."}
+{"instruction": "What is the area of a circle with a radius of 35 cm?", "output": "The area is about 3848.45 cm².\n\nWorking: A = π × r² = π × 35² ≈ 3848.45 cm²."}
+{"instruction": "A device runs at 48 V and draws 0.1 A. How much power does it use?", "output": "The device uses 4.8 W.\n\nWorking: P = V × I = 48 V × 0.1 A = 4.8 W."}
+{"instruction": "What is 40% of 1980?", "output": "40% of 1980 is 792.\n\nWorking: 40% × 1980 = 40/100 × 1980 = 792."}
+{"instruction": "What is the area of a circle with a radius of 137 cm?", "output": "The area is about 58964.55 cm².\n\nWorking: A = π × r² = π × 137² ≈ 58964.55 cm²."}
+{"instruction": "A 157 V supply is connected across a 480 ohm resistor. What current flows through it?", "output": "The current is 0.3271 A.\n\nWorking: Ohm's law gives I = V ÷ R = 157 V ÷ 480 Ω ≈ 0.3271 A."}
+{"instruction": "A resistor of 800 ohms carries a current of 1.4 A. What is the voltage across it?", "output": "The voltage across the resistor is 1120 V.\n\nWorking: Ohm's law gives V = I × R = 1.4 A × 800 Ω = 1120 V."}
+{"instruction": "A resistor of 250 ohms carries a current of 2.4 A. What is the voltage across it?", "output": "The voltage across the resistor is 600 V.\n\nWorking: Ohm's law gives V = I × R = 2.4 A × 250 Ω = 600 V."}
+{"instruction": "What is 30% of 1000?", "output": "30% of 1000 is 300.\n\nWorking: 30% × 1000 = 30/100 × 1000 = 300."}
+{"instruction": "A 34 V supply is connected across a 370 ohm resistor. What current flows through it?", "output": "The current is 0.0919 A.\n\nWorking: Ohm's law gives I = V ÷ R = 34 V ÷ 370 Ω ≈ 0.0919 A."}
+{"instruction": "A resistor of 160 ohms carries a current of 1.5 A. What is the voltage across it?", "output": "The voltage across the resistor is 240 V.\n\nWorking: Ohm's law gives V = I × R = 1.5 A × 160 Ω = 240 V."}
+{"instruction": "A 113 V supply is connected across a 270 ohm resistor. What current flows through it?", "output": "The current is 0.4185 A.\n\nWorking: Ohm's law gives I = V ÷ R = 113 V ÷ 270 Ω ≈ 0.4185 A."}
+{"instruction": "A resistor of 130 ohms carries a current of 3.6 A. What is the voltage across it?", "output": "The voltage across the resistor is 468 V.\n\nWorking: Ohm's law gives V = I × R = 3.6 A × 130 Ω = 468 V."}
+{"instruction": "What is 25% of 600?", "output": "25% of 600 is 150.\n\nWorking: 25% × 600 = 25/100 × 600 = 150."}
+{"instruction": "A 101 V supply is connected across a 510 ohm resistor. What current flows through it?", "output": "The current is 0.198 A.\n\nWorking: Ohm's law gives I = V ÷ R = 101 V ÷ 510 Ω ≈ 0.198 A."}
+{"instruction": "What is 25% of 20?", "output": "25% of 20 is 5.\n\nWorking: 25% × 20 = 25/100 × 20 = 5."}
+{"instruction": "Convert 94 litres to millilitres.", "output": "94 litres is 94000 millilitres.\n\nWorking: there are 1000 millilitres in one litre, so 94 × 1000 = 94000."}
+{"instruction": "What is the capital of Japan?", "output": "The capital of Japan is Tokyo.\n\nWorking: this is a geography fact; Tokyo is the seat of Japan's national government."}
+{"instruction": "Convert the decimal number 1216 to hexadecimal.", "output": "1216 in hexadecimal is 4C0.\n\nWorking: repeatedly dividing 1216 by 16 and reading the remainders from last to first gives 4C0."}
+{"instruction": "A 82 V supply is connected across a 730 ohm resistor. What current flows through it?", "output": "The current is 0.1123 A.\n\nWorking: Ohm's law gives I = V ÷ R = 82 V ÷ 730 Ω ≈ 0.1123 A."}
+{"instruction": "Convert the decimal number 404 to binary.", "output": "404 in binary is 110010100.\n\nWorking: repeatedly dividing 404 by 2 and reading the remainders from last to first gives 110010100."}
+{"instruction": "What is the area of a circle with a radius of 64 cm?", "output": "The area is about 12867.96 cm².\n\nWorking: A = π × r² = π × 64² ≈ 12867.96 cm²."}
+{"instruction": "A device runs at 24 V and draws 3.4 A. How much power does it use?", "output": "The device uses 81.6 W.\n\nWorking: P = V × I = 24 V × 3.4 A = 81.6 W."}
+{"instruction": "A device runs at 230 V and draws 1.2 A. How much power does it use?", "output": "The device uses 276 W.\n\nWorking: P = V × I = 230 V × 1.2 A = 276 W."}
+{"instruction": "A device runs at 5 V and draws 7.3 A. How much power does it use?", "output": "The device uses 36.5 W.\n\nWorking: P = V × I = 5 V × 7.3 A = 36.5 W."}
+{"instruction": "Convert 18 °C to Fahrenheit.", "output": "18 °C is 64.4 °F.\n\nWorking: °F = °C × 9/5 + 32 = 18 × 9/5 + 32 = 64.4."}
+{"instruction": "A device runs at 48 V and draws 4.9 A. How much power does it use?", "output": "The device uses 235.2 W.\n\nWorking: P = V × I = 48 V × 4.9 A = 235.2 W."}
+{"instruction": "Convert the decimal number 3050 to hexadecimal.", "output": "3050 in hexadecimal is BEA.\n\nWorking: repeatedly dividing 3050 by 16 and reading the remainders from last to first gives BEA."}
+{"instruction": "What is the capital of Finland?", "output": "The capital of Finland is Helsinki.\n\nWorking: this is a geography fact; Helsinki is the seat of Finland's national government."}
+{"instruction": "A 205 V supply is connected across a 880 ohm resistor. What current flows through it?", "output": "The current is 0.233 A.\n\nWorking: Ohm's law gives I = V ÷ R = 205 V ÷ 880 Ω ≈ 0.233 A."}
+{"instruction": "Convert 43 °C to Fahrenheit.", "output": "43 °C is 109.4 °F.\n\nWorking: °F = °C × 9/5 + 32 = 43 × 9/5 + 32 = 109.4."}
+{"instruction": "A 27 V supply is connected across a 510 ohm resistor. What current flows through it?", "output": "The current is 0.0529 A.\n\nWorking: Ohm's law gives I = V ÷ R = 27 V ÷ 510 Ω ≈ 0.0529 A."}
+{"instruction": "A resistor of 600 ohms carries a current of 3.8 A. What is the voltage across it?", "output": "The voltage across the resistor is 2280 V.\n\nWorking: Ohm's law gives V = I × R = 3.8 A × 600 Ω = 2280 V."}
+{"instruction": "Convert 28 °C to Fahrenheit.", "output": "28 °C is 82.4 °F.\n\nWorking: °F = °C × 9/5 + 32 = 28 × 9/5 + 32 = 82.4."}
+{"instruction": "A device runs at 110 V and draws 0.4 A. How much power does it use?", "output": "The device uses 44 W.\n\nWorking: P = V × I = 110 V × 0.4 A = 44 W."}
+{"instruction": "A resistor of 690 ohms carries a current of 0.7 A. What is the voltage across it?", "output": "The voltage across the resistor is 483 V.\n\nWorking: Ohm's law gives V = I × R = 0.7 A × 690 Ω = 483 V."}
+{"instruction": "A 224 V supply is connected across a 1000 ohm resistor. What current flows through it?", "output": "The current is 0.224 A.\n\nWorking: Ohm's law gives I = V ÷ R = 224 V ÷ 1000 Ω ≈ 0.224 A."}
+{"instruction": "Convert 89 metres to centimetres.", "output": "89 metres is 8900 centimetres.\n\nWorking: there are 100 centimetres in one metre, so 89 × 100 = 8900."}
+{"instruction": "Convert 37.5 litres to millilitres.", "output": "37.5 litres is 37500 millilitres.\n\nWorking: there are 1000 millilitres in one litre, so 37.5 × 1000 = 37500."}
+{"instruction": "Convert the decimal number 1576 to hexadecimal.", "output": "1576 in hexadecimal is 628.\n\nWorking: repeatedly dividing 1576 by 16 and reading the remainders from last to first gives 628."}
+{"instruction": "What is the area of a circle with a radius of 18 cm?", "output": "The area is about 1017.88 cm².\n\nWorking: A = π × r² = π × 18² ≈ 1017.88 cm²."}
+{"instruction": "A resistor of 290 ohms carries a current of 0.3 A. What is the voltage across it?", "output": "The voltage across the resistor is 87 V.\n\nWorking: Ohm's law gives V = I × R = 0.3 A × 290 Ω = 87 V."}
+{"instruction": "Convert 86 °C to Fahrenheit.", "output": "86 °C is 186.8 °F.\n\nWorking: °F = °C × 9/5 + 32 = 86 × 9/5 + 32 = 186.8."}
+{"instruction": "Convert the decimal number 416 to binary.", "output": "416 in binary is 110100000.\n\nWorking: repeatedly dividing 416 by 2 and reading the remainders from last to first gives 110100000."}
+{"instruction": "Convert 156 metres to centimetres.", "output": "156 metres is 15600 centimetres.\n\nWorking: there are 100 centimetres in one metre, so 156 × 100 = 15600."}
+{"instruction": "What is the area of a circle with a radius of 84 cm?", "output": "The area is about 22167.08 cm².\n\nWorking: A = π × r² = π × 84² ≈ 22167.08 cm²."}
+{"instruction": "A device runs at 48 V and draws 0.4 A. How much power does it use?", "output": "The device uses 19.2 W.\n\nWorking: P = V × I = 48 V × 0.4 A = 19.2 W."}
+{"instruction": "A device runs at 9 V and draws 6.7 A. How much power does it use?", "output": "The device uses 60.3 W.\n\nWorking: P = V × I = 9 V × 6.7 A = 60.3 W."}
+{"instruction": "A resistor of 640 ohms carries a current of 2.2 A. What is the voltage across it?", "output": "The voltage across the resistor is 1408 V.\n\nWorking: Ohm's law gives V = I × R = 2.2 A × 640 Ω = 1408 V."}
+{"instruction": "Convert 192 metres to centimetres.", "output": "192 metres is 19200 centimetres.\n\nWorking: there are 100 centimetres in one metre, so 192 × 100 = 19200."}
+{"instruction": "What is the area of a circle with a radius of 126 cm?", "output": "The area is about 49875.92 cm².\n\nWorking: A = π × r² = π × 126² ≈ 49875.92 cm²."}
+{"instruction": "A 14 V supply is connected across a 950 ohm resistor. What current flows through it?", "output": "The current is 0.0147 A.\n\nWorking: Ohm's law gives I = V ÷ R = 14 V ÷ 950 Ω ≈ 0.0147 A."}
+{"instruction": "What is the area of a circle with a radius of 73 cm?", "output": "The area is about 16741.55 cm².\n\nWorking: A = π × r² = π × 73² ≈ 16741.55 cm²."}
+{"instruction": "A resistor of 920 ohms carries a current of 0.5 A. What is the voltage across it?", "output": "The voltage across the resistor is 460 V.\n\nWorking: Ohm's law gives V = I × R = 0.5 A × 920 Ω = 460 V."}
+{"instruction": "A device runs at 24 V and draws 2.6 A. How much power does it use?", "output": "The device uses 62.4 W.\n\nWorking: P = V × I = 24 V × 2.6 A = 62.4 W."}
+{"instruction": "Convert the decimal number 547 to hexadecimal.", "output": "547 in hexadecimal is 223.\n\nWorking: repeatedly dividing 547 by 16 and reading the remainders from last to first gives 223."}
+{"instruction": "What is the capital of Russia?", "output": "The capital of Russia is Moscow.\n\nWorking: this is a geography fact; Moscow is the seat of Russia's national government."}
+{"instruction": "A resistor of 750 ohms carries a current of 0.4 A. What is the voltage across it?", "output": "The voltage across the resistor is 300 V.\n\nWorking: Ohm's law gives V = I × R = 0.4 A × 750 Ω = 300 V."}
+{"instruction": "A device runs at 5 V and draws 1.9 A. How much power does it use?", "output": "The device uses 9.5 W.\n\nWorking: P = V × I = 5 V × 1.9 A = 9.5 W."}
+{"instruction": "What is 40% of 760?", "output": "40% of 760 is 304.\n\nWorking: 40% × 760 = 40/100 × 760 = 304."}
+{"instruction": "A device runs at 12 V and draws 4.5 A. How much power does it use?", "output": "The device uses 54 W.\n\nWorking: P = V × I = 12 V × 4.5 A = 54 W."}
+{"instruction": "Convert 1 °C to Fahrenheit.", "output": "1 °C is 33.8 °F.\n\nWorking: °F = °C × 9/5 + 32 = 1 × 9/5 + 32 = 33.8."}
+{"instruction": "Convert -30 °C to Fahrenheit.", "output": "-30 °C is -22 °F.\n\nWorking: °F = °C × 9/5 + 32 = -30 × 9/5 + 32 = -22."}
+{"instruction": "What is 10% of 1780?", "output": "10% of 1780 is 178.\n\nWorking: 10% × 1780 = 10/100 × 1780 = 178."}
+{"instruction": "Convert the decimal number 3630 to hexadecimal.", "output": "3630 in hexadecimal is E2E.\n\nWorking: repeatedly dividing 3630 by 16 and reading the remainders from last to first gives E2E."}
+{"instruction": "A device runs at 24 V and draws 8.4 A. How much power does it use?", "output": "The device uses 201.6 W.\n\nWorking: P = V × I = 24 V × 8.4 A = 201.6 W."}
+{"instruction": "What is the area of a circle with a radius of 63 cm?", "output": "The area is about 12468.98 cm².\n\nWorking: A = π × r² = π × 63² ≈ 12468.98 cm²."}
+{"instruction": "Convert 91 °C to Fahrenheit.", "output": "91 °C is 195.8 °F.\n\nWorking: °F = °C × 9/5 + 32 = 91 × 9/5 + 32 = 195.8."}
+{"instruction": "What is 40% of 1040?", "output": "40% of 1040 is 416.\n\nWorking: 40% × 1040 = 40/100 × 1040 = 416."}
+{"instruction": "Convert the decimal number 545 to binary.", "output": "545 in binary is 1000100001.\n\nWorking: repeatedly dividing 545 by 2 and reading the remainders from last to first gives 1000100001."}
+{"instruction": "A resistor of 80 ohms carries a current of 3.3 A. What is the voltage across it?", "output": "The voltage across the resistor is 264 V.\n\nWorking: Ohm's law gives V = I × R = 3.3 A × 80 Ω = 264 V."}
+{"instruction": "What is 25% of 1940?", "output": "25% of 1940 is 485.\n\nWorking: 25% × 1940 = 25/100 × 1940 = 485."}
+{"instruction": "Convert the decimal number 508 to binary.", "output": "508 in binary is 111111100.\n\nWorking: repeatedly dividing 508 by 2 and reading the remainders from last to first gives 111111100."}
+{"instruction": "What is the area of a circle with a radius of 40 cm?", "output": "The area is about 5026.55 cm².\n\nWorking: A = π × r² = π × 40² ≈ 5026.55 cm²."}
+{"instruction": "What is 25% of 320?", "output": "25% of 320 is 80.\n\nWorking: 25% × 320 = 25/100 × 320 = 80."}
+{"instruction": "Convert 29 minutes to seconds.", "output": "29 minutes is 1740 seconds.\n\nWorking: there are 60 seconds in one minute, so 29 × 60 = 1740."}
+{"instruction": "What is 15% of 1740?", "output": "15% of 1740 is 261.\n\nWorking: 15% × 1740 = 15/100 × 1740 = 261."}
+{"instruction": "Convert the decimal number 253 to binary.", "output": "253 in binary is 11111101.\n\nWorking: repeatedly dividing 253 by 2 and reading the remainders from last to first gives 11111101."}
+{"instruction": "What is the area of a circle with a radius of 122 cm?", "output": "The area is about 46759.47 cm².\n\nWorking: A = π × r² = π × 122² ≈ 46759.47 cm²."}
+{"instruction": "A device runs at 24 V and draws 9.3 A. How much power does it use?", "output": "The device uses 223.2 W.\n\nWorking: P = V × I = 24 V × 9.3 A = 223.2 W."}
+{"instruction": "A resistor of 390 ohms carries a current of 1.6 A. What is the voltage across it?", "output": "The voltage across the resistor is 624 V.\n\nWorking: Ohm's law gives V = I × R = 1.6 A × 390 Ω = 624 V."}
+{"instruction": "A resistor of 100 ohms carries a current of 4.9 A. What is the voltage across it?", "output": "The voltage across the resistor is 490 V.\n\nWorking: Ohm's law gives V = I × R = 4.9 A × 100 Ω = 490 V."}
+{"instruction": "A 70 V supply is connected across a 120 ohm resistor. What current flows through it?", "output": "The current is 0.5833 A.\n\nWorking: Ohm's law gives I = V ÷ R = 70 V ÷ 120 Ω ≈ 0.5833 A."}
+{"instruction": "Convert the decimal number 775 to hexadecimal.", "output": "775 in hexadecimal is 307.\n\nWorking: repeatedly dividing 775 by 16 and reading the remainders from last to first gives 307."}
+{"instruction": "Convert -17 °C to Fahrenheit.", "output": "-17 °C is 1.4 °F.\n\nWorking: °F = °C × 9/5 + 32 = -17 × 9/5 + 32 = 1.4."}
+{"instruction": "Convert the decimal number 653 to binary.", "output": "653 in binary is 1010001101.\n\nWorking: repeatedly dividing 653 by 2 and reading the remainders from last to first gives 1010001101."}
+{"instruction": "What is the area of a circle with a radius of 6 cm?", "output": "The area is about 113.1 cm².\n\nWorking: A = π × r² = π × 6² ≈ 113.1 cm²."}
+{"instruction": "A device runs at 12 V and draws 9.5 A. How much power does it use?", "output": "The device uses 114 W.\n\nWorking: P = V × I = 12 V × 9.5 A = 114 W."}
+{"instruction": "Convert the decimal number 205 to binary.", "output": "205 in binary is 11001101.\n\nWorking: repeatedly dividing 205 by 2 and reading the remainders from last to first gives 11001101."}
+{"instruction": "What is the area of a circle with a radius of 39 cm?", "output": "The area is about 4778.36 cm².\n\nWorking: A = π × r² = π × 39² ≈ 4778.36 cm²."}
+{"instruction": "A device runs at 5 V and draws 2.9 A. How much power does it use?", "output": "The device uses 14.5 W.\n\nWorking: P = V × I = 5 V × 2.9 A = 14.5 W."}
+{"instruction": "Convert the decimal number 3999 to hexadecimal.", "output": "3999 in hexadecimal is F9F.\n\nWorking: repeatedly dividing 3999 by 16 and reading the remainders from last to first gives F9F."}
+{"instruction": "What is the area of a circle with a radius of 110 cm?", "output": "The area is about 38013.27 cm².\n\nWorking: A = π × r² = π × 110² ≈ 38013.27 cm²."}
+{"instruction": "A resistor of 380 ohms carries a current of 2.7 A. What is the voltage across it?", "output": "The voltage across the resistor is 1026 V.\n\nWorking: Ohm's law gives V = I × R = 2.7 A × 380 Ω = 1026 V."}
+{"instruction": "What is 40% of 1760?", "output": "40% of 1760 is 704.\n\nWorking: 40% × 1760 = 40/100 × 1760 = 704."}
+{"instruction": "A device runs at 9 V and draws 8.2 A. How much power does it use?", "output": "The device uses 73.8 W.\n\nWorking: P = V × I = 9 V × 8.2 A = 73.8 W."}
+{"instruction": "What is the area of a circle with a radius of 143 cm?", "output": "The area is about 64242.43 cm².\n\nWorking: A = π × r² = π × 143² ≈ 64242.43 cm²."}
+{"instruction": "What is the area of a circle with a radius of 60 cm?", "output": "The area is about 11309.73 cm².\n\nWorking: A = π × r² = π × 60² ≈ 11309.73 cm²."}
+{"instruction": "A resistor of 190 ohms carries a current of 3.5 A. What is the voltage across it?", "output": "The voltage across the resistor is 665 V.\n\nWorking: Ohm's law gives V = I × R = 3.5 A × 190 Ω = 665 V."}
+{"instruction": "Convert the decimal number 184 to binary.", "output": "184 in binary is 10111000.\n\nWorking: repeatedly dividing 184 by 2 and reading the remainders from last to first gives 10111000."}
+{"instruction": "A resistor of 370 ohms carries a current of 3.9 A. What is the voltage across it?", "output": "The voltage across the resistor is 1443 V.\n\nWorking: Ohm's law gives V = I × R = 3.9 A × 370 Ω = 1443 V."}
+{"instruction": "Convert 35 °C to Fahrenheit.", "output": "35 °C is 95 °F.\n\nWorking: °F = °C × 9/5 + 32 = 35 × 9/5 + 32 = 95."}
+{"instruction": "Convert the decimal number 3444 to hexadecimal.", "output": "3444 in hexadecimal is D74.\n\nWorking: repeatedly dividing 3444 by 16 and reading the remainders from last to first gives D74."}
+{"instruction": "Convert the decimal number 661 to hexadecimal.", "output": "661 in hexadecimal is 295.\n\nWorking: repeatedly dividing 661 by 16 and reading the remainders from last to first gives 295."}
+{"instruction": "Convert the decimal number 1341 to hexadecimal.", "output": "1341 in hexadecimal is 53D.\n\nWorking: repeatedly dividing 1341 by 16 and reading the remainders from last to first gives 53D."}
+{"instruction": "What is the area of a circle with a radius of 37 cm?", "output": "The area is about 4300.84 cm².\n\nWorking: A = π × r² = π × 37² ≈ 4300.84 cm²."}
+{"instruction": "Convert the decimal number 3992 to hexadecimal.", "output": "3992 in hexadecimal is F98.\n\nWorking: repeatedly dividing 3992 by 16 and reading the remainders from last to first gives F98."}
+{"instruction": "Convert 94 °C to Fahrenheit.", "output": "94 °C is 201.2 °F.\n\nWorking: °F = °C × 9/5 + 32 = 94 × 9/5 + 32 = 201.2."}
+{"instruction": "A 141 V supply is connected across a 520 ohm resistor. What current flows through it?", "output": "The current is 0.2712 A.\n\nWorking: Ohm's law gives I = V ÷ R = 141 V ÷ 520 Ω ≈ 0.2712 A."}
+{"instruction": "A 210 V supply is connected across a 180 ohm resistor. What current flows through it?", "output": "The current is 1.1667 A.\n\nWorking: Ohm's law gives I = V ÷ R = 210 V ÷ 180 Ω ≈ 1.1667 A."}
+{"instruction": "A device runs at 9 V and draws 6.9 A. How much power does it use?", "output": "The device uses 62.1 W.\n\nWorking: P = V × I = 9 V × 6.9 A = 62.1 W."}
+{"instruction": "A 205 V supply is connected across a 750 ohm resistor. What current flows through it?", "output": "The current is 0.2733 A.\n\nWorking: Ohm's law gives I = V ÷ R = 205 V ÷ 750 Ω ≈ 0.2733 A."}
+{"instruction": "What is the capital of Italy?", "output": "The capital of Italy is Rome.\n\nWorking: this is a geography fact; Rome is the seat of Italy's national government."}
+{"instruction": "Convert 72 °C to Fahrenheit.", "output": "72 °C is 161.6 °F.\n\nWorking: °F = °C × 9/5 + 32 = 72 × 9/5 + 32 = 161.6."}
+{"instruction": "Convert -14 °C to Fahrenheit.", "output": "-14 °C is 6.8 °F.\n\nWorking: °F = °C × 9/5 + 32 = -14 × 9/5 + 32 = 6.8."}
+{"instruction": "What is the area of a circle with a radius of 27 cm?", "output": "The area is about 2290.22 cm².\n\nWorking: A = π × r² = π × 27² ≈ 2290.22 cm²."}
+{"instruction": "Convert 21 hours to minutes.", "output": "21 hours is 1260 minutes.\n\nWorking: there are 60 minutes in one hour, so 21 × 60 = 1260."}
+{"instruction": "A resistor of 240 ohms carries a current of 4.5 A. What is the voltage across it?", "output": "The voltage across the resistor is 1080 V.\n\nWorking: Ohm's law gives V = I × R = 4.5 A × 240 Ω = 1080 V."}
+{"instruction": "A resistor of 420 ohms carries a current of 1 A. What is the voltage across it?", "output": "The voltage across the resistor is 420 V.\n\nWorking: Ohm's law gives V = I × R = 1 A × 420 Ω = 420 V."}
+{"instruction": "Convert 97 °C to Fahrenheit.", "output": "97 °C is 206.6 °F.\n\nWorking: °F = °C × 9/5 + 32 = 97 × 9/5 + 32 = 206.6."}
+{"instruction": "Convert the decimal number 459 to binary.", "output": "459 in binary is 111001011.\n\nWorking: repeatedly dividing 459 by 2 and reading the remainders from last to first gives 111001011."}
+{"instruction": "Convert 29 °C to Fahrenheit.", "output": "29 °C is 84.2 °F.\n\nWorking: °F = °C × 9/5 + 32 = 29 × 9/5 + 32 = 84.2."}
+{"instruction": "What is the area of a circle with a radius of 23 cm?", "output": "The area is about 1661.9 cm².\n\nWorking: A = π × r² = π × 23² ≈ 1661.9 cm²."}
+{"instruction": "Convert the decimal number 1507 to hexadecimal.", "output": "1507 in hexadecimal is 5E3.\n\nWorking: repeatedly dividing 1507 by 16 and reading the remainders from last to first gives 5E3."}
+{"instruction": "Convert 58 litres to millilitres.", "output": "58 litres is 58000 millilitres.\n\nWorking: there are 1000 millilitres in one litre, so 58 × 1000 = 58000."}
+{"instruction": "A resistor of 510 ohms carries a current of 0.4 A. What is the voltage across it?", "output": "The voltage across the resistor is 204 V.\n\nWorking: Ohm's law gives V = I × R = 0.4 A × 510 Ω = 204 V."}
+{"instruction": "What is 20% of 140?", "output": "20% of 140 is 28.\n\nWorking: 20% × 140 = 20/100 × 140 = 28."}
+{"instruction": "A resistor of 80 ohms carries a current of 3.7 A. What is the voltage across it?", "output": "The voltage across the resistor is 296 V.\n\nWorking: Ohm's law gives V = I × R = 3.7 A × 80 Ω = 296 V."}
+{"instruction": "A device runs at 24 V and draws 8 A. How much power does it use?", "output": "The device uses 192 W.\n\nWorking: P = V × I = 24 V × 8 A = 192 W."}
+{"instruction": "Convert 51 °C to Fahrenheit.", "output": "51 °C is 123.8 °F.\n\nWorking: °F = °C × 9/5 + 32 = 51 × 9/5 + 32 = 123.8."}
+{"instruction": "Convert 77 °C to Fahrenheit.", "output": "77 °C is 170.6 °F.\n\nWorking: °F = °C × 9/5 + 32 = 77 × 9/5 + 32 = 170.6."}
+{"instruction": "Convert the decimal number 238 to hexadecimal.", "output": "238 in hexadecimal is EE.\n\nWorking: repeatedly dividing 238 by 16 and reading the remainders from last to first gives EE."}
+{"instruction": "Convert 130 hours to minutes.", "output": "130 hours is 7800 minutes.\n\nWorking: there are 60 minutes in one hour, so 130 × 60 = 7800."}
+{"instruction": "What is the capital of Poland?", "output": "The capital of Poland is Warsaw.\n\nWorking: this is a geography fact; Warsaw is the seat of Poland's national government."}
+{"instruction": "A device runs at 5 V and draws 9.6 A. How much power does it use?", "output": "The device uses 48 W.\n\nWorking: P = V × I = 5 V × 9.6 A = 48 W."}
+{"instruction": "What is the area of a circle with a radius of 129 cm?", "output": "The area is about 52279.24 cm².\n\nWorking: A = π × r² = π × 129² ≈ 52279.24 cm²."}
+{"instruction": "A resistor of 440 ohms carries a current of 1 A. What is the voltage across it?", "output": "The voltage across the resistor is 440 V.\n\nWorking: Ohm's law gives V = I × R = 1 A × 440 Ω = 440 V."}
+{"instruction": "A device runs at 9 V and draws 1.5 A. How much power does it use?", "output": "The device uses 13.5 W.\n\nWorking: P = V × I = 9 V × 1.5 A = 13.5 W."}
+{"instruction": "What is the area of a circle with a radius of 100 cm?", "output": "The area is about 31415.93 cm².\n\nWorking: A = π × r² = π × 100² ≈ 31415.93 cm²."}
+{"instruction": "Convert the decimal number 905 to binary.", "output": "905 in binary is 1110001001.\n\nWorking: repeatedly dividing 905 by 2 and reading the remainders from last to first gives 1110001001."}
+{"instruction": "Convert -28 °C to Fahrenheit.", "output": "-28 °C is -18.4 °F.\n\nWorking: °F = °C × 9/5 + 32 = -28 × 9/5 + 32 = -18.4."}
+{"instruction": "Convert -22 °C to Fahrenheit.", "output": "-22 °C is -7.6 °F.\n\nWorking: °F = °C × 9/5 + 32 = -22 × 9/5 + 32 = -7.6."}
+{"instruction": "Convert the decimal number 2468 to hexadecimal.", "output": "2468 in hexadecimal is 9A4.\n\nWorking: repeatedly dividing 2468 by 16 and reading the remainders from last to first gives 9A4."}
+{"instruction": "A 73 V supply is connected across a 580 ohm resistor. What current flows through it?", "output": "The current is 0.1259 A.\n\nWorking: Ohm's law gives I = V ÷ R = 73 V ÷ 580 Ω ≈ 0.1259 A."}
+{"instruction": "Convert 45.5 litres to millilitres.", "output": "45.5 litres is 45500 millilitres.\n\nWorking: there are 1000 millilitres in one litre, so 45.5 × 1000 = 45500."}
+{"instruction": "Convert the decimal number 1003 to binary.", "output": "1003 in binary is 1111101011.\n\nWorking: repeatedly dividing 1003 by 2 and reading the remainders from last to first gives 1111101011."}
+{"instruction": "A device runs at 9 V and draws 7.9 A. How much power does it use?", "output": "The device uses 71.1 W.\n\nWorking: P = V × I = 9 V × 7.9 A = 71.1 W."}
+{"instruction": "What is the capital of Bangladesh?", "output": "The capital of Bangladesh is Dhaka.\n\nWorking: this is a geography fact; Dhaka is the seat of Bangladesh's national government."}
+{"instruction": "A resistor of 640 ohms carries a current of 4.4 A. What is the voltage across it?", "output": "The voltage across the resistor is 2816 V.\n\nWorking: Ohm's law gives V = I × R = 4.4 A × 640 Ω = 2816 V."}
+{"instruction": "What is the capital of Brazil?", "output": "The capital of Brazil is Brasília.\n\nWorking: this is a geography fact; Brasília is the seat of Brazil's national government."}
+{"instruction": "Convert 30.5 minutes to seconds.", "output": "30.5 minutes is 1830 seconds.\n\nWorking: there are 60 seconds in one minute, so 30.5 × 60 = 1830."}
+{"instruction": "A device runs at 230 V and draws 2.9 A. How much power does it use?", "output": "The device uses 667 W.\n\nWorking: P = V × I = 230 V × 2.9 A = 667 W."}
+{"instruction": "Convert 143 kilometres to metres.", "output": "143 kilometres is 143000 metres.\n\nWorking: there are 1000 metres in one kilometre, so 143 × 1000 = 143000."}
+{"instruction": "A 16 V supply is connected across a 520 ohm resistor. What current flows through it?", "output": "The current is 0.0308 A.\n\nWorking: Ohm's law gives I = V ÷ R = 16 V ÷ 520 Ω ≈ 0.0308 A."}
+{"instruction": "Convert 21 °C to Fahrenheit.", "output": "21 °C is 69.8 °F.\n\nWorking: °F = °C × 9/5 + 32 = 21 × 9/5 + 32 = 69.8."}
+{"instruction": "Convert the decimal number 359 to hexadecimal.", "output": "359 in hexadecimal is 167.\n\nWorking: repeatedly dividing 359 by 16 and reading the remainders from last to first gives 167."}
+{"instruction": "What is the area of a circle with a radius of 53 cm?", "output": "The area is about 8824.73 cm².\n\nWorking: A = π × r² = π × 53² ≈ 8824.73 cm²."}
+{"instruction": "Convert 24.5 metres to centimetres.", "output": "24.5 metres is 2450 centimetres.\n\nWorking: there are 100 centimetres in one metre, so 24.5 × 100 = 2450."}
+{"instruction": "Convert 78 litres to millilitres.", "output": "78 litres is 78000 millilitres.\n\nWorking: there are 1000 millilitres in one litre, so 78 × 1000 = 78000."}
+{"instruction": "Convert the decimal number 1158 to hexadecimal.", "output": "1158 in hexadecimal is 486.\n\nWorking: repeatedly dividing 1158 by 16 and reading the remainders from last to first gives 486."}
+{"instruction": "A resistor of 710 ohms carries a current of 2.8 A. What is the voltage across it?", "output": "The voltage across the resistor is 1988 V.\n\nWorking: Ohm's law gives V = I × R = 2.8 A × 710 Ω = 1988 V."}
+{"instruction": "A 101 V supply is connected across a 720 ohm resistor. What current flows through it?", "output": "The current is 0.1403 A.\n\nWorking: Ohm's law gives I = V ÷ R = 101 V ÷ 720 Ω ≈ 0.1403 A."}
+{"instruction": "Convert the decimal number 752 to binary.", "output": "752 in binary is 1011110000.\n\nWorking: repeatedly dividing 752 by 2 and reading the remainders from last to first gives 1011110000."}
+{"instruction": "What is the area of a circle with a radius of 135 cm?", "output": "The area is about 57255.53 cm².\n\nWorking: A = π × r² = π × 135² ≈ 57255.53 cm²."}
+{"instruction": "A device runs at 9 V and draws 8.9 A. How much power does it use?", "output": "The device uses 80.1 W.\n\nWorking: P = V × I = 9 V × 8.9 A = 80.1 W."}
+{"instruction": "Convert 2.5 minutes to seconds.", "output": "2.5 minutes is 150 seconds.\n\nWorking: there are 60 seconds in one minute, so 2.5 × 60 = 150."}
+{"instruction": "What is 20% of 1880?", "output": "20% of 1880 is 376.\n\nWorking: 20% × 1880 = 20/100 × 1880 = 376."}
+{"instruction": "A device runs at 5 V and draws 5 A. How much power does it use?", "output": "The device uses 25 W.\n\nWorking: P = V × I = 5 V × 5 A = 25 W."}
+{"instruction": "What is 20% of 1740?", "output": "20% of 1740 is 348.\n\nWorking: 20% × 1740 = 20/100 × 1740 = 348."}
+{"instruction": "Convert the decimal number 357 to binary.", "output": "357 in binary is 101100101.\n\nWorking: repeatedly dividing 357 by 2 and reading the remainders from last to first gives 101100101."}
+{"instruction": "What is 25% of 180?", "output": "25% of 180 is 45.\n\nWorking: 25% × 180 = 25/100 × 180 = 45."}
+{"instruction": "A 213 V supply is connected across a 630 ohm resistor. What current flows through it?", "output": "The current is 0.3381 A.\n\nWorking: Ohm's law gives I = V ÷ R = 213 V ÷ 630 Ω ≈ 0.3381 A."}
+{"instruction": "A resistor of 220 ohms carries a current of 4.9 A. What is the voltage across it?", "output": "The voltage across the resistor is 1078 V.\n\nWorking: Ohm's law gives V = I × R = 4.9 A × 220 Ω = 1078 V."}
+{"instruction": "A device runs at 24 V and draws 6.2 A. How much power does it use?", "output": "The device uses 148.8 W.\n\nWorking: P = V × I = 24 V × 6.2 A = 148.8 W."}
+{"instruction": "A 174 V supply is connected across a 840 ohm resistor. What current flows through it?", "output": "The current is 0.2071 A.\n\nWorking: Ohm's law gives I = V ÷ R = 174 V ÷ 840 Ω ≈ 0.2071 A."}
+{"instruction": "Convert the decimal number 514 to binary.", "output": "514 in binary is 1000000010.\n\nWorking: repeatedly dividing 514 by 2 and reading the remainders from last to first gives 1000000010."}
+{"instruction": "A 197 V supply is connected across a 280 ohm resistor. What current flows through it?", "output": "The current is 0.7036 A.\n\nWorking: Ohm's law gives I = V ÷ R = 197 V ÷ 280 Ω ≈ 0.7036 A."}
+{"instruction": "Convert 27.75 litres to millilitres.", "output": "27.75 litres is 27750 millilitres.\n\nWorking: there are 1000 millilitres in one litre, so 27.75 × 1000 = 27750."}
+{"instruction": "What is the capital of Kenya?", "output": "The capital of Kenya is Nairobi.\n\nWorking: this is a geography fact; Nairobi is the seat of Kenya's national government."}
+{"instruction": "What is the area of a circle with a radius of 2 cm?", "output": "The area is about 12.57 cm².\n\nWorking: A = π × r² = π × 2² ≈ 12.57 cm²."}
+{"instruction": "Convert 33 metres to centimetres.", "output": "33 metres is 3300 centimetres.\n\nWorking: there are 100 centimetres in one metre, so 33 × 100 = 3300."}
+{"instruction": "Convert 44 °C to Fahrenheit.", "output": "44 °C is 111.2 °F.\n\nWorking: °F = °C × 9/5 + 32 = 44 × 9/5 + 32 = 111.2."}
+{"instruction": "A device runs at 5 V and draws 1.4 A. How much power does it use?", "output": "The device uses 7 W.\n\nWorking: P = V × I = 5 V × 1.4 A = 7 W."}
+{"instruction": "What is the capital of France?", "output": "The capital of France is Paris.\n\nWorking: this is a geography fact; Paris is the seat of France's national government."}
+{"instruction": "Convert -18 °C to Fahrenheit.", "output": "-18 °C is -0.4 °F.\n\nWorking: °F = °C × 9/5 + 32 = -18 × 9/5 + 32 = -0.4."}
+{"instruction": "What is the area of a circle with a radius of 146 cm?", "output": "The area is about 66966.19 cm².\n\nWorking: A = π × r² = π × 146² ≈ 66966.19 cm²."}
+{"instruction": "What is 5% of 760?", "output": "5% of 760 is 38.\n\nWorking: 5% × 760 = 5/100 × 760 = 38."}
+{"instruction": "Convert -26 °C to Fahrenheit.", "output": "-26 °C is -14.8 °F.\n\nWorking: °F = °C × 9/5 + 32 = -26 × 9/5 + 32 = -14.8."}
+{"instruction": "A 163 V supply is connected across a 620 ohm resistor. What current flows through it?", "output": "The current is 0.2629 A.\n\nWorking: Ohm's law gives I = V ÷ R = 163 V ÷ 620 Ω ≈ 0.2629 A."}
+{"instruction": "A resistor of 1000 ohms carries a current of 1.6 A. What is the voltage across it?", "output": "The voltage across the resistor is 1600 V.\n\nWorking: Ohm's law gives V = I × R = 1.6 A × 1000 Ω = 1600 V."}
+{"instruction": "What is the capital of Norway?", "output": "The capital of Norway is Oslo.\n\nWorking: this is a geography fact; Oslo is the seat of Norway's national government."}
+{"instruction": "What is the capital of Canada?", "output": "The capital of Canada is Ottawa.\n\nWorking: this is a geography fact; Ottawa is the seat of Canada's national government."}
+{"instruction": "A 22 V supply is connected across a 200 ohm resistor. What current flows through it?", "output": "The current is 0.11 A.\n\nWorking: Ohm's law gives I = V ÷ R = 22 V ÷ 200 Ω ≈ 0.11 A."}
+{"instruction": "A 80 V supply is connected across a 900 ohm resistor. What current flows through it?", "output": "The current is 0.0889 A.\n\nWorking: Ohm's law gives I = V ÷ R = 80 V ÷ 900 Ω ≈ 0.0889 A."}
+{"instruction": "Convert 39 minutes to seconds.", "output": "39 minutes is 2340 seconds.\n\nWorking: there are 60 seconds in one minute, so 39 × 60 = 2340."}
+{"instruction": "Convert the decimal number 362 to hexadecimal.", "output": "362 in hexadecimal is 16A.\n\nWorking: repeatedly dividing 362 by 16 and reading the remainders from last to first gives 16A."}
+{"instruction": "Convert the decimal number 824 to binary.", "output": "824 in binary is 1100111000.\n\nWorking: repeatedly dividing 824 by 2 and reading the remainders from last to first gives 1100111000."}
+{"instruction": "Convert 26 °C to Fahrenheit.", "output": "26 °C is 78.8 °F.\n\nWorking: °F = °C × 9/5 + 32 = 26 × 9/5 + 32 = 78.8."}
+{"instruction": "A device runs at 12 V and draws 4.7 A. How much power does it use?", "output": "The device uses 56.4 W.\n\nWorking: P = V × I = 12 V × 4.7 A = 56.4 W."}
+{"instruction": "A device runs at 24 V and draws 1.6 A. How much power does it use?", "output": "The device uses 38.4 W.\n\nWorking: P = V × I = 24 V × 1.6 A = 38.4 W."}
+{"instruction": "Convert the decimal number 2577 to hexadecimal.", "output": "2577 in hexadecimal is A11.\n\nWorking: repeatedly dividing 2577 by 16 and reading the remainders from last to first gives A11."}
+{"instruction": "Convert 107 metres to centimetres.", "output": "107 metres is 10700 centimetres.\n\nWorking: there are 100 centimetres in one metre, so 107 × 100 = 10700."}
+{"instruction": "A device runs at 230 V and draws 6.8 A. How much power does it use?", "output": "The device uses 1564 W.\n\nWorking: P = V × I = 230 V × 6.8 A = 1564 W."}
+{"instruction": "Convert the decimal number 305 to hexadecimal.", "output": "305 in hexadecimal is 131.\n\nWorking: repeatedly dividing 305 by 16 and reading the remainders from last to first gives 131."}
+{"instruction": "What is 25% of 1020?", "output": "25% of 1020 is 255.\n\nWorking: 25% × 1020 = 25/100 × 1020 = 255."}
+{"instruction": "Convert the decimal number 20 to hexadecimal.", "output": "20 in hexadecimal is 14.\n\nWorking: repeatedly dividing 20 by 16 and reading the remainders from last to first gives 14."}
+{"instruction": "A device runs at 230 V and draws 8.9 A. How much power does it use?", "output": "The device uses 2047 W.\n\nWorking: P = V × I = 230 V × 8.9 A = 2047 W."}
+{"instruction": "What is the capital of Thailand?", "output": "The capital of Thailand is Bangkok.\n\nWorking: this is a geography fact; Bangkok is the seat of Thailand's national government."}
+{"instruction": "A device runs at 230 V and draws 2.5 A. How much power does it use?", "output": "The device uses 575 W.\n\nWorking: P = V × I = 230 V × 2.5 A = 575 W."}
+{"instruction": "Convert 34 minutes to seconds.", "output": "34 minutes is 2040 seconds.\n\nWorking: there are 60 seconds in one minute, so 34 × 60 = 2040."}
+{"instruction": "Convert 46 metres to centimetres.", "output": "46 metres is 4600 centimetres.\n\nWorking: there are 100 centimetres in one metre, so 46 × 100 = 4600."}
+{"instruction": "Convert 27 °C to Fahrenheit.", "output": "27 °C is 80.6 °F.\n\nWorking: °F = °C × 9/5 + 32 = 27 × 9/5 + 32 = 80.6."}
+{"instruction": "A 169 V supply is connected across a 300 ohm resistor. What current flows through it?", "output": "The current is 0.5633 A.\n\nWorking: Ohm's law gives I = V ÷ R = 169 V ÷ 300 Ω ≈ 0.5633 A."}
+{"instruction": "A 99 V supply is connected across a 920 ohm resistor. What current flows through it?", "output": "The current is 0.1076 A.\n\nWorking: Ohm's law gives I = V ÷ R = 99 V ÷ 920 Ω ≈ 0.1076 A."}
+{"instruction": "Convert the decimal number 690 to binary.", "output": "690 in binary is 1010110010.\n\nWorking: repeatedly dividing 690 by 2 and reading the remainders from last to first gives 1010110010."}
+{"instruction": "What is 10% of 1820?", "output": "10% of 1820 is 182.\n\nWorking: 10% × 1820 = 10/100 × 1820 = 182."}
+{"instruction": "What is 20% of 1000?", "output": "20% of 1000 is 200.\n\nWorking: 20% × 1000 = 20/100 × 1000 = 200."}
+{"instruction": "What is the capital of Greece?", "output": "The capital of Greece is Athens.\n\nWorking: this is a geography fact; Athens is the seat of Greece's national government."}
+{"instruction": "Convert 63 °C to Fahrenheit.", "output": "63 °C is 145.4 °F.\n\nWorking: °F = °C × 9/5 + 32 = 63 × 9/5 + 32 = 145.4."}
+{"instruction": "A device runs at 230 V and draws 5.2 A. How much power does it use?", "output": "The device uses 1196 W.\n\nWorking: P = V × I = 230 V × 5.2 A = 1196 W."}
+{"instruction": "What is 5% of 1580?", "output": "5% of 1580 is 79.\n\nWorking: 5% × 1580 = 5/100 × 1580 = 79."}
+{"instruction": "Convert the decimal number 1007 to binary.", "output": "1007 in binary is 1111101111.\n\nWorking: repeatedly dividing 1007 by 2 and reading the remainders from last to first gives 1111101111."}
+{"instruction": "A 16 V supply is connected across a 640 ohm resistor. What current flows through it?", "output": "The current is 0.025 A.\n\nWorking: Ohm's law gives I = V ÷ R = 16 V ÷ 640 Ω ≈ 0.025 A."}
+{"instruction": "What is the area of a circle with a radius of 52 cm?", "output": "The area is about 8494.87 cm².\n\nWorking: A = π × r² = π × 52² ≈ 8494.87 cm²."}
+{"instruction": "Convert the decimal number 317 to binary.", "output": "317 in binary is 100111101.\n\nWorking: repeatedly dividing 317 by 2 and reading the remainders from last to first gives 100111101."}
+{"instruction": "Convert 58 °C to Fahrenheit.", "output": "58 °C is 136.4 °F.\n\nWorking: °F = °C × 9/5 + 32 = 58 × 9/5 + 32 = 136.4."}
+{"instruction": "Convert 19 hours to minutes.", "output": "19 hours is 1140 minutes.\n\nWorking: there are 60 minutes in one hour, so 19 × 60 = 1140."}
+{"instruction": "Convert the decimal number 1283 to hexadecimal.", "output": "1283 in hexadecimal is 503.\n\nWorking: repeatedly dividing 1283 by 16 and reading the remainders from last to first gives 503."}
+{"instruction": "What is 30% of 80?", "output": "30% of 80 is 24.\n\nWorking: 30% × 80 = 30/100 × 80 = 24."}
+{"instruction": "A resistor of 740 ohms carries a current of 4.1 A. What is the voltage across it?", "output": "The voltage across the resistor is 3034 V.\n\nWorking: Ohm's law gives V = I × R = 4.1 A × 740 Ω = 3034 V."}
+{"instruction": "A 107 V supply is connected across a 910 ohm resistor. What current flows through it?", "output": "The current is 0.1176 A.\n\nWorking: Ohm's law gives I = V ÷ R = 107 V ÷ 910 Ω ≈ 0.1176 A."}
+{"instruction": "Convert 57 hours to minutes.", "output": "57 hours is 3420 minutes.\n\nWorking: there are 60 minutes in one hour, so 57 × 60 = 3420."}
+{"instruction": "What is the area of a circle with a radius of 38 cm?", "output": "The area is about 4536.46 cm².\n\nWorking: A = π × r² = π × 38² ≈ 4536.46 cm²."}
+{"instruction": "A resistor of 730 ohms carries a current of 0.4 A. What is the voltage across it?", "output": "The voltage across the resistor is 292 V.\n\nWorking: Ohm's law gives V = I × R = 0.4 A × 730 Ω = 292 V."}
+{"instruction": "What is the area of a circle with a radius of 61 cm?", "output": "The area is about 11689.87 cm².\n\nWorking: A = π × r² = π × 61² ≈ 11689.87 cm²."}
+{"instruction": "Convert the decimal number 1960 to hexadecimal.", "output": "1960 in hexadecimal is 7A8.\n\nWorking: repeatedly dividing 1960 by 16 and reading the remainders from last to first gives 7A8."}
+{"instruction": "Convert 71.5 minutes to seconds.", "output": "71.5 minutes is 4290 seconds.\n\nWorking: there are 60 seconds in one minute, so 71.5 × 60 = 4290."}
+{"instruction": "Convert the decimal number 725 to binary.", "output": "725 in binary is 1011010101.\n\nWorking: repeatedly dividing 725 by 2 and reading the remainders from last to first gives 1011010101."}
+{"instruction": "What is 15% of 200?", "output": "15% of 200 is 30.\n\nWorking: 15% × 200 = 15/100 × 200 = 30."}
+{"instruction": "Convert 39 °C to Fahrenheit.", "output": "39 °C is 102.2 °F.\n\nWorking: °F = °C × 9/5 + 32 = 39 × 9/5 + 32 = 102.2."}
+{"instruction": "Convert 31 °C to Fahrenheit.", "output": "31 °C is 87.8 °F.\n\nWorking: °F = °C × 9/5 + 32 = 31 × 9/5 + 32 = 87.8."}
+{"instruction": "A device runs at 48 V and draws 4.5 A. How much power does it use?", "output": "The device uses 216 W.\n\nWorking: P = V × I = 48 V × 4.5 A = 216 W."}
+{"instruction": "Convert the decimal number 519 to binary.", "output": "519 in binary is 1000000111.\n\nWorking: repeatedly dividing 519 by 2 and reading the remainders from last to first gives 1000000111."}
+{"instruction": "A resistor of 410 ohms carries a current of 2.2 A. What is the voltage across it?", "output": "The voltage across the resistor is 902 V.\n\nWorking: Ohm's law gives V = I × R = 2.2 A × 410 Ω = 902 V."}
+{"instruction": "A 103 V supply is connected across a 510 ohm resistor. What current flows through it?", "output": "The current is 0.202 A.\n\nWorking: Ohm's law gives I = V ÷ R = 103 V ÷ 510 Ω ≈ 0.202 A."}
+{"instruction": "Convert the decimal number 1020 to binary.", "output": "1020 in binary is 1111111100.\n\nWorking: repeatedly dividing 1020 by 2 and reading the remainders from last to first gives 1111111100."}
