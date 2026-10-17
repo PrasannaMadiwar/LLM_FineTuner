@@ -3,10 +3,12 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from app.api.v1.router import api_router
 from app.core.config import get_settings
+from app.core.logging import JobIdMiddleware, configure_logging
 
 
 def create_app() -> FastAPI:
     settings = get_settings()
+    configure_logging(settings.log_level)
     app = FastAPI(
         title=settings.app_name,
         version=settings.app_version,
@@ -22,7 +24,13 @@ def create_app() -> FastAPI:
         allow_methods=["*"],
         allow_headers=["*"],
     )
+    app.add_middleware(JobIdMiddleware)
     app.include_router(api_router, prefix=settings.api_v1_prefix)
+
+    @app.get("/health", summary="Liveness probe", tags=["health"])
+    async def health() -> dict[str, str]:
+        return {"status": "ok", "version": settings.app_version}
+
     return app
 
 

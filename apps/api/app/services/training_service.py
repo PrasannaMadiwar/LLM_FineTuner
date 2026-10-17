@@ -1,3 +1,4 @@
+import logging
 from datetime import UTC, datetime
 from pathlib import Path
 from uuid import UUID
@@ -9,6 +10,8 @@ from app.services.model_registry import ModelRegistry
 from app.services.template_loader import TemplateLoader
 from app.services.training_state_machine import TrainingStateMachine
 from app.services.training_task_dispatcher import TrainingTaskDispatcher
+
+logger = logging.getLogger(__name__)
 
 
 class TrainingService:
@@ -181,6 +184,13 @@ class TrainingService:
             to_status=next_status,
             message=message,
             metadata=metadata,
+        )
+        logger.info(
+            "Training job %s -> %s: %s",
+            job.status.value,
+            next_status.value,
+            message,
+            extra={"job_id": str(job_id)},
         )
         return updated
 

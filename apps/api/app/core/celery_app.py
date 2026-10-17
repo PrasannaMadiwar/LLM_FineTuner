@@ -1,8 +1,16 @@
 from celery import Celery
+from celery.signals import setup_logging
 
 from app.core.config import get_settings
+from app.core.logging import configure_logging
 
 settings = get_settings()
+
+
+@setup_logging.connect
+def _configure_worker_logging(loglevel=None, **kwargs) -> None:
+    # Connecting this signal stops Celery from installing its own plain-text handlers.
+    configure_logging(loglevel or settings.log_level)
 
 celery_app = Celery(
     "llm_fine_tuner",

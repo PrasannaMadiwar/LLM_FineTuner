@@ -1,4 +1,5 @@
 import asyncio
+import logging
 from uuid import UUID
 
 from sqlalchemy.ext.asyncio import async_sessionmaker, create_async_engine
@@ -7,6 +8,7 @@ from sqlalchemy.orm import configure_mappers
 import app.infrastructure.models  # noqa: F401 - Register all ORM models for SQLAlchemy
 from app.core.celery_app import celery_app
 from app.core.config import get_settings
+from app.core.logging import bind_job_id
 from app.domain.gpu import GPUProviderName
 from app.infrastructure.gpu.factory import create_gpu_provider
 from app.infrastructure.repositories.gpu_repository import GPURepository
@@ -21,6 +23,8 @@ from app.services.training_state_machine import TrainingStateMachine
 # Ensure all SQLAlchemy ORM mappers and foreign key relationships are configured
 configure_mappers()
 
+logger = logging.getLogger(__name__)
+
 
 @celery_app.task(
     name="app.tasks.training_tasks.execute_training_job",
@@ -31,7 +35,9 @@ configure_mappers()
     max_retries=3,
 )
 def execute_training_job(self, user_id: str, job_id: str) -> dict:
-    return asyncio.run(_execute_training_job(UUID(user_id), UUID(job_id), str(self.request.id)))
+    with bind_job_id(job_id):
+        logger.info("Training task %s started.", self.request.id)
+        return asyncio.run(_execute_training_job(UUID(user_id), UUID(job_id), str(self.request.id)))
 
 
 async def _execute_training_job(user_id: UUID, job_id: UUID, task_id: str) -> dict:

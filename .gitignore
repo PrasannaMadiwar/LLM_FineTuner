@@ -10,6 +10,8 @@ node_modules/
 dist/
 build/
 coverage/
+.coverage
+coverage.xml
 *.pyc
 *.pyo
 *.pyd

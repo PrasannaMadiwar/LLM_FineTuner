@@ -1,0 +1,52 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  api:
+    name: API tests
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: apps/api
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: apps/api/pyproject.toml
+      - name: Install
+        run: pip install -e ".[dev]"
+      - name: Test with coverage
+        run: python -m pytest --cov=app --cov-report=term --cov-report=xml
+      - uses: actions/upload-artifact@v4
+        with:
+          name: api-coverage
+          path: apps/api/coverage.xml
+
+  gpu-agent:
+    name: GPU agent tests
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: gpu-agent
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: gpu-agent/requirements.txt
+      - name: Install
+        # Training dependencies (torch, unsloth) are not needed: tests run templates in dry-run mode.
+        run: pip install -r requirements.txt httpx "pytest>=8.3.4,<9.0.0" "pytest-cov>=5"
+      - name: Test with coverage
+        run: python -m pytest -p no:cacheprovider --cov=app --cov-report=term --cov-report=xml
+      - uses: actions/upload-artifact@v4
+        with:
+          name: gpu-agent-coverage
+          path: gpu-agent/coverage.xml
