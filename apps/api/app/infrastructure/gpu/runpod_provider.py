@@ -2,6 +2,7 @@ from collections.abc import AsyncIterator
 from datetime import datetime
 import asyncio
 import json
+import logging
 import time
 from typing import Any
 
@@ -25,6 +26,21 @@ from app.domain.gpu import (
 )
 from app.infrastructure.gpu.base import GPUProvider, GPUProviderException
 
+logger = logging.getLogger(__name__)
+
+# RunPod's API only accepts full gpuTypeIds (POST /pods returns 400 for "A100"), so
+# short names from configuration are expanded to the matching IDs.
+_GPU_TYPE_ALIASES: dict[str, list[str]] = {
+    "A100": ["NVIDIA A100 80GB PCIe", "NVIDIA A100-SXM4-80GB"],
+    "A100-40GB": ["NVIDIA A100-SXM4-40GB"],
+    "H100": ["NVIDIA H100 80GB HBM3", "NVIDIA H100 PCIe", "NVIDIA H100 NVL"],
+    "A40": ["NVIDIA A40"],
+    "L40S": ["NVIDIA L40S"],
+    "L4": ["NVIDIA L4"],
+    "RTX4090": ["NVIDIA GeForce RTX 4090"],
+}
+_MAX_LOGGED_ERROR_BODY = 8000
+
 
 class RunPodProvider(GPUProvider):
     def __init__(
@@ -37,6 +53,9 @@ class RunPodProvider(GPUProvider):
         region: str | None = None,
         base_url: str = "https://rest.runpod.io/v1",
         agent_port: int | None = None,
+        agent_token: str | None = None,
+        cloud_type: str | None = None,
+        allowed_cuda_versions: list[str] | None = None,
         max_retries: int = 3,
         timeout_seconds: float = 30.0,
         transport: httpx.AsyncBaseTransport | None = None,
@@ -50,12 +69,26 @@ class RunPodProvider(GPUProvider):
         self._region = region if region is not None else settings.runpod_region
         self._base_url = base_url.rstrip("/")
         self._agent_port = agent_port or settings.runpod_agent_port
+        self._agent_token = agent_token if agent_token is not None else settings.gpu_agent_token
+        self._cloud_type = cloud_type or settings.runpod_cloud_type
+        self._allowed_cuda_versions = (
+            allowed_cuda_versions
+            if allowed_cuda_versions is not None
+            else [value.strip() for value in settings.runpod_allowed_cuda_versions.split(",") if value.strip()]
+        )
         self._max_retries = max_retries
         self._timeout_seconds = timeout_seconds
         self._transport = transport
 
     async def create_instance(self, config: GPUCreateConfig) -> GPUProviderInstance:
         self._require_api_key()
+        if not self._agent_token:
+            # The pod's agent refuses to start without a token, so fail before renting a GPU.
+            raise self._provider_error(
+                GPUErrorCode.MISSING_API_KEY,
+                "GPU_AGENT_TOKEN must be set so the RunPod GPU agent can authenticate requests.",
+                retryable=False,
+            )
         payload = self._build_create_payload(config)
         response_payload = await self._request("POST", "/pods", json_payload=payload)
         provider_id = str(response_payload.get("id") or response_payload.get("podId") or "")
@@ -69,7 +102,7 @@ class RunPodProvider(GPUProvider):
             provider_instance_id=provider_id,
             status=self._map_status(response_payload.get("desiredStatus") or response_payload.get("status")),
             endpoint_url=self._extract_agent_url(response_payload),
-            metadata=response_payload,
+            metadata=self._public_metadata(response_payload),
         )
 
     async def terminate_instance(self, provider_instance_id: str) -> GPUStatusResult:
@@ -79,18 +112,36 @@ class RunPodProvider(GPUProvider):
             provider_instance_id=provider_instance_id,
             status=GPUInstanceStatus.STOPPING,
             message="Termination requested.",
-            metadata=response_payload,
+            metadata=self._public_metadata(response_payload),
         )
 
     async def get_status(self, provider_instance_id: str) -> GPUStatusResult:
+        status = await self._pod_status(provider_instance_id)
+        # desiredStatus is RUNNING as soon as the pod is rented, long before the image is
+        # pulled and the agent listens, so only report RUNNING once the agent answers.
+        if status.status == GPUInstanceStatus.RUNNING and not (
+            status.endpoint_url and await self._agent_is_ready(status.endpoint_url)
+        ):
+            return status.model_copy(update={"status": GPUInstanceStatus.STARTING})
+        return status
+
+    async def _pod_status(self, provider_instance_id: str) -> GPUStatusResult:
         self._require_api_key()
         response_payload = await self._request("GET", f"/pods/{provider_instance_id}")
         return GPUStatusResult(
             provider_instance_id=provider_instance_id,
             status=self._map_status(response_payload.get("desiredStatus") or response_payload.get("status")),
             endpoint_url=self._extract_agent_url(response_payload),
-            metadata=response_payload,
+            metadata=self._public_metadata(response_payload),
         )
+
+    async def _agent_is_ready(self, endpoint_url: str) -> bool:
+        try:
+            async with httpx.AsyncClient(timeout=5.0, transport=self._transport) as client:
+                response = await client.get(f"{endpoint_url.rstrip('/')}/health", headers=self._agent_headers())
+        except httpx.HTTPError:
+            return False
+        return response.status_code < 400
 
     async def upload_files(
         self,
@@ -205,7 +256,7 @@ class RunPodProvider(GPUProvider):
                 provider_instance_id=str(pod.get("id") or pod.get("podId") or ""),
                 status=self._map_status(pod.get("desiredStatus") or pod.get("status")),
                 endpoint_url=self._extract_agent_url(pod),
-                metadata=pod,
+                metadata=self._public_metadata(pod),
             )
             for pod in pods
             if pod.get("id") or pod.get("podId")
@@ -301,7 +352,7 @@ class RunPodProvider(GPUProvider):
         return response.json() if response.content else {}
 
     async def _resolve_agent_url(self, provider_instance_id: str) -> str:
-        status = await self.get_status(provider_instance_id)
+        status = await self._pod_status(provider_instance_id)
         agent_url = status.endpoint_url
         if not agent_url:
             raise self._provider_error(
@@ -315,10 +366,16 @@ class RunPodProvider(GPUProvider):
         template_id = self._template_id
         payload: dict[str, Any] = {
             "name": config.name,
-            "gpuTypeIds": [config.gpu_type or self._default_gpu],
+            "computeType": "GPU",
+            "cloudType": self._cloud_type,
+            "gpuTypeIds": self._resolve_gpu_types(config.gpu_type or self._default_gpu),
+            "gpuCount": 1,
+            "allowedCudaVersions": self._allowed_cuda_versions,
             "volumeInGb": config.volume_size_gb or self._volume_size_gb,
+            "volumeMountPath": "/workspace",
             "containerDiskInGb": config.container_disk_gb or self._container_disk_gb,
-            "env": config.env,
+            # The template sets no env, so the agent's token and port are passed per pod.
+            "env": {**config.env, "GPU_AGENT_TOKEN": self._agent_token, "PORT": str(self._agent_port)},
             "ports": self._format_ports(config.ports),
         }
         image = config.image
@@ -330,15 +387,28 @@ class RunPodProvider(GPUProvider):
             payload["dataCenterIds"] = [config.region or self._region]
         return {key: value for key, value in payload.items() if value not in (None, [], {})}
 
+    @staticmethod
+    def _resolve_gpu_types(value: str) -> list[str]:
+        resolved: list[str] = []
+        for item in (part.strip() for part in value.split(",")):
+            if not item:
+                continue
+            for gpu_type in _GPU_TYPE_ALIASES.get(item.upper().replace(" ", ""), [item]):
+                if gpu_type not in resolved:
+                    resolved.append(gpu_type)
+        return resolved
+
     def _headers(self) -> dict[str, str]:
         return {
             "Authorization": f"Bearer {self._api_key}",
             "Content-Type": "application/json",
         }
 
-    @staticmethod
-    def _agent_headers() -> dict[str, str]:
-        return {"Accept": "application/json"}
+    def _agent_headers(self) -> dict[str, str]:
+        headers = {"Accept": "application/json"}
+        if self._agent_token:
+            headers["Authorization"] = f"Bearer {self._agent_token}"
+        return headers
 
     def _require_api_key(self) -> None:
         if not self._api_key:
@@ -348,7 +418,22 @@ class RunPodProvider(GPUProvider):
                 retryable=False,
             )
 
+    @staticmethod
+    def _public_metadata(payload: dict) -> dict:
+        # Pod responses echo env, which holds GPU_AGENT_TOKEN; metadata is stored and shown to users.
+        return {key: value for key, value in payload.items() if key != "env"}
+
     def _http_error(self, response: httpx.Response) -> GPUProviderException:
+        body = response.text[:_MAX_LOGGED_ERROR_BODY]
+        if self._agent_token:
+            body = body.replace(self._agent_token, "[REDACTED]")
+        logger.error(
+            "RunPod API %s %s returned HTTP %s: %s",
+            response.request.method,
+            response.request.url.path,
+            response.status_code,
+            body,
+        )
         code = GPUErrorCode.API_ERROR
         retryable = response.status_code >= 500
         if response.status_code in {401, 403}:
@@ -378,7 +463,21 @@ class RunPodProvider(GPUProvider):
         try:
             payload: Any = response.json()
         except json.JSONDecodeError:
-            return "GPU provider request failed."
+            return response.text.strip()[:500] or "GPU provider request failed."
+        # RunPod's REST API reports schema violations as a list:
+        # [{"error": "...", "problems": ["At /pods/properties/gpuTypeIds/items/enum: ..."]}]
+        if isinstance(payload, list):
+            messages = []
+            for item in payload:
+                if not isinstance(item, dict):
+                    continue
+                problems = item.get("problems")
+                if isinstance(problems, list) and problems:
+                    messages.extend(str(problem)[:300] for problem in problems)
+                elif item.get("error"):
+                    messages.append(str(item["error"]))
+            if messages:
+                return "; ".join(messages)[:1000]
         if isinstance(payload, dict):
             error = payload.get("error") or payload.get("message") or payload.get("detail")
             if isinstance(error, dict) and error.get("message"):
@@ -408,7 +507,7 @@ class RunPodProvider(GPUProvider):
         public_ip = payload.get("publicIp") or payload.get("ip")
         ports = payload.get("portMappings") or payload.get("ports") or {}
         if not public_ip:
-            return None
+            return self._proxy_url(payload)
         if isinstance(ports, dict):
             mapped_port = ports.get(str(self._agent_port)) or ports.get(self._agent_port)
             if mapped_port:
@@ -421,6 +520,14 @@ class RunPodProvider(GPUProvider):
                 public_port = item.get("publicPort") or item.get("hostPort")
                 if private_port == self._agent_port and public_port:
                     return f"http://{public_ip}:{public_port}"
+        return self._proxy_url(payload)
+
+    def _proxy_url(self, payload: dict) -> str | None:
+        # Ports exposed as "<port>/http" are served through RunPod's HTTPS proxy, not portMappings.
+        pod_id = payload.get("id") or payload.get("podId")
+        ports = payload.get("ports") or []
+        if pod_id and isinstance(ports, list) and f"{self._agent_port}/http" in ports:
+            return f"https://{pod_id}-{self._agent_port}.proxy.runpod.net"
         return None
 
     @staticmethod

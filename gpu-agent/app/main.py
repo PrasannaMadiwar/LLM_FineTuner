@@ -2,13 +2,19 @@ from contextlib import asynccontextmanager
 
 from fastapi import Depends, FastAPI
 
-from app.dependencies import require_agent_token, workspace_service
+from app.dependencies import (
+    ensure_agent_token_configured,
+    require_agent_token,
+    settings,
+    workspace_service,
+)
 from app.routes import download, health, logs, system, training, upload
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     del app
+    ensure_agent_token_configured(settings())
     workspace_service().ensure_workspace()
     yield
 

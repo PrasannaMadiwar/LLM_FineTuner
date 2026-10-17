@@ -29,7 +29,7 @@ def test_health_endpoint(tmp_path):
 
 
 def test_agent_rejects_missing_or_invalid_token(tmp_path):
-    client = _client(tmp_path, agent_token="secret-token")
+    client = _client(tmp_path, agent_token="secret-token", send_token=False)
 
     missing = client.get("/health")
     invalid = client.get("/health", headers={"Authorization": "Bearer wrong"})
@@ -89,7 +89,7 @@ def _wait_for_status(client: TestClient, training_id: str) -> dict:
     raise AssertionError("Training run did not finish.")
 
 
-def _client(root: Path, agent_token: str | None = None) -> TestClient:
+def _client(root: Path, agent_token: str | None = "test-token", send_token: bool = True) -> TestClient:
     app.dependency_overrides.clear()
     configured = Settings(
         workspace_path=root,
@@ -119,4 +119,5 @@ def _client(root: Path, agent_token: str | None = None) -> TestClient:
     app.dependency_overrides[log_service] = lambda: logs
     app.dependency_overrides[training_service] = lambda: training
     app.dependency_overrides[health_service] = lambda: health
-    return TestClient(app)
+    headers = {"Authorization": f"Bearer {agent_token}"} if send_token and agent_token else {}
+    return TestClient(app, headers=headers)

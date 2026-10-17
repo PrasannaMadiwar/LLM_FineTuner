@@ -29,7 +29,8 @@ logger = logging.getLogger(__name__)
 
 
 class GPUService:
-    _ALLOWED_COMMANDS = {"python", "pip", "mkdir", "cp", "mv", "ls"}
+    # Mirrors the GPU agent allowlist (no pip); the agent also confines paths to its workspace.
+    _ALLOWED_COMMANDS = {"python", "mkdir", "cp", "mv", "ls"}
 
     def __init__(
         self,

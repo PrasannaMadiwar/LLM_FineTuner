@@ -7,6 +7,7 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 class Settings(BaseSettings):
     app_name: str = "LLM Fine-Tuner API"
     app_version: str = "0.1.0"
+    log_level: str = "INFO"
     api_v1_prefix: str = "/api/v1"
     database_url: str = "postgresql+asyncpg://llm_finetuner:llm_finetuner_password@localhost:5432/llm_finetuner"
     database_schema: str = Field(default="public", pattern=r"^[A-Za-z_][A-Za-z0-9_]*$")
@@ -39,11 +40,17 @@ class Settings(BaseSettings):
     local_gpu_agent_port: int = 8001
     runpod_api_key: str | None = None
     runpod_template_id: str | None = None
+    # A RunPod gpuTypeId such as "NVIDIA A100 80GB PCIe", a short alias such as "A100",
+    # or a comma-separated list of either.
     runpod_default_gpu: str = "A100"
     runpod_volume_size: int = 100
     runpod_container_disk: int = 50
     runpod_region: str | None = None
     runpod_agent_port: int = 8001
+    # Secure Cloud pods always get a public IP and HTTP proxy, which the agent needs.
+    runpod_cloud_type: str = Field(default="SECURE", pattern=r"^(SECURE|COMMUNITY)$")
+    # The agent image is built on CUDA 12.8, so the host driver must support 12.8 or newer.
+    runpod_allowed_cuda_versions: str = "12.8,12.9,13.0"
     gpu_create_timeout_seconds: int = 900
     gpu_operation_max_retries: int = 3
     training_worker_poll_interval_seconds: float = 10.0

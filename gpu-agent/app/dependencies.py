@@ -44,13 +44,30 @@ def training_service() -> TrainingService:
     return TrainingService(settings(), workspace_service(), file_service(), log_service())
 
 
+class MissingAgentTokenError(RuntimeError):
+    pass
+
+
+def ensure_agent_token_configured(configured: Settings) -> None:
+    if not (configured.agent_token or "").strip():
+        raise MissingAgentTokenError(
+            "GPU_AGENT_TOKEN is not set. The GPU agent refuses to start without it, "
+            "because every endpoint can upload files, run training, or execute commands."
+        )
+
+
 def require_agent_token(
     configured: Annotated[Settings, Depends(settings)],
     authorization: Annotated[str | None, Header()] = None,
 ) -> None:
-    token = configured.agent_token
+    token = (configured.agent_token or "").strip()
     if not token:
-        return
+        # Startup already refuses to run without a token; this keeps requests closed
+        # if the app is ever served without going through that startup check.
+        raise HTTPException(
+            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+            detail="GPU agent token is not configured.",
+        )
     prefix = "Bearer "
     if not authorization or not authorization.startswith(prefix):
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Missing GPU agent token.")

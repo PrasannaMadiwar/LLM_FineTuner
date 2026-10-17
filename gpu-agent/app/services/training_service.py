@@ -1,6 +1,7 @@
 import asyncio
 import json
 import os
+import re
 import shlex
 import sys
 import threading
@@ -25,8 +26,15 @@ from app.services.workspace_service import WorkspaceService
 
 
 class TrainingService:
-    _ALLOWED_COMMANDS: ClassVar[set[str]] = {"pip", "mkdir", "cp", "mv", "ls"}
+    # pip is deliberately absent: installing packages runs arbitrary code, and the image
+    # already ships every training dependency. Every argument of these commands must be
+    # a short flag or a path inside the workspace.
+    _ALLOWED_COMMANDS: ClassVar[set[str]] = {"mkdir", "cp", "mv", "ls"}
     _APPROVED_TEMPLATES: ClassVar[set[str]] = {"llama", "qwen", "gemma", "mistral"}
+    _SHORT_FLAG: ClassVar[re.Pattern[str]] = re.compile(r"^-[A-Za-z0-9]+$")
+    # Variables that change which binary or library runs would bypass the allowlist.
+    _BLOCKED_ENV_PREFIXES: ClassVar[tuple[str, ...]] = ("LD_", "DYLD_", "PYTHON")
+    _BLOCKED_ENV_NAMES: ClassVar[set[str]] = {"PATH"}
 
     def __init__(
         self,
@@ -124,16 +132,19 @@ class TrainingService:
         if not parts:
             raise ValueError("Command cannot be empty.")
         executable = parts[0]
-        if executable == "python":
-            self._validate_python_command(parts)
-        elif executable not in self._ALLOWED_COMMANDS:
-            raise ValueError("Command is not approved for runtime execution.")
-
+        self._validate_env(payload.env)
         working_directory = (
             self._workspace_service.validate_path(payload.working_directory)
             if payload.working_directory
             else self._workspace_service.workspace_path
         )
+        if executable == "python":
+            self._validate_python_command(parts)
+        elif executable in self._ALLOWED_COMMANDS:
+            self._validate_path_arguments(parts[1:], working_directory)
+        else:
+            raise ValueError("Command is not approved for runtime execution.")
+
         if not working_directory.is_dir():
             raise ValueError("Working directory does not exist.")
 
@@ -161,6 +172,26 @@ class TrainingService:
             exit_code=process.returncode or 0,
             execution_time_seconds=time.monotonic() - started_at,
         )
+
+    def _validate_path_arguments(self, arguments: list[str], working_directory: Path) -> None:
+        for argument in arguments:
+            if argument.startswith("-"):
+                # Long options such as --target-directory=/etc can smuggle in a path.
+                if not self._SHORT_FLAG.match(argument):
+                    raise ValueError(f"Option '{argument}' is not allowed; use short flags only.")
+                continue
+            path = Path(argument)
+            candidate = path if path.is_absolute() else working_directory / path
+            try:
+                self._workspace_service.validate_path(candidate)
+            except ValueError as exc:
+                raise ValueError(f"Path '{argument}' is outside the workspace.") from exc
+
+    def _validate_env(self, env: dict[str, str]) -> None:
+        for name in env:
+            upper = name.upper()
+            if upper in self._BLOCKED_ENV_NAMES or upper.startswith(self._BLOCKED_ENV_PREFIXES):
+                raise ValueError(f"Environment variable '{name}' is not allowed for runtime commands.")
 
     def _validate_template(self, template: str) -> str:
         normalized = template.lower().strip()
